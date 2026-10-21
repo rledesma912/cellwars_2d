@@ -22,18 +22,22 @@ Aplicá los criterios del principio 1 de `CLAUDE.md`. Si alguno se cumple, recom
 
 ## 4. Redactar
 
-1. Número `NNN`: siguiente libre en `specs/features/` y `specs/archive/features/`. Carpeta `specs/features/NNN-<nombre>/spec.md`, id `FNNN`, `status: draft`, `links` completos (GDD, decisiones, spike).
-2. Criterios de aceptación con ID `FNNN-ACnn` y **una** etiqueta cada uno:
+1. Número `NNN`: siguiente libre en `specs/features/`, `specs/archive/features/` y las branches `feat/*` (`git fetch` y `git branch -a --list '*feat/*'`).
+2. **Branch** (igual en ambas vías): con working tree limpio y `main` al día con `origin/main`, creá `feat/NNN-<nombre>` desde `main`. La spec, el plan, el código y el playtest viajan juntos en esta branch y en un único PR.
+3. Carpeta `specs/features/NNN-<nombre>/spec.md`, id `FNNN`, `status: draft`, `links` completos (GDD, decisiones, spike). Commit `docs: spec FNNN (draft)`.
+4. Criterios de aceptación con ID `FNNN-ACnn` y **una** etiqueta cada uno:
    - `[unit]`: comportamiento de lógica pura verificable con gdUnit4 (timers, cálculos, transiciones). Redactalo como entrada → salida.
    - `[manual]`: resultado objetivo jugando ("sube a una plataforma de 3 tiles").
    - `[feel]`: subjetivo; siempre lo cierra el desarrollador.
    Cada criterio es verificable por sí solo. Preferí `[unit]` cuando la regla se puede aislar.
-3. Parámetros de tuning: tabla con tipo, valor inicial y rango. Si vienen de un spike, usá los valores que funcionaron.
-4. Casos límite y Fuera de alcance explícitos.
-5. Preguntas abiertas: solo las reales; cada una debe resolverse antes de aprobar o quedar como decisión del desarrollador.
+5. Parámetros de tuning: tabla con tipo, valor inicial y rango. Si vienen de un spike, usá los valores que funcionaron.
+6. Casos límite y Fuera de alcance explícitos.
+7. Preguntas abiertas: solo las reales; cada una debe resolverse antes de aprobar o quedar como decisión del desarrollador.
 
 ## 5. Aprobación
 
-Mostrá la spec y **pedí aprobación**. Al aprobarse: `status: approved`. Desde ese momento no cambiás criterios: si algo resulta incorrecto o inviable, detenete y proponé el cambio.
+Mostrá la spec y **pedí aprobación explícita**. Al aprobarse: `status: approved`, commit `docs: spec FNNN aprobada` y push. Desde ese momento no cambiás criterios: si algo resulta incorrecto o inviable, detenete y proponé el cambio.
 
-Siguiente paso: vía completa → `plan-feature`; vía liviana → completá "Plan y tasks", creá la issue (`gh issue create`) y seguí con `implement-task`.
+Siguiente paso (siempre en `feat/NNN-<nombre>`):
+- Vía completa → `plan-feature`.
+- Vía liviana → completá "Plan y tasks" en la spec, creá la issue (`gh issue create`, título `FNNN: <nombre>`), anotá `Issue: #N`, commit, y seguí con `implement-task`.

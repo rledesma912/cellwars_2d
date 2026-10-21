@@ -1,5 +1,7 @@
 # Traspaso: flujo de desarrollo agéntico para un plataformas 2D en Godot
 
+> **Registro histórico (Fase 0).** Las reglas vigentes están en `CLAUDE.md`, `.claude/skills/` y `specs/templates/`. Ante cualquier diferencia con este documento, mandan esos.
+
 > Documento de arranque para Claude Code. Resume las decisiones tomadas en la fase de diseño del flujo de trabajo.
 > **Claude Code: leé este documento completo antes de hacer cualquier cosa.** Las instrucciones de cómo usarlo están en la sección 12.
 

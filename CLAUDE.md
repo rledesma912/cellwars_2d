@@ -32,7 +32,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 ## Principios del flujo
 
 1. **Spike solo con incertidumbre relevante**: feel desconocido de mecánica central; ≥2 enfoques técnicos y elegir mal es caro; dudas de viabilidad/rendimiento; integración nueva. Si no, directo a spec.
-   - Un solo spike abierto a la vez. El timebox se respeta: al vencer, detenete y proponé cerrar o **una** extensión.
+   - Un solo spike abierto a la vez. Un spike está abierto si existe una branch `spike/*` (local o remota) o algún archivo en `specs/spikes/`; deja de estarlo cuando `close-spike` termina. El timebox se respeta: al vencer, detenete y proponé cerrar o **una** extensión.
    - El código de un spike **nunca llega a `main`**: vive en `prototypes/spike_NNN/` en la branch `spike/NNN-*`.
 2. **Todo spike termina en una decisión** en `specs/decisions/`, que luego actualiza GDD / arquitectura / spec. Las decisiones técnicas importantes fuera de spikes también se registran.
 3. **Verificación en capas**; cada criterio declara la suya:
@@ -47,6 +47,9 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 9. **Tuning**: todo valor ajustable vive en un Resource `.tres` en `game/data/`. El agente crea el `.tres` inicial de un Resource nuevo con los valores de la spec; desde ahí lo edita solo el desarrollador.
 10. **Vivos vs registros**: vivos (`gdd/`, `architecture.md`, `spec.md`, `INDEX.md`, `backlog.md`) reflejan la verdad actual y nunca contienen ideas descartadas, decisiones reemplazadas ni preguntas resueltas. Registros (spikes, decisiones) no se editan una vez cerrados; al vencer van a `specs/archive/`. **Nada se borra**: se mueve a `archive/` o queda en git; lo descartado va en una línea a `specs/discarded.md`.
 11. **Consolidar es parte de terminar**: nada está cerrado hasta que sus resultados se consolidaron en los documentos vivos.
+12. **Aprobación explícita**: solo cuenta un mensaje del desarrollador que apruebe eso concreto. Silencio, falta de objeciones o un "ok" a otra cosa no es aprobación.
+13. **Ante error, conflicto o precondición incumplida**: detenete y reportá qué falló, qué no hiciste y qué opciones hay. No improvises una alternativa.
+14. **Vigencia**: `CLAUDE.md`, `.claude/skills/` y `specs/templates/` mandan. `specs/HANDOFF.md` es un registro del diseño original; ante diferencias, no se aplica.
 
 ## Arquitectura de código
 
@@ -83,8 +86,8 @@ Todo documento (excepto `INDEX.md`, `discarded.md`, `backlog.md`, `HANDOFF.md` y
 
 ```yaml
 ---
-id: F003            # F feature, S spike, D decisión, G sección del GDD
-type: feature       # feature | spike | decision | gdd
+id: F003            # F feature (FNNN), S spike (SNNN), D decisión (DNNNN), G sección del GDD, ARCH arquitectura
+type: feature       # feature | spike | decision | gdd | architecture
 status: draft       # draft | approved | in-progress | done | superseded | discarded
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
@@ -93,6 +96,8 @@ updated: YYYY-MM-DD
 ```
 
 Los criterios de aceptación viven en el cuerpo con su ID, no en el frontmatter.
+
+**Numeración**: el siguiente número libre se calcula mirando `specs/`, `specs/archive/` **y** las branches (`git branch -a --list 'spike/*' 'feat/*'`) y tags `archive/spike-*`, porque un spike o feature en curso solo existe en su branch.
 
 ## Permisos sobre artefactos
 
@@ -112,14 +117,14 @@ Los criterios de aceptación viven en el cuerpo con su ID, no en el frontmatter.
 
 | Documento | Abierto | Al cerrarse |
 |---|---|---|
-| Spike (doc) | `specs/spikes/` (máx. uno) | Decisión aprobada → `close-spike` → `archive/spikes/` |
+| Spike (doc) | En la branch `spike/NNN-*`: `draft` (definición) → `approved` (en ejecución) → `done` (informe listo) | Decisión aprobada → `close-spike` lo lleva a `main` por PR, ya en `archive/spikes/` |
 | Spike (código) | `prototypes/spike_NNN/` en `spike/NNN-*` | Tag `archive/spike-NNN` + branch borrada (local y remota, con confirmación) |
-| Decisión | `propuesta` en `specs/decisions/` | `aprobada` queda; `superseded` → `archive/decisions/` y los vivos apuntan a la nueva |
-| Spec | `draft` → `approved` → `in-progress` | `done`, consolidada *as-built*, queda en `features/` |
+| Decisión | `draft` (propuesta) en `specs/decisions/` | `approved` queda; `superseded` → `archive/decisions/` y los vivos apuntan a la nueva |
+| Spec | En la branch `feat/NNN-*`: `draft` → `approved` → `in-progress` | `done` (ver regla abajo), consolidada *as-built*, queda en `features/` |
 | Plan, tasks, playtest | Junto a la spec | `close-feature` → `archive/features/` |
 | Feature descartada | — | Carpeta a `archive/features/` + línea en `discarded.md` |
 
-**Spec as-built**: estado `done`, criterios con resultado final, sin preguntas abiertas, tuning referenciando el `.tres` (no números copiados), sección corta "Notas finales".
+**Spec as-built**: estado `done` solo si todos los criterios se cumplieron o cada desviación tiene aceptación explícita del desarrollador (registrada en "Notas finales"); criterios con resultado final, sin preguntas abiertas, tuning referenciando el `.tres` (no números copiados), sección corta "Notas finales".
 
 ## Git
 

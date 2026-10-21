@@ -5,14 +5,22 @@ description: Cierra un spike de cellwars_2d una vez aprobada su decisión - cons
 
 # Close spike
 
-Precondición: el spike `SNNN` tiene `status: done` y su decisión `DNNNN` fue aprobada por el desarrollador (decilo explícitamente; si no hay aprobación, detenete).
+Precondición: el spike `SNNN` tiene `status: done` y su decisión `DNNNN` fue aprobada por el desarrollador con un mensaje explícito (citalo; si no hay aprobación explícita, detenete). Hasta que esta skill termine, el spike cuenta como abierto.
 
 ## 1. Branch de cierre
 
-Desde `main` actualizado, creá `docs/close-spike-NNN`. Traé solo los documentos desde la branch del spike, **nunca `prototypes/`**:
+Precondiciones (si alguna falla, detenete, mostrá el estado o el diff y pedí intervención):
+
+- Working tree limpio (`git status --porcelain` vacío).
+- `main` local igual a `origin/main` (`git fetch` primero).
+- La branch del spike está pusheada (sin commits locales pendientes).
+- Las rutas a traer **no existen** en `main` (`git ls-tree main -- <ruta>` vacío). Si existen, no las pises: mostrá `git diff main spike/NNN-<nombre> -- <ruta>` y esperá instrucciones.
+
+Desde `main`, creá `docs/close-spike-NNN`. Traé solo los documentos desde la branch del spike, **nunca `prototypes/`**:
 
 ```bash
 git checkout spike/NNN-<nombre> -- specs/spikes/NNN-<nombre>.md specs/decisions/NNNN-<titulo>.md
+git diff --cached --stat   # debe listar solo esos dos archivos de specs/
 ```
 
 ## 2. Consolidar

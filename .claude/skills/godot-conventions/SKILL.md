@@ -9,6 +9,9 @@ Fuente de verdad vigente: `specs/architecture.md`. Esta skill la baja a reglas o
 
 Antes de implementar un sistema de Godot, invocá además la skill `godot-prompter:*` del dominio (p. ej. `player-controller`, `resource-pattern`, `state-machine`) y reportá el patrón elegido y el descartado.
 
+- Si el patrón ya está fijado en `architecture.md`, en una decisión aprobada o en el `plan.md` de la feature, y sus supuestos no cambiaron, no vuelvas a consultarla: seguí lo documentado.
+- Si una recomendación de GodotPrompter contradice `architecture.md` o una decisión aprobada, **señalá el conflicto y pedí una decisión**. No cambies la arquitectura por tu cuenta.
+
 ## Dónde va cada cosa
 
 | Qué | Dónde | Tipo |
