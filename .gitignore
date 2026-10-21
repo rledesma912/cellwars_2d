@@ -1,0 +1,46 @@
+# --- Godot 4 ---------------------------------------------------------------
+# Cache del editor e imports convertidos: se regeneran solos al abrir el proyecto.
+.godot/
+# Traducciones compiladas desde CSV (la fuente .csv sí se commitea).
+*.translation
+# Plantilla de build de Android (se instala desde el editor si algún día se usa).
+/android/
+
+# Se commitean (NO agregar acá):
+#   *.uid      → IDs estables de scripts/recursos; sin ellos se rompen referencias.
+#   *.import   → configuración de importación de cada asset (filtro, compresión).
+#   addons/    → gdUnit4 se versiona junto al proyecto (vendorizado).
+#   export_presets.cfg → presets de export (sin secretos).
+
+# --- Exports ----------------------------------------------------------------
+/build/
+/export/
+# Credenciales de export (keystores, passwords): nunca al repo.
+export_credentials.cfg
+*.keystore
+
+# --- Tests ------------------------------------------------------------------
+# Reportes HTML/XML que genera gdUnit4 en cada corrida.
+/reports/
+
+# --- Claude Code ------------------------------------------------------------
+# Settings personales (permisos locales); settings.json sí se commitea.
+.claude/settings.local.json
+
+# --- Python (gdtoolkit) -----------------------------------------------------
+__pycache__/
+.venv/
+
+# --- Arte -------------------------------------------------------------------
+# Backups automáticos de Pixelorama / LibreSprite (los .pxo/.aseprite sí van).
+*.pxo.bak
+*.bak
+
+# --- OS / editores ----------------------------------------------------------
+.DS_Store
+Thumbs.db
+.directory
+*.swp
+*~
+.vscode/
+.idea/

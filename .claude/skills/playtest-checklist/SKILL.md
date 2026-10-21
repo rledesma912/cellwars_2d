@@ -1,0 +1,33 @@
+---
+name: playtest-checklist
+description: Genera el playtest.md de una feature de cellwars_2d desde sus criterios [manual] y [feel], con pasos concretos y qué mirar en el overlay F3, y abre el PR con ese checklist. Usala cuando todas las tasks de código de una feature estén cerradas.
+---
+
+# Playtest checklist
+
+Plantilla: `specs/templates/playtest.md`.
+
+## 1. Precondiciones
+
+- Todas las tasks de código cerradas, suite de gdUnit4 en verde.
+- Smoke run vía MCP sin errores en consola (hacelo de nuevo ahora; si hay errores, volvé a `implement-task`).
+
+## 2. Generar
+
+`specs/features/NNN-<nombre>/playtest.md` (vía completa). En vía liviana no hay archivo: el checklist va directo en el PR.
+
+- **Preparación**: qué escena abrir (o `main.tscn`), cómo activar el overlay (F3) y qué `.tres` editar para tunear.
+- **Checklist [manual]**: un ítem por criterio, con su ID. Formato `- [ ] FNNN-ACnn: <pasos concretos> → <resultado esperado> (overlay: <qué línea mirar>)`.
+- **Checklist [feel]**: un ítem por criterio, como pregunta, con qué parámetros del `.tres` mueven esa sensación.
+- **Notas del playtest**: vacío; lo llena el desarrollador.
+
+## 3. PR
+
+Commit `docs: playtest FNNN`, push y `gh pr create` a `main`:
+
+- Título: `feat: FNNN <nombre>`.
+- Cuerpo: resumen; decisiones de Godot no obvias explicadas (el desarrollador está aprendiendo); `Closes #N`; criterios `[unit]` con el test que los cubre; checklist de playtest (`[manual]` y `[feel]`) copiado.
+
+Nunca marques ítems `[manual]` ni `[feel]`. El desarrollador juega, marca y mergea. Si reporta bugs o cambios, volvé a `implement-task`; si son de tuning, los ajusta él en el `.tres`.
+
+Después del merge: `close-feature`.
