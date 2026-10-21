@@ -11,14 +11,14 @@ Ignorá `specs/archive/` como fuente de verdad, pero usalo para detectar referen
 
 | Chequeo | Cómo |
 |---|---|
-| Frontmatter | Todo `.md` de `specs/` (salvo `INDEX.md`, `discarded.md`, `backlog.md`, `HANDOFF.md`, `templates/`) tiene `id`, `type`, `status`, `links`, `updated` con valores válidos. Ids únicos. |
+| Frontmatter | Todo `.md` de `specs/` (salvo `INDEX.md`, `discarded.md`, `backlog.md`, `HANDOFF.md`, `templates/`) tiene `id`, `type`, `status`, `links`, `updated` con los valores válidos que define `CLAUDE.md` (incluye `type: architecture` / `id: ARCH`). Ids únicos. |
 | Contradicciones | GDD vs specs vs decisiones `approved` vs `architecture.md`. |
 | Referencias | Enlaces y `links:` que apuntan a archivos inexistentes, a `archive/` o a decisiones `superseded`. |
 | Contenido descartado | Ideas de `discarded.md` que siguen mencionadas en documentos vivos. |
 | Preguntas viejas | "Preguntas abiertas" en specs `approved`/`in-progress`/`done`. |
 | Borradores abandonados | `status: draft` con `updated` de hace más de 30 días. |
 | INDEX | Features `done` que faltan en `INDEX.md` o entradas que apuntan a features no cerradas. |
-| Spikes | Más de uno abierto; spikes `done` sin decisión o sin cerrar. |
+| Spikes | Más de uno abierto (branches `spike/*` + `specs/spikes/`); spikes `done` sin decisión o sin cerrar. |
 | Trazabilidad | Criterios `[unit]` de features `in-progress`/`done` sin test `test_fnnn_acnn_*` en `test/` (grep). |
 
 ## 2. Informe
