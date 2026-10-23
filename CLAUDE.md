@@ -1,6 +1,6 @@
 # CLAUDE.md — cellwars_2d
 
-Plataformas 2D en pixel art con Godot. Desarrollador solo, arquitecto de software, aprendiendo GDScript: **explicá en comentarios breves y en los PRs toda decisión de Godot que no sea obvia.** Todo open source.
+Plataformas 2D en pixel art con Godot. Desarrollador solo, aprendiendo GDScript: **explicá en comentarios breves y en los PRs toda decisión de Godot que no sea obvia.** Todo open source.
 
 ## Reglas de lectura
 

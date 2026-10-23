@@ -1,97 +1,77 @@
 ---
 id: G001
 type: gdd
-status: draft           # draft mientras se completa · approved al mergear el PR
+status: draft
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-21
+updated: 2026-10-23
 ---
 
-<!--
-CÓMO USAR ESTA PLANTILLA
-- Completá con bullets o frases sueltas; no hace falta prosa prolija. El agente la pasa en limpio.
-- Lo que no sepas todavía: dejalo en "Preguntas abiertas" en vez de inventarlo.
-- Los comentarios HTML (como este) son ayuda: podés borrarlos o dejarlos, el agente los quita al pasar en limpio.
-- Documento VIVO: describe el juego como lo pensás HOY. Ajustes → PR. Cambio de premisa → decisión en specs/decisions/ + línea en discarded.md.
--->
-
-# Visión: <nombre del juego>
+# Visión: Cellwars 2D
 
 ## Premisa
 
-<!--
-En 2 a 4 frases: ¿de qué se trata? ¿Quién es el protagonista, qué quiere y qué se lo impide?
-¿Dónde ocurre? ¿El nombre es literal o provisorio?
-Ejemplo: "Sos una célula inmune dentro de un organismo infectado. Avanzás órgano por órgano
-recuperando zonas tomadas por un virus que muta y cambia el terreno."
--->
+Un soldado de un escuadrón de glóbulos blancos, equipado con un traje futurista, debe atravesar el interior de un cuerpo humano para alcanzar refugios seguros en cada nivel. Bacterias y virus le bloquean el paso y debe combatirlos o evitarlos. El juego transcurre en un escenario biológico: pasillos, cavernas y tejidos del organismo.
 
 ## Pilares
 
-<!--
-2 a 4 cualidades que TODA decisión futura debe respetar. Sirven para decir que no.
-Formato: **Nombre**: qué significa en concreto · qué implica (o descarta).
-Ejemplo:
-- **Control preciso y justo**: si morís, es tu culpa, nunca del control → hitboxes generosas, coyote time; nada de inercia excesiva.
-- **Partidas cortas**: se juega en sesiones de 10–15 min → checkpoints frecuentes, sin grindeo.
--->
+**Control preciso y deliberado**: Cada salto y cada ataque deben sentirse intencionales. El personaje responde con peso y compromiso, sin inercia excesiva ni respuestas instantáneas. Si morís, es porque calculaste mal, no porque el control te traicionó. Esto implica animaciones con frames de anticipación y recuperación, y hitboxes legibles.
+
+**Pantallas cortas, avance por salas**: El personaje comienza desde distintos lados de la pantalla y recorre pasillos y cavernas conectadas. Cada pantalla es un desafío autocontenido con sus propias trampas, enemigos y salida. El avance es lineal, sin caminos alternativos: la exploración consiste en leer y memorizar cada sala.
+
+**Combate cuerpo a cuerpo y a distancia**: El soldado puede golpear con su traje y disparar. El combate no es masivo: los encuentros son uno a uno o contra grupos pequeños, y la posición importa tanto como la velocidad de reacción. Se prioriza la lectura del enemigo sobre la ejecución frenética.
+
+**Mortalidad alta, checkpoints frecuentes**: El jugador muere fácilmente ante trampas y enemigos. Sin embargo, el castigo es mínimo: cada sala es un checkpoint, así que al morir se reinicia desde la entrada de la sala, sin repetir secciones largas. La dificultad viene del diseño de las salas, no de la distancia entre checkpoints.
 
 ## Experiencia buscada
 
-<!--
-¿Qué querés que sienta el jugador? ¿Qué hace minuto a minuto (el "loop" central)?
-Ejemplo: "Tensión y fluidez: correr y saltar sin frenar, leer el nivel sobre la marcha.
-Loop: atravesar una sala → superar un desafío → checkpoint → sala siguiente."
--->
+Tensión contenida y fluidez. El jugador siente que cada pantalla es un pequeño rompecabezas de movimiento y combate: leer el terreno, identificar la ruta, ejecutar con precisión. La muerte es parte del aprendizaje, no un castigo frustrante.
+
+Loop central: entrar a una sala (checkpoint) → identificar amenazas y ruta → ejecutar saltos y combates → alcanzar la salida → sala siguiente. En la última sala del nivel, la salida es el refugio.
 
 ## Estructura y núcleo de gameplay
 
-<!--
-- Estructura: niveles lineales · mundo conectado (metroidvania) · runs procedurales (roguelite) · otra.
-- Núcleo: plataformas puro · plataformas + combate (¿qué peso tiene cada uno?).
-- Progresión: ¿qué cambia a medida que avanzás? (habilidades nuevas, dificultad, zonas, nada).
--->
+**Estructura**: Niveles lineales divididos en pantallas fijas (sin scroll continuo). Cada nivel representa una zona del cuerpo (órgano, tejido, conducto) y termina al alcanzar un refugio en su última sala. Cada sala es un checkpoint.
+
+**Núcleo**: Plataformas + combate. El peso está repartido: las plataformas exigen precisión y timing; el combate exige posicionamiento y lectura de patrones. No hay énfasis en combos ni en acción frenética.
+
+**Progresión**: El personaje no gana habilidades nuevas a lo largo del juego. Lo que cambia es la complejidad de las salas y la agresividad de los enemigos. El conocimiento del jugador es la única progresión real.
 
 ## Público y dificultad
 
-<!--
-¿Para quién es? (vos y amigos, fans de plataformas exigentes, casual)
-¿Qué tan difícil? ¿Hay opciones de accesibilidad o asistencia?
--->
+**Público**: Jugadores que crecieron con los cinematic platformers de los 90 (Prince of Persia, Another World, Flashback) o que disfrutan de juegos de plataformas exigentes con ritmo pausado. No es para quien busca acción rápida o narrativa dominante.
+
+**Dificultad**: Alta, pero justa. Las muertes son frecuentes y el aprendizaje es por repetición. No hay opciones de accesibilidad en la v1: la dificultad es parte de la identidad del juego.
 
 ## Plataformas y meta
 
-<!--
-- Plataformas: Linux / Windows / web / otra. Control: teclado y gamepad (ya decidido).
-- Meta: proyecto de aprendizaje · publicar gratis (itch.io) · comercial.
--->
+**Plataformas**: PC (Windows/Linux). Control con teclado y gamepad.
+
+**Meta**: Proyecto de aprendizaje y homenaje a los clásicos del género. Distribución gratuita en itch.io.
 
 ## Alcance de la primera versión
 
-<!--
-¿Qué es "terminado" para la v1? Medilo en algo concreto: horas de juego, zonas, niveles, jefes.
-Ejemplo: "3 zonas de ~5 niveles cada una, 1 jefe por zona, ~1 hora de juego."
--->
+3 niveles (zonas del cuerpo), cada uno con aproximadamente 8–10 pantallas. Un total estimado de 30–40 minutos de juego para un jugador que ya conoce los niveles. Sin jefes en la v1: el desafío está en las salas, no en enfrentamientos únicos.
 
 ## No-objetivos
 
-<!--
-Lo que este juego NO es ni va a tener, al menos en la v1. Igual de importante que los pilares.
-Ejemplo: sin diálogos ni historia hablada · sin multijugador · sin mundo abierto · sin generación procedural.
--->
+Sin diálogos ni historia hablada. Sin cinemáticas extensas (las animaciones de muerte y transición son suficientes). Sin habilidades desbloqueables ni inventario. Sin multijugador. Sin generación procedural. Sin scroll continuo: el juego es de pantalla fija.
 
 ## Referencias
 
-<!--
-Juegos (o películas, arte, música) y QUÉ tomás de cada uno. También qué NO querés copiar.
-Ejemplo:
-- Celeste: precisión del control y respawn instantáneo. No: la carga narrativa.
-- Dead Cells: fluidez del combate.
--->
+**Prince of Persia (1989)**: La vulnerabilidad del protagonista, el peso de cada acción, las trampas mortales que exigen memorización y timing. El combate de esgrima uno a uno. No: la ambientación medieval ni el límite de tiempo global.
+
+**Another World (1991)**: La ausencia de HUD y texto, la narrativa contada a través del entorno, la sensación de hostilidad del mundo. Las animaciones rotoscopiadas que dan peso al personaje. No: la resolución de puzzles crípticos sin pistas.
+
+**Flashback (1992)**: El combate con arma de fuego, la exploración de pantallas conectadas, la presentación cinematográfica. La idea de un soldado en un entorno hostil con identidad propia. No: la estructura de aventura con objetos y pistas narrativas.
 
 ## Preguntas abiertas
 
-<!--
-Todo lo que todavía no sabés. Es normal que al principio esta sección sea larga;
-se va vaciando con los spikes y las decisiones.
--->
+- ¿Qué arsenal tiene el soldado? ¿Un solo arma o varias, con munición limitada o infinita?
+- ¿Cómo funciona la vida? ¿Muero de un golpe o aguanto varios? Si aguanto varios, ¿cómo lo muestro sin HUD?
+- ¿Qué conjunto de movimientos tiene el personaje: agacharse, rodar, colgarse de bordes? (Lo empieza a responder el Spike 001.)
+- ¿Los enemigos tienen patrones fijos o alguna variación?
+- ¿Cuántos tipos de enemigos entran en la v1?
+- ¿Los refugios son solo el final del nivel o tienen alguna otra función (narrativa o mecánica)?
+- Por ahora cada sala es un checkpoint. ¿Alguna sala va a necesitar un checkpoint intermedio, o conviene espaciarlos más?
+- ¿La estética es biológica explícita (tejidos, órganos) o más abstracta y tecnológica?
