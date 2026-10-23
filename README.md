@@ -52,7 +52,7 @@ flowchart TD
 | `specs/archive/` | Lo cerrado o reemplazado. Nada se borra: se archiva. |
 | `.claude/` | Configuración del agente: `skills/` (recetas de trabajo paso a paso) y `hooks/` (formato y lint automáticos en cada script). |
 | `addons/` | Plugins de Godot (gdUnit4). |
-| `prototypes/` | Código descartable de los experimentos. **Solo existe en las branches `spike/*`**, nunca en `main`. |
+| `prototypes/` | Código descartable de los experimentos. **Solo existe en las branches `spike/*`**, nunca en `develop` ni en `main`. |
 
 Archivos sueltos en la raíz: `project.godot` (el proyecto), `CLAUDE.md` (reglas para el agente), `.mcp.json` (conexión del agente con Godot).
 
