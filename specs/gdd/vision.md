@@ -1,7 +1,7 @@
 ---
 id: G001
 type: gdd
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
 updated: 2026-10-23
