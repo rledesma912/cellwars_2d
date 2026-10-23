@@ -23,7 +23,7 @@ Aplicá los criterios del principio 1 de `CLAUDE.md`. Si alguno se cumple, recom
 ## 4. Redactar
 
 1. Número `NNN`: siguiente libre en `specs/features/`, `specs/archive/features/` y las branches `feat/*` (`git fetch` y `git branch -a --list '*feat/*'`).
-2. **Branch** (igual en ambas vías): con working tree limpio y `main` al día con `origin/main`, creá `feat/NNN-<nombre>` desde `main`. La spec, el plan, el código y el playtest viajan juntos en esta branch y en un único PR.
+2. **Branch** (igual en ambas vías): con working tree limpio y `develop` al día con `origin/develop`, creá `feat/NNN-<nombre>` desde `develop`. La spec, el plan, el código y el playtest viajan juntos en esta branch y en un único PR.
 3. Carpeta `specs/features/NNN-<nombre>/spec.md`, id `FNNN`, `status: draft`, `links` completos (GDD, decisiones, spike). Commit `docs: spec FNNN (draft)`.
 4. Criterios de aceptación con ID `FNNN-ACnn` y **una** etiqueta cada uno:
    - `[unit]`: comportamiento de lógica pura verificable con gdUnit4 (timers, cálculos, transiciones). Redactalo como entrada → salida.

@@ -23,7 +23,7 @@ Plantilla: `specs/templates/playtest.md`.
 
 ## 3. PR
 
-Commit `docs: playtest FNNN`, push y `gh pr create` a `main`:
+Commit `docs: playtest FNNN`, push y `gh pr create --base develop`:
 
 - Título: `feat: FNNN <nombre>`.
 - Cuerpo: resumen; decisiones de Godot no obvias explicadas (el desarrollador está aprendiendo); `Closes #N`; criterios `[unit]` con el test que los cubre; checklist de playtest (`[manual]` y `[feel]`) copiado.

@@ -33,7 +33,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 
 1. **Spike solo con incertidumbre relevante**: feel desconocido de mecánica central; ≥2 enfoques técnicos y elegir mal es caro; dudas de viabilidad/rendimiento; integración nueva. Si no, directo a spec.
    - Un solo spike abierto a la vez. Un spike está abierto si existe una branch `spike/*` (local o remota) o algún archivo en `specs/spikes/`; deja de estarlo cuando `close-spike` termina. El timebox se respeta: al vencer, detenete y proponé cerrar o **una** extensión.
-   - El código de un spike **nunca llega a `main`**: vive en `prototypes/spike_NNN/` en la branch `spike/NNN-*`.
+   - El código de un spike **nunca llega a `develop` ni a `main`**: vive en `prototypes/spike_NNN/` en la branch `spike/NNN-*`.
 2. **Todo spike termina en una decisión** en `specs/decisions/`, que luego actualiza GDD / arquitectura / spec. Las decisiones técnicas importantes fuera de spikes también se registran.
 3. **Verificación en capas**; cada criterio declara la suya:
    - `[unit]`: gdUnit4 sobre lógica pura. Lo cierra el agente.
@@ -117,7 +117,7 @@ Los criterios de aceptación viven en el cuerpo con su ID, no en el frontmatter.
 
 | Documento | Abierto | Al cerrarse |
 |---|---|---|
-| Spike (doc) | En la branch `spike/NNN-*`: `draft` (definición) → `approved` (en ejecución) → `done` (informe listo) | Decisión aprobada → `close-spike` lo lleva a `main` por PR, ya en `archive/spikes/` |
+| Spike (doc) | En la branch `spike/NNN-*`: `draft` (definición) → `approved` (en ejecución) → `done` (informe listo) | Decisión aprobada → `close-spike` lo lleva a `develop` por PR, ya en `archive/spikes/` |
 | Spike (código) | `prototypes/spike_NNN/` en `spike/NNN-*` | Tag `archive/spike-NNN` + branch borrada (local y remota, con confirmación) |
 | Decisión | `draft` (propuesta) en `specs/decisions/` | `approved` queda; `superseded` → `archive/decisions/` y los vivos apuntan a la nueva |
 | Spec | En la branch `feat/NNN-*`: `draft` → `approved` → `in-progress` | `done` (ver regla abajo), consolidada *as-built*, queda en `features/` |
@@ -128,6 +128,11 @@ Los criterios de aceptación viven en el cuerpo con su ID, no en el frontmatter.
 
 ## Git
 
-- Branches: `spike/NNN-nombre` (no se mergean; solo los docs llegan a `main`), `feat/NNN-nombre` (una issue por feature).
+Modelo `develop` + `main` (decisión `D0001`):
+
+- `develop`: integración. Toda branch de trabajo sale de `develop` actualizado y vuelve por PR a `develop` (`gh pr create --base develop`).
+- `main`: solo releases. PR `develop` → `main` titulado `release: vX.Y.Z` y, tras el merge, tag anotado `vX.Y.Z` en `main`; los builds de itch.io salen de un tag. El agente nunca abre un release sin pedido explícito.
+- Hotfix: `hotfix/<nombre>` desde `main` → PR a `main` + tag de parche → merge de `main` a `develop`.
+- Branches: `spike/NNN-nombre` (no se mergean; solo los docs llegan a `develop`), `feat/NNN-nombre` (una issue por feature), `docs/*`, `chore/*`.
 - PR con checklist de playtest; el desarrollador mergea después de jugar.
 - Commits convencionales: `feat:`, `fix:`, `spike:`, `docs:`, `chore:`.

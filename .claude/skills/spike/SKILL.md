@@ -10,14 +10,14 @@ Plantilla: `specs/templates/spike.md`. Decisión: `specs/templates/decision.md`.
 ## 0. Precondiciones (si alguna falla, detenete y avisá)
 
 - **Un solo spike abierto**: `git fetch` y verificá que no exista ninguna branch `spike/*` (`git branch -a --list '*spike/*'`) ni archivos en `specs/spikes/` (salvo `.gitkeep`). Un spike en `done` esperando decisión o consolidación **sigue abierto**. Si hay uno, proponé terminarlo (decisión + `close-spike`).
-- **Working tree limpio** y `main` al día con `origin/main`.
+- **Working tree limpio** y `develop` al día con `origin/develop`.
 - **Justificación**: se cumple al menos uno de los criterios del principio 1 de `CLAUDE.md` (feel desconocido de mecánica central; ≥2 enfoques y elegir mal es caro; viabilidad/rendimiento; integración nueva). Si no, recomendá ir directo a `spec-feature`.
 - **No descartado**: buscá el tema en `specs/discarded.md`. Si aparece, solo seguís si hay un motivo nuevo, y lo escribís en "Motivo".
 
 ## 1. Definición
 
 1. Número: siguiente `NNN` libre mirando `specs/archive/spikes/`, las branches `spike/*` y los tags `archive/spike-*` (3 dígitos, desde `001`). Id `SNNN`.
-2. Creá la branch `spike/NNN-<nombre>` desde `main` y en ella `specs/spikes/NNN-<nombre>.md` desde la plantilla, `status: draft`. Completá solo frontmatter, encabezado y **Definición**:
+2. Creá la branch `spike/NNN-<nombre>` desde `develop` y en ella `specs/spikes/NNN-<nombre>.md` desde la plantilla, `status: draft`. Completá solo frontmatter, encabezado y **Definición**:
    - Pregunta en una frase, criterios de salida observables, timebox en horas con fecha de vencimiento, alternativas a comparar.
    - Leé antes el GDD relevante (`specs/gdd/`) y `architecture.md`.
 3. Commit `spike: definición SNNN` y push (así el spike queda visible como abierto).
@@ -41,5 +41,5 @@ Plantilla: `specs/templates/spike.md`. Decisión: `specs/templates/decision.md`.
 ## Reglas
 
 - Nunca marcar `[feel]` como cumplido; registrá lo que reporta el desarrollador.
-- El código de `prototypes/` nunca llega a `main`.
+- El código de `prototypes/` nunca llega a `develop` ni a `main`.
 - No modifiques GDD ni `architecture.md` durante el spike: eso lo hace `close-spike`.

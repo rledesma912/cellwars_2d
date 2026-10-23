@@ -1,6 +1,6 @@
 ---
 name: close-spike
-description: Cierra un spike de cellwars_2d una vez aprobada su decisión - consolida las consecuencias en los documentos vivos, archiva el informe, registra lo descartado, lleva los docs a main por PR y archiva la branch con un tag. Usala cuando el desarrollador apruebe la decisión de un spike.
+description: Cierra un spike de cellwars_2d una vez aprobada su decisión - consolida las consecuencias en los documentos vivos, archiva el informe, registra lo descartado, lleva los docs a develop por PR y archiva la branch con un tag. Usala cuando el desarrollador apruebe la decisión de un spike.
 ---
 
 # Close spike
@@ -12,11 +12,11 @@ Precondición: el spike `SNNN` tiene `status: done` y su decisión `DNNNN` fue a
 Precondiciones (si alguna falla, detenete, mostrá el estado o el diff y pedí intervención):
 
 - Working tree limpio (`git status --porcelain` vacío).
-- `main` local igual a `origin/main` (`git fetch` primero).
+- `develop` local igual a `origin/develop` (`git fetch` primero).
 - La branch del spike está pusheada (sin commits locales pendientes).
-- Las rutas a traer **no existen** en `main` (`git ls-tree main -- <ruta>` vacío). Si existen, no las pises: mostrá `git diff main spike/NNN-<nombre> -- <ruta>` y esperá instrucciones.
+- Las rutas a traer **no existen** en `develop` (`git ls-tree develop -- <ruta>` vacío). Si existen, no las pises: mostrá `git diff develop spike/NNN-<nombre> -- <ruta>` y esperá instrucciones.
 
-Desde `main`, creá `docs/close-spike-NNN`. Traé solo los documentos desde la branch del spike, **nunca `prototypes/`**:
+Desde `develop`, creá `docs/close-spike-NNN`. Traé solo los documentos desde la branch del spike, **nunca `prototypes/`**:
 
 ```bash
 git checkout spike/NNN-<nombre> -- specs/spikes/NNN-<nombre>.md specs/decisions/NNNN-<titulo>.md
@@ -34,7 +34,7 @@ git diff --cached --stat   # debe listar solo esos dos archivos de specs/
 
 ## 3. PR
 
-Commit `docs: cierre de spike SNNN y decisión DNNNN`, push y PR a `main` con: resumen de la decisión, lista de documentos tocados, líneas agregadas a `discarded.md`. El desarrollador mergea.
+Commit `docs: cierre de spike SNNN y decisión DNNNN`, push y PR a `develop` con: resumen de la decisión, lista de documentos tocados, líneas agregadas a `discarded.md`. El desarrollador mergea.
 
 ## 4. Archivar la branch (después del merge)
 

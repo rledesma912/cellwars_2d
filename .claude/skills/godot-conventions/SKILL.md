@@ -23,7 +23,7 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 | Niveles | `game/levels/` | **No tocar** salvo pedido explícito |
 | Debug overlay | `game/debug/` | Cada sistema nuevo agrega sus líneas |
 | Tests | `test/` espejo de `game/systems/` (`test/player/player_motor_test.gd`) | `extends GdUnitTestSuite` |
-| Prototipos de spike | `prototypes/spike_NNN/` | Solo en branches `spike/*`, nunca en `main` |
+| Prototipos de spike | `prototypes/spike_NNN/` | Solo en branches `spike/*`, nunca en `develop` ni en `main` |
 
 ## Reglas
 

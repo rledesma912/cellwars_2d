@@ -27,6 +27,6 @@ Tabla de hallazgos: archivo, problema, propuesta. Mostralo al desarrollador.
 
 ## 3. PR
 
-Branch `docs/curate-<YYYY-MM-DD>`. Aplicá solo los arreglos mecánicos (frontmatter, enlaces, mover a `archive/`, quitar contenido descartado de los vivos). Lo que requiere criterio (contradicciones, GDD, decisiones, criterios de specs aprobadas) va como propuesta en el cuerpo del PR, sin aplicarse. Commit `docs: curación de specs`, PR a `main`.
+Branch `docs/curate-<YYYY-MM-DD>` desde `develop` actualizado. Aplicá solo los arreglos mecánicos (frontmatter, enlaces, mover a `archive/`, quitar contenido descartado de los vivos). Lo que requiere criterio (contradicciones, GDD, decisiones, criterios de specs aprobadas) va como propuesta en el cuerpo del PR, sin aplicarse. Commit `docs: curación de specs`, PR a `develop`.
 
 Nunca borrar: mover a `archive/` o dejar en git.

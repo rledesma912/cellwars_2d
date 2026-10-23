@@ -5,11 +5,11 @@ description: Cierra una feature de cellwars_2d después del merge - consolida la
 
 # Close feature
 
-Precondiciones (si alguna falla, detenete y reportá): el PR de `FNNN` está mergeado en `main`; working tree limpio; `main` al día con `origin/main`.
+Precondiciones (si alguna falla, detenete y reportá): el PR de `FNNN` está mergeado en `develop`; working tree limpio; `develop` al día con `origin/develop`.
 
 Fuente de verdad del playtest: el checklist del PR, marcado por el desarrollador (`gh pr view <N> --json body`).
 
-Branch `docs/close-feature-NNN` desde `main` actualizado.
+Branch `docs/close-feature-NNN` desde `develop` actualizado.
 
 ## 1. Spec as-built
 
@@ -48,6 +48,6 @@ Si `ls` muestra algo más que `spec.md`, detenete y preguntá qué hacer con ese
 
 ## 4. PR
 
-Commit `docs: cierre FNNN`, push y PR a `main` con la lista de documentos tocados. El desarrollador revisa y mergea. Borrá la branch `feat/NNN-*` solo con confirmación.
+Commit `docs: cierre FNNN`, push y PR a `develop` con la lista de documentos tocados. El desarrollador revisa y mergea. Borrá la branch `feat/NNN-*` solo con confirmación.
 
 El agente nunca borra documentos: los mueve a `archive/`.
