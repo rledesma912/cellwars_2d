@@ -42,7 +42,7 @@ Lógica pura (`PlayerMotor`, sin nodos):
 
 Jugando:
 
-- F003-AC07 [manual] Al tocar Jugar aparece la sala de prueba llenando la pantalla: 32 × 18 baldosas de 20 px, sin franjas ni baldosas cortadas. Tiene 3 pisos, escalones entre pisos, paredes a los costados, un hueco en el piso de abajo, la entrada abierta en la pared izquierda (piso 1) y la salida abierta en la pared derecha (piso 3).
+- F003-AC07 [manual] Al tocar Jugar aparece la sala de prueba llenando la pantalla: 32 × 18 baldosas de 20 px, sin franjas ni baldosas cortadas. Tiene 3 pisos, escaleras de dos escalones entre pisos, paredes a los costados, un hueco en el piso de abajo, la entrada abierta en la pared izquierda (piso 1) y la salida abierta en la pared derecha (piso 3).
 - F003-AC08 [manual] El rectángulo (26 × 40 px) aparece parado en el punto de inicio. Camina con A/D, flechas, cruceta y stick izquierdo; salta con Espacio, K o el botón A del gamepad. No atraviesa paredes, pisos ni techos.
 - F003-AC09 [manual] Partiendo de la entrada se llega a la salida solo caminando y saltando por los escalones.
 - F003-AC10 [manual] Al salir entero de la pantalla, por debajo (el hueco) o por un costado (la entrada o la salida), el rectángulo reaparece en el punto de inicio, quieto. Es provisorio: la F004 cambia los costados por el paso a otra sala y la F005 cambia el hueco por la muerte.
@@ -64,16 +64,16 @@ Jugando:
 | Parámetro | Tipo | Valor inicial | Rango sugerido |
 |---|---|---|---|
 | `run_speed` | float (px/s) | 140 | 80–250 |
-| `jump_height` | float (px) | 80 (4 baldosas) | 40–140 |
+| `jump_height` | float (px) | 60 (3 baldosas) | 40–140 |
 | `time_to_apex` | float (s) | 0,35 | 0,2–0,6 |
 | `max_fall_speed` | float (px/s) | 600 | 300–1000 |
 
 `gravity` y `jump_velocity` no se ajustan a mano: se calculan de `jump_height` y `time_to_apex` (AC06). Así se ajusta "qué tan alto" y "qué tan rápido", que es más fácil de pensar.
 
-Con 80 px de salto, el rectángulo sube escalones de hasta 3 baldosas (60 px) con margen. Pero no sube un piso entero (6 baldosas, 120 px) de un salto, por eso la sala tiene escalones.
+Con 40 px de alto y 60 de salto, la cabeza llega justo al techo al saltar debajo de un piso (5 filas de aire = 100 px), sin chocar. Sube escalones de 2 baldosas (40 px) con margen; un piso entero (120 px) se sube por una escalera de dos escalones.
 
 ## Decisiones del desarrollador
 
 - Salas de prueba: el agente puede crear y editar `game/levels/test/` (aprobado el 2026-10-24). Las salas de los niveles siguen siendo del desarrollador.
 - Overlay de debug: sus textos quedan en castellano, sin traducir (aprobado el 2026-10-24).
-- Cambios pedidos durante la implementación (2026-10-24): regla de entrada y salida en lados opuestos (Objetivo, AC07, AC09, AC10) y rectángulo un tercio más chico, de 40 × 60 a 26 × 40 px (AC08).
+- Cambios pedidos durante la implementación (2026-10-24): regla de entrada y salida en lados opuestos (Objetivo, AC07, AC09, AC10) y rectángulo un tercio más chico, de 40 × 60 a 26 × 40 px (AC08). Para que no choque con los techos, salto de 80 a 60 px y escalones de 2 baldosas; el precipicio pasa a 3 baldosas para que se pueda saltar.

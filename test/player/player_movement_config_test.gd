@@ -14,6 +14,6 @@ func test_f003_ac06_derived_gravity_and_jump_velocity() -> void:
 func test_defaults_match_spec() -> void:
 	var config := PlayerMovementConfig.new()
 	assert_float(config.run_speed).is_equal(140.0)
-	assert_float(config.jump_height).is_equal(80.0)
+	assert_float(config.jump_height).is_equal(60.0)
 	assert_float(config.time_to_apex).is_equal(0.35)
 	assert_float(config.max_fall_speed).is_equal(600.0)

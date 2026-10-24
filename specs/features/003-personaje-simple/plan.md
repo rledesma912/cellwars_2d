@@ -55,7 +55,7 @@ World (Node2D, world.gd)                         game/world/world.tscn
 | `game/debug/debug_overlay.gd` | nodo | `DebugOverlay`: F3 (`debug_toggle`) muestra u oculta; si está visible, escribe las líneas de `get_debug_info()` más los FPS. |
 | `game/data/player_movement.tres` | Resource (instancia) | Valores iniciales de la spec. Después lo edita solo el desarrollador. |
 | `game/levels/tilesets/greybox.tres` + `game/art/greybox/block.png` | Resource + imagen | Baldosa gris de 20×20 con borde, para distinguir baldosas, y colisión de cuadrado completo. |
-| `game/levels/test/test_room.tscn` | escena | Sala de 32 × 18: paredes con entrada (izquierda, piso 1) y salida (derecha, piso 3), 3 pisos de 6 filas, escalones de 3 filas, hueco en el piso de abajo y `Spawn` junto a la entrada. Se genera con un script temporal que pinta las baldosas (más preciso que a mano); después se puede editar en el editor. |
+| `game/levels/test/test_room.tscn` | escena | Sala de 32 × 18: paredes con entrada (izquierda, piso 1) y salida (derecha, piso 3), 3 pisos de 6 filas, escaleras de dos escalones de 2 filas, hueco de 3 baldosas en el piso de abajo y `Spawn` junto a la entrada. Se genera con un script temporal que pinta las baldosas (más preciso que a mano); después se puede editar en el editor. |
 
 ## Señales
 
