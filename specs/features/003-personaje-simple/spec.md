@@ -45,7 +45,7 @@ Jugando:
 - F003-AC09 [manual] Partiendo del piso de abajo se llega al piso de arriba de todo solo caminando y saltando por los escalones.
 - F003-AC10 [manual] Al caer por el hueco y salir por debajo de la pantalla, el rectángulo reaparece en el punto de inicio, quieto. Es provisorio: la F005 lo reemplaza por la muerte.
 - F003-AC11 [manual] Pausa (Esc / Start) congela al rectángulo, incluso a mitad de un salto; Continuar lo deja seguir desde donde estaba.
-- F003-AC12 [manual] F3 (o el botón LB del gamepad) muestra el overlay de debug con velocidad, si está en el piso y FPS; F3 de nuevo lo oculta. Los valores cambian al moverse.
+- F003-AC12 [manual] F3 (o el botón Select/Back del gamepad) muestra el overlay de debug con velocidad, si está en el piso y FPS; F3 de nuevo lo oculta. Los valores cambian al moverse.
 - F003-AC13 [manual] Cambiar `jump_height` en `game/data/player_movement.tres` desde el inspector cambia la altura del salto en la siguiente partida.
 
 ## Casos límite
