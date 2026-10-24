@@ -58,6 +58,8 @@ func _physics_process(delta: float) -> void:
 - `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
 - `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
+- Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y marcadores como `Spawn`. Las medidas (D0002) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados opuestos.
+- Entidades: el origen de un personaje está en sus pies, al centro.
 - Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
 
 ## Textos e idiomas
@@ -94,7 +96,7 @@ Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (res
 
 ## Debug overlay
 
-`game/debug/debug_overlay.tscn`, activable con F3 (`debug_toggle`). Muestra estado del jugador, velocidad, `is_on_floor`, timers (coyote, buffer) y FPS. Cada sistema nuevo agrega sus líneas. Es la herramienta principal del playtest.
+`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy: velocidad y "en el piso" del personaje. Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
 
 ## Tooling
 
