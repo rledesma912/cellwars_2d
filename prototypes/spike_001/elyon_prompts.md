@@ -143,8 +143,8 @@ no anti-aliasing, no gradients, flat solid background.
 ### Girar (de frente) — `elyon_40_girar_frente.png`
 
 ```
-Pixel art game sprite of the attached character (futuristic soldier), strict side view
-facing right, full body, turning around, body facing the camera, front view, arms at the sides. The character is exactly 40 pixels tall on a
+Pixel art game sprite of the attached character (futuristic soldier), strict front view,
+facing the camera, full body, turning around, arms at the sides. The character is exactly 40 pixels tall on a
 64x64 pixel canvas, feet at the bottom center, shown upscaled 8x so every pixel is a crisp
 8x8 square block (final image 512x512).
 Design to keep: white and light grey armor plates over a black bodysuit, dark grey rounded
@@ -154,6 +154,8 @@ Style: retro 16-bit cinematic platformer like Flashback (1992) and Prince of Per
 limited palette of 10 colors, 1-pixel dark outline, flat shading with 2 tones per material,
 no anti-aliasing, no gradients, flat solid background.
 ```
+
+Para esta pose, sacá `front view` del prompt negativo.
 
 ### Apuntar — `elyon_40_apuntar.png`
 
@@ -297,8 +299,8 @@ no anti-aliasing, no gradients, flat solid background.
 ### Girar (de frente) — `elyon_48_girar_frente.png`
 
 ```
-Pixel art game sprite of the attached character (futuristic soldier), strict side view
-facing right, full body, turning around, body facing the camera, front view, arms at the sides. The character is exactly 48 pixels tall on a
+Pixel art game sprite of the attached character (futuristic soldier), strict front view,
+facing the camera, full body, turning around, arms at the sides. The character is exactly 48 pixels tall on a
 64x64 pixel canvas, feet at the bottom center, shown upscaled 8x so every pixel is a crisp
 8x8 square block (final image 512x512).
 Design to keep: white and light grey armor plates over a black bodysuit, dark grey rounded
@@ -308,6 +310,8 @@ Style: retro 16-bit cinematic platformer like Flashback (1992) and Prince of Per
 limited palette of 10 colors, 1-pixel dark outline, flat shading with 2 tones per material,
 no anti-aliasing, no gradients, flat solid background.
 ```
+
+Para esta pose, sacá `front view` del prompt negativo.
 
 ### Apuntar — `elyon_48_apuntar.png`
 
