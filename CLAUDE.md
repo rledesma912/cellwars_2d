@@ -11,7 +11,7 @@ Plataformas 2D en pixel art con Godot. Nombre visible **Cellwars 2D**; nombre t�
 
 ## Vocabulario
 
-GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce evidencia, no código de producción) · Decisión/ADR (`specs/decisions/`) · Spec (criterios con ID) · Plan (diseño técnico: escenas, scripts, señales, Resources). **No usar la sigla "TDD"** en el repo.
+GDD (`specs/gdd/`, modular) · Spike (investigación de alcance acotado, sin límite de tiempo; produce evidencia, no código de producción) · Decisión/ADR (`specs/decisions/`) · Spec (criterios con ID) · Plan (diseño técnico: escenas, scripts, señales, Resources). **No usar la sigla "TDD"** en el repo.
 
 ## Stack
 
@@ -32,7 +32,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 ## Principios del flujo
 
 1. **Spike solo con incertidumbre relevante**: feel desconocido de mecánica central; ≥2 enfoques técnicos y elegir mal es caro; dudas de viabilidad/rendimiento; integración nueva. Si no, directo a spec.
-   - Un solo spike abierto a la vez. Un spike está abierto si existe una branch `spike/*` (local o remota) o algún archivo en `specs/spikes/`; deja de estarlo cuando `close-spike` termina. El timebox se respeta: al vencer, detenete y proponé cerrar o **una** extensión.
+   - Un solo spike abierto a la vez. Un spike está abierto si existe una branch `spike/*` (local o remota) o algún archivo en `specs/spikes/`; deja de estarlo cuando `close-spike` termina. Sin límite de tiempo: lo que lo acota es su alcance (pregunta, alternativas y criterios de salida). Al cumplirse los criterios de salida, proponé cerrar; si aparece algo fuera del alcance, anotalo y proponé si se suma o va al backlog. Cierra el desarrollador.
    - El código de un spike **nunca llega a `develop` ni a `main`**: vive en `prototypes/spike_NNN/` en la branch `spike/NNN-*`.
 2. **Todo spike termina en una decisión** en `specs/decisions/`, que luego actualiza GDD / arquitectura / spec. Las decisiones técnicas importantes fuera de spikes también se registran.
 3. **Verificación en capas**; cada criterio declara la suya:
