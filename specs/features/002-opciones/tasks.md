@@ -13,7 +13,7 @@ updated: 2026-10-24
 - [x] T2 `PlayerSettings` en lógica pura y tests (cubre: F002-AC01, F002-AC02, F002-AC03, F002-AC04, F002-AC05)
 - [x] T3 `SettingsStore`: leer y guardar en dos pasos, con tests (cubre: F002-AC06, F002-AC07, F002-AC08)
 - [x] T4 Traducciones: `game/i18n/texts.csv`, registro en el proyecto, textos de F001 pasados a etiquetas, carpeta `i18n/` documentada (cubre: F002-AC13)
-- [ ] T5 Botón B del gamepad en `ui_cancel` (cubre: F002-AC14)
+- [x] T5 Botón B del gamepad en `ui_cancel` (cubre: F002-AC14)
 - [ ] T6 Escena `OptionsMenu` con bip de prueba (cubre: F002-AC10, F002-AC11, F002-AC12, F002-AC17)
 - [ ] T7 `MainMenu`: botón Opciones y foco al volver (cubre: F002-AC10, F002-AC14)
 - [ ] T8 `Main`: cargar, aplicar y guardar la configuración; conectar Opciones; smoke run (cubre: F002-AC11 a F002-AC16)
