@@ -1,7 +1,7 @@
 ---
 id: F002
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
 updated: 2026-10-24
@@ -33,32 +33,32 @@ Todos los textos del juego pasan a una tabla de traducciones, incluidos los men�
 
 Configuración del jugador (lógica pura):
 
-- F002-AC01 [unit] Una configuración nueva tiene pantalla completa desactivada, volumen 100 % y el idioma que corresponde al sistema (ver AC04).
-- F002-AC02 [unit] El volumen siempre queda entre 0 y 100: pedir 130 deja 100; pedir −5 deja 0.
-- F002-AC03 [unit] Conversión del volumen a la escala de audio de Godot (decibeles): 100 % → 0 dB; 50 % → aproximadamente −6 dB; 0 % → silencio total.
-- F002-AC04 [unit] Idioma por defecto según el idioma del sistema: cualquier variante de español (`es`, `es_AR`, `es_ES`…) → español; cualquier variante de inglés → inglés; cualquier otro → inglés.
-- F002-AC05 [unit] Cambiar una opción al mismo valor que ya tenía se informa como "sin cambios" (y por lo tanto no se guarda); cambiarla a otro valor se informa como "cambió".
+- F002-AC01 [unit] ✅ Una configuración nueva tiene pantalla completa desactivada, volumen 100 % y el idioma que corresponde al sistema (ver AC04).
+- F002-AC02 [unit] ✅ El volumen siempre queda entre 0 y 100: pedir 130 deja 100; pedir −5 deja 0.
+- F002-AC03 [unit] ✅ Conversión del volumen a la escala de audio de Godot (decibeles): 100 % → 0 dB; 50 % → aproximadamente −6 dB; 0 % → silencio total.
+- F002-AC04 [unit] ✅ Idioma por defecto según el idioma del sistema: cualquier variante de español (`es`, `es_AR`, `es_ES`…) → español; cualquier variante de inglés → inglés; cualquier otro → inglés.
+- F002-AC05 [unit] ✅ Cambiar una opción al mismo valor que ya tenía se informa como "sin cambios" (y por lo tanto no se guarda); cambiarla a otro valor se informa como "cambió".
 
 Guardado (lógica pura con acceso a archivos, sin escenas):
 
-- F002-AC06 [unit] Guardar la configuración y volver a leerla devuelve los mismos valores.
-- F002-AC07 [unit] Si el archivo no existe, está roto o tiene valores inválidos (volumen "abc", idioma "fr", un tipo de dato inesperado), los valores afectados vuelven a su valor por defecto y el resto se respeta.
-- F002-AC08 [unit] El guardado escribe primero un archivo temporal y recién al terminar reemplaza al anterior: después de guardar no queda ningún archivo temporal, y si quedó uno de un guardado interrumpido, se ignora al leer.
+- F002-AC06 [unit] ✅ Guardar la configuración y volver a leerla devuelve los mismos valores.
+- F002-AC07 [unit] ✅ Si el archivo no existe, está roto o tiene valores inválidos (volumen "abc", idioma "fr", un tipo de dato inesperado), los valores afectados vuelven a su valor por defecto y el resto se respeta.
+- F002-AC08 [unit] ✅ El guardado escribe primero un archivo temporal y recién al terminar reemplaza al anterior: después de guardar no queda ningún archivo temporal, y si quedó uno de un guardado interrumpido, se ignora al leer.
 
 Flujo de pantallas (amplía el de F001):
 
-- F002-AC09 [unit] Menú + evento `open_options` → Opciones; Opciones + evento `back` → Menú. En Opciones, los eventos de jugar y pausar se ignoran.
+- F002-AC09 [unit] ✅ Menú + evento `open_options` → Opciones; Opciones + evento `back` → Menú. En Opciones, los eventos de jugar y pausar se ignoran.
 
 Pantallas (jugando):
 
-- F002-AC10 [manual] El menú principal muestra "Jugar", "Opciones" y "Salir". "Opciones" abre una pantalla con el título "Opciones", una casilla "Pantalla completa", una barra "Volumen" con su porcentaje, un selector "Idioma" (Español / English) y el botón "Volver", con el foco en "Pantalla completa".
-- F002-AC11 [manual] Marcar "Pantalla completa" pasa el juego a pantalla completa en el momento; desmarcarla lo vuelve a ventana.
-- F002-AC12 [manual] Al mover la barra de volumen suena un bip de prueba al volumen elegido; en 0 % no se escucha nada.
-- F002-AC13 [manual] Cambiar el idioma cambia en el momento todos los textos de la pantalla de opciones; al volver, el menú principal y el menú de pausa también están en el idioma elegido.
-- F002-AC14 [manual] "Volver", Esc o el botón B del gamepad regresan al menú principal, con el foco en "Opciones".
-- F002-AC15 [manual] Cerrar el juego y volver a abrirlo conserva la pantalla completa, el volumen y el idioma elegidos.
-- F002-AC16 [manual] Sin archivo de configuración (primera vez), el juego arranca en el idioma de la compu si es español o inglés, y en inglés si es otro.
-- F002-AC17 [manual] En la pantalla de opciones se navega con flechas, pad direccional y stick; la barra de volumen se mueve con izquierda/derecha de a 10 %; todo responde también al mouse.
+- F002-AC10 [manual] ✅ El menú principal muestra "Jugar", "Opciones" y "Salir". "Opciones" abre una pantalla con el título "Opciones", una casilla "Pantalla completa", una barra "Volumen" con su porcentaje, un selector "Idioma" (Español / English) y el botón "Volver", con el foco en "Pantalla completa".
+- F002-AC11 [manual] ⚠️ aceptado sin probar (ver Notas finales). Marcar "Pantalla completa" pasa el juego a pantalla completa en el momento; desmarcarla lo vuelve a ventana.
+- F002-AC12 [manual] ✅ Al mover la barra de volumen suena un bip de prueba al volumen elegido; en 0 % no se escucha nada.
+- F002-AC13 [manual] ✅ Cambiar el idioma cambia en el momento todos los textos de la pantalla de opciones; al volver, el menú principal y el menú de pausa también están en el idioma elegido.
+- F002-AC14 [manual] ✅ "Volver", Esc o el botón B del gamepad regresan al menú principal, con el foco en "Opciones".
+- F002-AC15 [manual] ✅ Cerrar el juego y volver a abrirlo conserva la pantalla completa, el volumen y el idioma elegidos.
+- F002-AC16 [manual] ✅ Sin archivo de configuración (primera vez), el juego arranca en el idioma de la compu si es español o inglés, y en inglés si es otro.
+- F002-AC17 [manual] ✅ En la pantalla de opciones se navega con flechas, pad direccional y stick; la barra de volumen se mueve con izquierda/derecha de a 10 %; todo responde también al mouse.
 
 ## Casos límite
 
@@ -83,6 +83,11 @@ No aplica: no son valores de juego. El paso de la barra de volumen (10 %) es una
 - Tabla única `game/i18n/texts.csv` con una etiqueta por texto (`MENU_PLAY`, `OPTIONS_VOLUME`…) y columnas `es` y `en`.
 - Los textos de F001 (menú principal, partida provisoria y pausa) pasan a usar etiquetas.
 
-## Preguntas abiertas
+## Notas finales
 
-Ninguna.
+- Criterios cumplidos: los `[unit]` con los tests de `test/settings/` y `test/flow/screen_flow_test.gd`; los `[manual]` y los casos límite marcados por el desarrollador en el playtest del PR #8.
+- **F002-AC11 aceptado sin probar por el desarrollador** ("acepto AC11 sin probar", 2026-10-24): el editor corre el juego incrustado en la pestaña Juego y ahí la pantalla completa no se puede aplicar. El agente lo verificó en una ventana real (activar → pantalla completa, desactivar → ventana), y el desarrollador confirmó que el juego arranca en pantalla completa por fuera del editor (AC15).
+- Para probar pantalla completa hay que correr el juego por fuera del editor: `godot --path <carpeta del proyecto>`.
+- El guardado usa JSON en vez de `ConfigFile` (cambio aprobado durante el plan): el formato de `ConfigFile` puede describir objetos que Godot construye al leer.
+- `ui_cancel` no trae el botón B del gamepad por defecto: se agregó en `project.godot`, igual que el A en `ui_accept` (F001).
+- El editor de Godot quita del `project.godot` los valores que coinciden con el por defecto (p. ej. idioma de respaldo `en`): no es un cambio de comportamiento.
