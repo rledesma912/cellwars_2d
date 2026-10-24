@@ -16,6 +16,6 @@ updated: 2026-10-23
 - [x] T5 Escena `World` placeholder con contador de tiempo (cubre: F001-AC09, F001-AC12)
 - [x] T6 Escena `PauseMenu` (cubre: F001-AC10, F001-AC11, F001-AC14)
 - [x] T7 `Main`: cablea flujo, pantallas, pausa y salir; smoke run vía MCP (cubre: F001-AC08 a F001-AC13, F001-AC15)
-- [ ] T8 Playtest: `playtest.md` y PR (cubre: F001-AC08 a F001-AC15)
+- [x] T8 Playtest: `playtest.md` y PR (cubre: F001-AC08 a F001-AC15)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f001_ac01_starts_in_menu`.
