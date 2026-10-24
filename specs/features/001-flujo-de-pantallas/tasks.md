@@ -9,7 +9,7 @@ updated: 2026-10-23
 
 # Tasks: feature 001
 
-- [ ] T1 Carpetas `game/ui/` y `game/world/` en la estructura: `CLAUDE.md`, `godot-conventions`, `architecture.md` (y la acción `pause` en Input), README (cubre: —, plan §8)
+- [x] T1 Carpetas `game/ui/` y `game/world/` en la estructura: `CLAUDE.md`, `godot-conventions`, `architecture.md` (y la acción `pause` en Input), README (cubre: —, plan §8)
 - [ ] T2 `ScreenFlow` en lógica pura + tests gdUnit4 (cubre: F001-AC01, F001-AC02, F001-AC03, F001-AC04, F001-AC05, F001-AC06, F001-AC07)
 - [ ] T3 Acción `pause` en `project.godot` (Esc, Start) (cubre: F001-AC10, F001-AC11)
 - [ ] T4 Escena `MainMenu` (cubre: F001-AC08, F001-AC13, F001-AC14)

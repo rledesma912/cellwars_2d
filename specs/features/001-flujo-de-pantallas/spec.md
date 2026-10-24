@@ -1,7 +1,7 @@
 ---
 id: F001
 type: feature
-status: approved
+status: in-progress
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
 updated: 2026-10-23

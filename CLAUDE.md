@@ -61,7 +61,8 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 - Comunicación entre sistemas por señales. Evitar `get_node()` con rutas largas. Autoloads: como máximo un bus de eventos y el estado global.
 - Física a 60 ticks; movimiento en `_physics_process`.
 - Debug overlay `game/debug/debug_overlay.tscn` (F3, acción `debug_toggle`): estado, velocidad, `is_on_floor`, timers, FPS. Cada sistema nuevo agrega sus líneas.
-- Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `debug_toggle`. Teclado y gamepad.
+- Escenas: `game/main.tscn` es la raíz persistente y cambia de pantalla; `game/ui/` tiene los menús; `game/world/` es la escena activa mientras se juega (arma la partida con salas de `levels/` y entidades de `entities/`).
+- Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
 
 ## Estructura del repo
 
@@ -71,7 +72,7 @@ specs/               # tiene .gdignore
   gdd/ (vision.md, controls.md, mechanics/, art-direction.md)
   INDEX.md · architecture.md · backlog.md · discarded.md
   templates/ · spikes/ · decisions/ · features/NNN-nombre/ · archive/{spikes,decisions,features}/
-game/ systems/ entities/ levels/ data/ art/ debug/ main.tscn
+game/ systems/ entities/ world/ levels/ ui/ data/ art/ debug/ main.tscn
 test/                # gdUnit4
 addons/              # gdUnit4
 prototypes/          # solo en branches spike/*

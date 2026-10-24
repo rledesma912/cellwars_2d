@@ -18,7 +18,9 @@ flowchart TD
 
     G --> G1["systems/<br/>reglas del juego"]
     G --> G2["entities/<br/>jugador, enemigos"]
-    G --> G3["levels/<br/>niveles"]
+    G --> G7["world/<br/>la partida en curso"]
+    G --> G3["levels/<br/>niveles (salas)"]
+    G --> G8["ui/<br/>menús"]
     G --> G4["data/<br/>valores de ajuste"]
     G --> G5["art/<br/>sprites y tilesets"]
     G --> G6["debug/<br/>overlay F3"]
@@ -39,7 +41,10 @@ flowchart TD
 |---|---|
 | `game/systems/` | **Reglas del juego** en código puro (cómo salta el jugador, cómo corre un timer). No dependen de la escena, por eso se pueden probar solas. |
 | `game/entities/` | **Escenas y nodos** del jugador, enemigos, objetos. Leen el input y aplican lo que deciden las reglas; no tienen reglas propias. |
+| `game/main.tscn` | **Escena raíz**: queda siempre cargada y cambia entre el menú y la partida. |
+| `game/world/` | **La partida en curso**: la escena activa mientras jugás. Carga las salas de `levels/` y pone al jugador y los enemigos de `entities/`. |
 | `game/levels/` | **Niveles**, armados con `TileMapLayer`. Los edita el desarrollador. |
+| `game/ui/` | **Menús**: menú principal, pausa y, más adelante, opciones. |
 | `game/data/` | **Valores de ajuste** (velocidad, altura de salto…) en archivos `.tres`, editables desde el inspector de Godot sin tocar código. |
 | `game/art/` | Sprites y tilesets en pixel art. |
 | `game/debug/` | Overlay de depuración (tecla **F3**): velocidad, estados, timers, FPS. |

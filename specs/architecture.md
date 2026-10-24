@@ -4,7 +4,7 @@ type: architecture
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-21
+updated: 2026-10-23
 ---
 
 # Arquitectura
@@ -53,6 +53,13 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 ```
 
+## Escenas
+
+- `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
+- `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
+- `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
+- Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
+
 ## Comunicación
 
 - Entre sistemas, por señales. Evitar `get_node()` con rutas largas.
@@ -76,7 +83,7 @@ func _physics_process(delta: float) -> void:
 
 ## Input
 
-Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `debug_toggle` (F3). Teclado y gamepad desde el inicio.
+Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio. Los menús usan las acciones `ui_*` que trae Godot.
 
 ## Debug overlay
 
