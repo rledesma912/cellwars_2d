@@ -1,6 +1,6 @@
 # CLAUDE.md — cellwars_2d
 
-Plataformas 2D en pixel art con Godot. Desarrollador solo, aprendiendo GDScript: **explicá en comentarios breves y en los PRs toda decisión de Godot que no sea obvia.** Todo open source.
+Plataformas 2D en pixel art con Godot. Nombre visible **Cellwars 2D**; nombre técnico **`CW_2D`**. Desarrollador solo, aprendiendo GDScript: **explicá en comentarios breves y en los PRs toda decisión de Godot que no sea obvia.** Todo open source.
 
 ## Reglas de lectura
 
@@ -64,6 +64,11 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 - Escenas: `game/main.tscn` es la raíz persistente y cambia de pantalla; `game/ui/` tiene los menús; `game/world/` es la escena activa mientras se juega (arma la partida con salas de `levels/` y entidades de `entities/`).
 - Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
 - Textos: nunca escritos directo; cada texto visible es una etiqueta (`MENU_PLAY`) traducida en `game/i18n/texts.csv` (columnas `es`, `en`). Los nodos con texto fijo se traducen solos; el texto armado por código usa `tr()`.
+
+## Nombres del juego
+
+- **Cellwars 2D**: solo donde lo ve el jugador (título del menú, de la ventana, página de itch.io).
+- **`CW_2D`**: todo lo técnico, sin espacios: directorio de datos del jugador, nombres de archivos exportados (`CW_2D-v0.1.0-windows.zip`), identificadores y prefijos.
 
 ## Estructura del repo
 
