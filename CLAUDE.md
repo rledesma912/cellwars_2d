@@ -63,6 +63,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 - Debug overlay `game/debug/debug_overlay.tscn` (F3, acción `debug_toggle`): estado, velocidad, `is_on_floor`, timers, FPS. Cada sistema nuevo agrega sus líneas.
 - Escenas: `game/main.tscn` es la raíz persistente y cambia de pantalla; `game/ui/` tiene los menús; `game/world/` es la escena activa mientras se juega (arma la partida con salas de `levels/` y entidades de `entities/`).
 - Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
+- Textos: nunca escritos directo; cada texto visible es una etiqueta (`MENU_PLAY`) traducida en `game/i18n/texts.csv` (columnas `es`, `en`). Los nodos con texto fijo se traducen solos; el texto armado por código usa `tr()`.
 
 ## Estructura del repo
 
@@ -72,7 +73,7 @@ specs/               # tiene .gdignore
   gdd/ (vision.md, controls.md, mechanics/, art-direction.md)
   INDEX.md · architecture.md · backlog.md · discarded.md
   templates/ · spikes/ · decisions/ · features/NNN-nombre/ · archive/{spikes,decisions,features}/
-game/ systems/ entities/ world/ levels/ ui/ data/ art/ debug/ main.tscn
+game/ systems/ entities/ world/ levels/ ui/ i18n/ data/ art/ debug/ main.tscn
 test/                # gdUnit4
 addons/              # gdUnit4
 prototypes/          # solo en branches spike/*

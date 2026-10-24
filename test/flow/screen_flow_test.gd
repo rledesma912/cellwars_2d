@@ -1,4 +1,4 @@
-# Tests de ScreenFlow (F001-AC01 a AC07).
+# Tests de ScreenFlow (F001-AC01 a AC07, F002-AC09).
 extends GdUnitTestSuite
 
 # Transiciones válidas según la spec; todo lo demás debe ignorarse (AC06).
@@ -8,6 +8,8 @@ const VALID := {
 	[ScreenFlow.State.PAUSED, ScreenFlow.Event.RESUME]: ScreenFlow.State.PLAYING,
 	[ScreenFlow.State.PAUSED, ScreenFlow.Event.PAUSE]: ScreenFlow.State.PLAYING,
 	[ScreenFlow.State.PAUSED, ScreenFlow.Event.TO_MENU]: ScreenFlow.State.MENU,
+	[ScreenFlow.State.MENU, ScreenFlow.Event.OPEN_OPTIONS]: ScreenFlow.State.OPTIONS,
+	[ScreenFlow.State.OPTIONS, ScreenFlow.Event.BACK]: ScreenFlow.State.MENU,
 }
 
 
@@ -18,6 +20,8 @@ func _flow_in(state: ScreenFlow.State) -> ScreenFlow:
 		flow.send(ScreenFlow.Event.PLAY)
 	if state == ScreenFlow.State.PAUSED:
 		flow.send(ScreenFlow.Event.PAUSE)
+	if state == ScreenFlow.State.OPTIONS:
+		flow.send(ScreenFlow.Event.OPEN_OPTIONS)
 	return flow
 
 
@@ -83,3 +87,14 @@ func test_f001_ac07_notifies_once_per_change_and_never_on_ignored() -> void:
 			]
 		)
 	)
+
+
+func test_f002_ac09_options_from_menu_and_back() -> void:
+	var flow := _flow_in(ScreenFlow.State.MENU)
+	assert_bool(flow.send(ScreenFlow.Event.OPEN_OPTIONS)).is_true()
+	assert_int(flow.get_state()).is_equal(ScreenFlow.State.OPTIONS)
+	for ignored: ScreenFlow.Event in [ScreenFlow.Event.PLAY, ScreenFlow.Event.PAUSE]:
+		assert_bool(flow.send(ignored)).is_false()
+		assert_int(flow.get_state()).is_equal(ScreenFlow.State.OPTIONS)
+	assert_bool(flow.send(ScreenFlow.Event.BACK)).is_true()
+	assert_int(flow.get_state()).is_equal(ScreenFlow.State.MENU)

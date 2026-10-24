@@ -21,6 +21,7 @@ flowchart TD
     G --> G7["world/<br/>la partida en curso"]
     G --> G3["levels/<br/>niveles (salas)"]
     G --> G8["ui/<br/>menús"]
+    G --> G9["i18n/<br/>traducciones"]
     G --> G4["data/<br/>valores de ajuste"]
     G --> G5["art/<br/>sprites y tilesets"]
     G --> G6["debug/<br/>overlay F3"]
@@ -44,7 +45,8 @@ flowchart TD
 | `game/main.tscn` | **Escena raíz**: queda siempre cargada y cambia entre el menú y la partida. |
 | `game/world/` | **La partida en curso**: la escena activa mientras jugás. Carga las salas de `levels/` y pone al jugador y los enemigos de `entities/`. |
 | `game/levels/` | **Niveles**, armados con `TileMapLayer`. Los edita el desarrollador. |
-| `game/ui/` | **Menús**: menú principal, pausa y, más adelante, opciones. |
+| `game/ui/` | **Menús**: menú principal, pausa y opciones. |
+| `game/i18n/` | **Traducciones**: una planilla con cada texto del juego en español e inglés. |
 | `game/data/` | **Valores de ajuste** (velocidad, altura de salto…) en archivos `.tres`, editables desde el inspector de Godot sin tocar código. |
 | `game/art/` | Sprites y tilesets en pixel art. |
 | `game/debug/` | Overlay de depuración (tecla **F3**): velocidad, estados, timers, FPS. |

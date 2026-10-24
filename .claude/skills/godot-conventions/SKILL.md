@@ -22,6 +22,7 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 | Valores de tuning | `game/data/<x>.tres` | Instancia del Resource. **La crea el agente una vez con valores iniciales; después la edita solo el desarrollador** |
 | Partida en curso | `game/world/` | Escena que arma la partida: carga salas de `levels/` y pone entidades. Nodo fino, como `entities/` |
 | Menús e interfaz | `game/ui/<pantalla>/` | Nodos `Control`; emiten señales (`play_requested`) y no deciden el flujo |
+| Traducciones | `game/i18n/texts.csv` | Una etiqueta por texto visible (`MENU_PLAY`), columnas `es` y `en`. Nunca escribir textos directo en escenas ni scripts |
 | Niveles | `game/levels/` | **No tocar** salvo pedido explícito |
 | Debug overlay | `game/debug/` | Cada sistema nuevo agrega sus líneas |
 | Tests | `test/` espejo de `game/systems/` (`test/player/player_motor_test.gd`) | `extends GdUnitTestSuite` |

@@ -8,14 +8,14 @@ extends RefCounted
 ## Se emite una vez por cada cambio real de estado (nunca con eventos ignorados).
 signal state_changed(from: State, to: State)
 
-enum State { MENU, PLAYING, PAUSED }
-enum Event { PLAY, PAUSE, RESUME, TO_MENU }
+enum State { MENU, PLAYING, PAUSED, OPTIONS }
+enum Event { PLAY, PAUSE, RESUME, TO_MENU, OPEN_OPTIONS, BACK }
 
 # Tabla de transiciones: para cada estado, qué eventos acepta y a dónde lleva cada uno.
 # Lo que no está en la tabla se ignora (p. ej. pausar desde el menú).
 # PAUSE desde PAUSED vuelve a PLAYING: la misma tecla pausa y despausa.
 const _TRANSITIONS := {
-	State.MENU: {Event.PLAY: State.PLAYING},
+	State.MENU: {Event.PLAY: State.PLAYING, Event.OPEN_OPTIONS: State.OPTIONS},
 	State.PLAYING: {Event.PAUSE: State.PAUSED},
 	State.PAUSED:
 	{
@@ -23,6 +23,7 @@ const _TRANSITIONS := {
 		Event.PAUSE: State.PLAYING,
 		Event.TO_MENU: State.MENU,
 	},
+	State.OPTIONS: {Event.BACK: State.MENU},
 }
 
 var _state: State = State.MENU

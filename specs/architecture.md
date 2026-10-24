@@ -4,7 +4,7 @@ type: architecture
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-23
+updated: 2026-10-24
 ---
 
 # Arquitectura
@@ -59,6 +59,12 @@ func _physics_process(delta: float) -> void:
 - `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
 - Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
+
+## Textos e idiomas
+
+- Cada texto visible es una etiqueta (`MENU_PLAY`) en `game/i18n/texts.csv`, con columnas `es` y `en`, registrada en *Localization → Translations*. Idioma de respaldo: `en`.
+- Los nodos con `text` fijo se traducen solos; el texto armado por código usa `tr("ETIQUETA")`.
+- Los `.translation` que genera la importación del CSV no se versionan (`.gitignore`).
 
 ## Comunicación
 

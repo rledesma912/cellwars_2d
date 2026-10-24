@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://bft2d5v41eqkk"]
+
+[ext_resource type="Script" uid="uid://lmdvb5wd7ai5" path="res://game/ui/options_menu/options_menu.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://b3i2ldoek0l3p" path="res://game/ui/options_menu/test_beep.wav" id="2_beep"]
+
+[node name="OptionsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "OPTIONS_TITLE"
+horizontal_alignment = 1
+
+[node name="FullscreenCheck" type="CheckButton" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "OPTIONS_FULLSCREEN"
+
+[node name="VolumeRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="VolumeLabel" type="Label" parent="CenterContainer/VBoxContainer/VolumeRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "OPTIONS_VOLUME"
+
+[node name="VolumeSlider" type="HSlider" parent="CenterContainer/VBoxContainer/VolumeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_vertical = 4
+step = 10.0
+value = 100.0
+
+[node name="VolumeValue" type="Label" parent="CenterContainer/VBoxContainer/VolumeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(56, 0)
+layout_mode = 2
+text = "100 %"
+horizontal_alignment = 2
+
+[node name="LanguageRow" type="HBoxContainer" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LanguageLabel" type="Label" parent="CenterContainer/VBoxContainer/LanguageRow"]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+text = "OPTIONS_LANGUAGE"
+
+[node name="LanguageSelect" type="OptionButton" parent="CenterContainer/VBoxContainer/LanguageRow"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="CenterContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "OPTIONS_BACK"
+
+[node name="TestBeep" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_beep")
