@@ -1,7 +1,7 @@
 ---
 id: F001
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
 updated: 2026-10-23
@@ -25,7 +25,7 @@ Que el juego tenga su esqueleto de navegación: arranca en un menú principal, d
 - Pausa automática al perder el foco de la ventana.
 - Confirmación al volver al menú o al salir ("¿Seguro?").
 - Arte final, fuentes y sonido de la UI: greybox con el tema por defecto de Godot.
-- Traducción a otros idiomas.
+- Traducción a otros idiomas: los textos de la UI van en castellano.
 - Líneas en el debug overlay (F3): el overlay todavía no existe.
 
 ## Criterios de aceptación
@@ -64,4 +64,4 @@ No aplica: la feature no tiene valores de juego ajustables.
 
 ## Preguntas abiertas
 
-- Idioma de los textos de la UI. Propuesta: castellano ("Jugar", "Salir", "Continuar", "Volver al menú"); la traducción queda fuera de alcance.
+Ninguna.
