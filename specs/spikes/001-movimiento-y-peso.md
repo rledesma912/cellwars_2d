@@ -46,3 +46,54 @@ updated: 2026-10-24
   - Quedan registradas las distancias resultantes con esos valores: salto máximo en horizontal y en vertical, y distancia de frenado. Las necesita el diseño de las salas.
   - Queda registrado si 640×360 con snap a píxel se ve bien con la silueta animada, o si hace falta revisarlo.
 - Destino del código: descartar (por defecto). La lógica que funcione se reescribe con tests en la feature que siga.
+
+## Qué se construyó
+
+Prototipo en `prototypes/spike_001/` (escena `spike_001.tscn`):
+
+- `spike_motor.gd`: motor de lógica pura con estados (enum): quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse. Mismo motor para las tres variantes; cambian los valores.
+- `spike_movement_config.gd` + `variant_a.tres`, `variant_b.tres`, `variant_c.tres`: un Resource por variante, editable desde el inspector.
+- `soldier.tscn`: `CharacterBody2D` de 20 × 40 px con un `AnimatedSprite2D`. Las animaciones se eligen según el estado del motor; la preparación, el giro y la recuperación se estiran para durar lo que dice el `.tres`.
+- `silhouette.png` y `silhouette_frames.tres`: silueta provisoria de 32 × 48 por cuadro, generada con `make_silhouette.py`.
+- `challenge_room.tscn`: sala de desafíos. Entra por arriba a la izquierda y sale por abajo a la derecha. Tiene:
+  - bloques de 1, 2 y 3 baldosas de alto;
+  - un borde para medir la frenada;
+  - una caída de 180 px;
+  - un pasillo para ir y volver;
+  - huecos de 3 y 4 baldosas con una plataforma de 2 en el medio.
+- Teclas del prototipo: 1/2/3 variante, Tab sala (la de prueba de la F003 o la de desafíos), R reinicia, P snap a píxel, F3 datos con las mediciones del último salto, caída y frenada.
+- `elyon_prompts.md`: prompts para generar a Elyon en pixel art a 40 y 48 px (modelos de difusión en general y Flux Kontext en ComfyUI).
+
+## Evidencia y findings
+
+Parcial (2026-10-24; el spike sigue abierto):
+
+- **Variante elegida: C (híbrido)**, con los valores de arranque de `variant_c.tres`. El desarrollador: *"El híbrido logra el equilibrio de un movimiento moderno y el feeling de peso del soldado, me gusta."* Después confirmó que los valores le quedan bien.
+- **Snap a píxel**: activarlo o desactivarlo (tecla P) no cambia nada visible a 640×360 con la silueta animada.
+- Mediciones por simulación con los valores de arranque:
+
+| Variante | Salto corriendo (largo / alto) | Toque corto | Frenada | Giro |
+|---|---|---|---|---|
+| A | 93 / 60 px | 29 px | 3 px | inmediato |
+| B | 102 / 60 px | 60 px (fija) | 13 px | 0,28 s |
+| C | 97 / 60 px | 38 px | 5 px | 0,1 s |
+
+- Regla propuesta para la decisión: **el motor manda los tiempos y la animación se adapta** (se estira o acorta para durar lo que dice el `.tres`), al revés que en *Prince of Persia*.
+- Fuera del alcance original, aceptado para revisar dentro del spike: **el tamaño del soldado**.
+  - Con 3 pisos por sala (100 px de aire por piso), el soldado más su salto deben entrar en 100 px. Las opciones son 40 px de alto (salto de 60 px) o 48 px (salto de unos 52 px).
+  - Para decidir, el desarrollador genera imágenes de Elyon en pixel art a 40 y 48 px con ComfyUI (Flux Kontext Dev, local) y el agente las pone a tamaño real en el prototipo.
+
+## Valores de tuning que funcionaron
+
+| Parámetro | Valor | Nota |
+|---|---|---|
+
+## Riesgos y limitaciones
+
+## Recomendación
+
+## Siguiente paso
+
+- [ ] Decisión DNNNN → actualizar GDD / arquitectura / spec
+- [ ] Otro spike (qué incertidumbre queda)
+- [ ] Descartar la idea (motivo)
