@@ -97,6 +97,11 @@ debug_toggle={
 ]
 }
 
+[internationalization]
+
+locale/translations=PackedStringArray("res://game/i18n/texts.es.translation", "res://game/i18n/texts.en.translation")
+locale/fallback="en"
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

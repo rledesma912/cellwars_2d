@@ -23,4 +23,7 @@ func _process(delta: float) -> void:
 
 
 func _update_label() -> void:
-	_elapsed_label.text = "Tiempo: %.1f s" % _elapsed
+	# tr() busca la etiqueta en la tabla de traducciones (game/i18n/texts.csv) y
+	# devuelve el texto en el idioma activo. Los botones y textos fijos se traducen
+	# solos; este se arma por código, así que se traduce a mano.
+	_elapsed_label.text = tr("WORLD_ELAPSED") % _elapsed

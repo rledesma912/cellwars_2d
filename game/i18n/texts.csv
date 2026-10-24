@@ -1,0 +1,14 @@
+keys,es,en
+MENU_PLAY,Jugar,Play
+MENU_OPTIONS,Opciones,Options
+MENU_QUIT,Salir,Quit
+PAUSE_TITLE,Pausa,Paused
+PAUSE_RESUME,Continuar,Resume
+PAUSE_TO_MENU,Volver al menú,Back to menu
+WORLD_PLACEHOLDER,Partida (provisoria),Game (placeholder)
+WORLD_ELAPSED,Tiempo: %.1f s,Time: %.1f s
+OPTIONS_TITLE,Opciones,Options
+OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
+OPTIONS_VOLUME,Volumen,Volume
+OPTIONS_LANGUAGE,Idioma,Language
+OPTIONS_BACK,Volver,Back
