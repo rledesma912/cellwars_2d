@@ -15,7 +15,7 @@ updated: 2026-10-24
 - [x] T4 Traducciones: `game/i18n/texts.csv`, registro en el proyecto, textos de F001 pasados a etiquetas, carpeta `i18n/` documentada (cubre: F002-AC13)
 - [x] T5 Botón B del gamepad en `ui_cancel` (cubre: F002-AC14)
 - [x] T6 Escena `OptionsMenu` con bip de prueba (cubre: F002-AC10, F002-AC11, F002-AC12, F002-AC17)
-- [ ] T7 `MainMenu`: botón Opciones y foco al volver (cubre: F002-AC10, F002-AC14)
+- [x] T7 `MainMenu`: botón Opciones y foco al volver (cubre: F002-AC10, F002-AC14)
 - [ ] T8 `Main`: cargar, aplicar y guardar la configuración; conectar Opciones; smoke run (cubre: F002-AC11 a F002-AC16)
 - [ ] T9 Playtest: `playtest.md` y PR (cubre: F002-AC10 a F002-AC17)
 
