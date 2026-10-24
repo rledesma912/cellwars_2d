@@ -28,14 +28,17 @@ Cada elección no obvia, con la alternativa descartada y el porqué.
 5. **Los menús usan contenedores** (`CenterContainer` + `VBoxContainer`), sin posiciones a mano. Así se centran solos a cualquier tamaño de ventana.
 6. **Navegación con las acciones `ui_*` que trae Godot** (`ui_up`, `ui_down`, `ui_accept`). Los `Button` ya responden a ellas cuando tienen foco, para teclado y gamepad. Cada menú llama `grab_focus()` en su primer botón al abrirse (AC08, AC10).
 7. **Acción nueva `pause`**: Esc + botón Start del gamepad. No reusamos `ui_cancel` (que también trae Esc) para no mezclar "volver atrás en un menú" con "pausar" cuando haya submenús (F002).
-8. **Pantallas en una carpeta nueva `game/screens/`**: menú principal, menú de pausa y la escena de juego placeholder. Hoy la estructura solo tiene `entities/` para escenas, y un menú no es una entidad del juego. **Requiere tu aprobación**: si la aprobás, actualizo `CLAUDE.md`, `godot-conventions`, `architecture.md` y el README en esta misma branch.
+8. **Dos carpetas nuevas: `game/ui/` y `game/world/`** (aprobadas por el desarrollador).
+   - `ui/`: menús (principal y pausa). Es el nombre más común en proyectos de Godot para interfaz.
+   - `world/`: la escena activa mientras se juega, la que arma la partida. Hoy es un placeholder; en F003 carga las salas de `levels/`, en F004 pone al personaje de `entities/`, en F005 maneja el respawn.
+   - Se actualizan `CLAUDE.md`, `godot-conventions`, `architecture.md` y el README en esta misma branch.
 
 ## Árbol de escenas
 
 ```
 Main (Node) · main.gd · process_mode ALWAYS
 ├── Screen (Node)                         # contenedor: acá se instancia la pantalla actual
-│   └── (MainMenu o GameScreen, uno por vez)
+│   └── (MainMenu o World, uno por vez)
 └── PauseMenu (instancia de pause_menu.tscn) · visible = false
 
 MainMenu (Control, Full Rect) · main_menu.gd
@@ -45,7 +48,7 @@ MainMenu (Control, Full Rect) · main_menu.gd
         ├── PlayButton (Button)           "Jugar"
         └── QuitButton (Button)           "Salir"
 
-GameScreen (Node2D) · game_screen.gd · process_mode PAUSABLE
+World (Node2D) · world.gd · process_mode PAUSABLE
 ├── PlaceholderLabel (Label)              "Escena de juego (placeholder)"
 └── ElapsedLabel (Label)                  "Tiempo: 12.3 s" (se congela en pausa; vuelve a 0 al reiniciar)
 
@@ -58,7 +61,7 @@ PauseMenu (CanvasLayer, layer 10) · pause_menu.gd
             └── MenuButton (Button)       "Volver al menú"
 ```
 
-El contador de tiempo de `GameScreen` existe solo para poder ver en el playtest que la pausa congela la escena (AC10, AC11) y que "Volver al menú" la reinicia (AC12).
+El contador de tiempo de `World` existe solo para poder ver en el playtest que la pausa congela la escena (AC10, AC11) y que "Volver al menú" la reinicia (AC12).
 
 ## Scripts y responsabilidades
 
@@ -66,9 +69,9 @@ El contador de tiempo de `GameScreen` existe solo para poder ver en el playtest 
 |---|---|---|
 | `game/systems/flow/screen_flow.gd` (`ScreenFlow`) | Lógica pura | Estados `MENU`/`PLAYING`/`PAUSED`, eventos `PLAY`/`PAUSE`/`RESUME`/`TO_MENU`, tabla de transiciones; emite `state_changed`. Ignora eventos inválidos. |
 | `game/main.gd` | Nodo | Crea el `ScreenFlow`, traduce señales de los menús y la acción `pause` a eventos, y aplica cada cambio de estado: instanciar o liberar pantallas, `get_tree().paused`, mostrar u ocultar la pausa. "Salir" llama `get_tree().quit()`. |
-| `game/screens/main_menu/main_menu.gd` | Nodo | Emite `play_requested` / `quit_requested` desde sus botones; foco inicial en "Jugar". |
-| `game/screens/pause_menu/pause_menu.gd` | Nodo | `open()` / `close()`; emite `resume_requested` / `menu_requested`; foco en "Continuar" al abrir. |
-| `game/screens/game_screen/game_screen.gd` | Nodo (placeholder) | Muestra el tiempo transcurrido. Se reemplaza por las salas en F003. |
+| `game/ui/main_menu/main_menu.gd` | Nodo | Emite `play_requested` / `quit_requested` desde sus botones; foco inicial en "Jugar". |
+| `game/ui/pause_menu/pause_menu.gd` | Nodo | `open()` / `close()`; emite `resume_requested` / `menu_requested`; foco en "Continuar" al abrir. |
+| `game/world/world.gd` | Nodo (placeholder) | Muestra el tiempo transcurrido. En F003 pasa a cargar las salas. |
 | `project.godot` | Config | Acción `pause` (Esc, Start). |
 
 ## Señales
@@ -102,5 +105,5 @@ Ninguno: el overlay todavía no existe (fuera de alcance en la spec).
 ## Riesgos
 
 - **Gamepad con stick en los menús**: las acciones `ui_*` por defecto de Godot incluyen el pad direccional; si el stick analógico no navega, se agregan sus ejes a `ui_up`/`ui_down` en `project.godot`. Se verifica en el playtest (AC14).
-- **Pausa con `process_mode` mal heredado**: si `GameScreen` no queda en `PAUSABLE`, el contador no se congela. Lo detecta AC10.
+- **Pausa con `process_mode` mal heredado**: si `World` no queda en `PAUSABLE`, el contador no se congela. Lo detecta AC10.
 - **Doble disparo de Esc**: un botón con foco no consume `pause`, así que el evento llega a `Main` vía `_unhandled_input`. Si el evento se procesara dos veces en un frame, la pausa abriría y cerraría sola; AC10 y el caso límite de Esc rápido lo cubren.
