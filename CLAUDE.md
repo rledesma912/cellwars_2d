@@ -20,7 +20,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 | Motor | Godot 4.7.x estable, `godot` en el PATH |
 | Lenguaje | GDScript (sin C#) |
 | Renderer | `gl_compatibility` |
-| Tile / resolución | 32 px · viewport 640×360, stretch `viewport` + `integer` (a validar en Spike 001) |
+| Tile / resolución | 20 px, sala de 32 × 18 tiles (`D0002`) · viewport 640×360, stretch `viewport` + `integer` (a validar en Spike 001) |
 | Niveles | `TileMapLayer` nativo; sin LDtk ni editores externos |
 | Arte | Pixelorama / LibreSprite. Greybox hasta que el sistema pase su `[feel]` |
 | Unit tests | gdUnit4, solo lógica pura, headless: `godot --headless -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test -c` (gdUnit4 v6.2.2; `--ignoreHeadlessMode` es seguro porque no testeamos input/UI) |

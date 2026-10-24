@@ -84,7 +84,7 @@ func _physics_process(delta: float) -> void:
 | Stretch | `viewport`, aspect `keep`, scale `integer` | Vigente |
 | Filtro de texturas | Nearest | Vigente |
 | `snap_2d_transforms_to_pixel` | `true` | A validar en Spike 001 (posible jitter con `Camera2D` suavizada) |
-| Tile | 32 px | Vigente |
+| Tile | 20 px; una sala = una pantalla = 32 × 18 tiles | Vigente (D0002) |
 | Display driver Linux | Wayland (`display_server/driver.linuxbsd`) | Vigente: el entorno del agente no tiene X11 |
 
 ## Input
