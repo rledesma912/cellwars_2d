@@ -70,8 +70,8 @@ OptionsMenu (Control, Full Rect) · options_menu.gd
 
 | Archivo | Tipo | Responsabilidad |
 |---|---|---|
-| `game/systems/settings/player_settings.gd` (`PlayerSettings`) | Lógica pura | Valores (pantalla completa, volumen, idioma) con sus reglas: límites, idioma por defecto según el sistema, volumen a decibeles; los cambios devuelven si cambió algo. Conversión a y desde un diccionario con validación de cada valor. |
-| `game/systems/settings/settings_store.gd` (`SettingsStore`) | Lógica pura con archivos | Lee `settings.json` (si falta o está roto, usa valores por defecto) y lo escribe en dos pasos. Recibe la ruta por parámetro para poder probarlo con archivos temporales. |
+| `game/systems/settings/player_settings.gd` (`PlayerSettings`) | Lógica pura | Valores (pantalla completa, volumen, idioma) con sus reglas: límites, idioma por defecto según el sistema, volumen a decibeles; los cambios devuelven si cambió algo. |
+| `game/systems/settings/settings_store.gd` (`SettingsStore`) | Lógica pura con archivos | Lee `settings.json` validando el tipo de cada valor (si falta, está roto o un valor es inválido, usa el de fábrica) y lo escribe en dos pasos. Recibe la ruta por parámetro para poder probarlo con archivos temporales. |
 | `game/systems/flow/screen_flow.gd` | Lógica pura | Suma el estado `OPTIONS` y los eventos `OPEN_OPTIONS` y `BACK`. |
 | `game/main.gd` | Nodo | Al arrancar: carga y aplica la configuración. Muestra Opciones cuando corresponde. Ante cada aviso de Opciones: actualiza, aplica y guarda si cambió. |
 | `game/ui/main_menu/main_menu.gd` | Nodo | Botón Opciones (`options_requested`) y `focus_options()` para volver con el foco ahí. |
