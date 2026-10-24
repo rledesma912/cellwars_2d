@@ -26,7 +26,7 @@ Plantilla: `specs/templates/playtest.md`.
 Commit `docs: playtest FNNN`, push y `gh pr create --base develop`:
 
 - Título: `feat: FNNN <nombre>`.
-- Cuerpo: resumen; decisiones de Godot no obvias explicadas (el desarrollador está aprendiendo); `Closes #N`; criterios `[unit]` con el test que los cubre; checklist de playtest (`[manual]` y `[feel]`) copiado.
+- Cuerpo: resumen; decisiones de Godot no obvias explicadas (el desarrollador está aprendiendo); criterios `[unit]` con el test que los cubre; checklist de playtest (`[manual]` y `[feel]`) copiado.
 
 Nunca marques ítems `[manual]` ni `[feel]`. El desarrollador juega, marca **en el checklist del PR** (es la fuente de verdad que lee `close-feature`) y mergea. Si reporta bugs o cambios, volvé a `implement-task`; si son de tuning, los ajusta él en el `.tres`.
 

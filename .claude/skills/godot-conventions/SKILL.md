@@ -20,6 +20,8 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 | Escenas y scripts de nodos | `game/entities/<entidad>/` | Nodo fino: lee input, llama a la lógica, aplica el resultado |
 | Definición de parámetros | `game/systems/<sistema>/<x>_config.gd` | `Resource` con `class_name` y `@export` tipados |
 | Valores de tuning | `game/data/<x>.tres` | Instancia del Resource. **La crea el agente una vez con valores iniciales; después la edita solo el desarrollador** |
+| Partida en curso | `game/world/` | Escena que arma la partida: carga salas de `levels/` y pone entidades. Nodo fino, como `entities/` |
+| Menús e interfaz | `game/ui/<pantalla>/` | Nodos `Control`; emiten señales (`play_requested`) y no deciden el flujo |
 | Niveles | `game/levels/` | **No tocar** salvo pedido explícito |
 | Debug overlay | `game/debug/` | Cada sistema nuevo agrega sus líneas |
 | Tests | `test/` espejo de `game/systems/` (`test/player/player_motor_test.gd`) | `extends GdUnitTestSuite` |

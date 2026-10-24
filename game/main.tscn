@@ -1,3 +1,14 @@
 [gd_scene format=3 uid="uid://dn72o2bii87w2"]
 
-[node name="Main" type="Node2D"]
+[ext_resource type="Script" uid="uid://by3tsttxjrveq" path="res://game/main.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://c0kbrrwj2f4t8" path="res://game/ui/pause_menu/pause_menu.tscn" id="2_pause"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_script")
+
+[node name="Screen" type="Node" parent="."]
+unique_name_in_owner = true
+
+[node name="PauseMenu" parent="." instance=ExtResource("2_pause")]
+unique_name_in_owner = true
+visible = false

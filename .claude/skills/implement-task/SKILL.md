@@ -24,7 +24,7 @@ Precondiciones: spec `approved` o `in-progress`; estás en la branch `feat/NNN-<
    - `godot --headless --import` si creaste `.gd`/`.tscn` (genera `.uid`).
    - Suite completa: `godot --headless -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test -c` → exit 0.
    - Smoke run vía MCP (`run_project`, `get_debug_output`, `stop_project`): consola sin errores.
-5. **Cierre de la task**: marcá `[x]` en `tasks.md` y en la issue; commit convencional (`feat: ...` / `fix: ...`) que cite la task y los criterios (`T3, F001-AC02`).
+5. **Cierre de la task**: marcá `[x]` en `tasks.md`; commit convencional (`feat: ...` / `fix: ...`) que cite la task y los criterios (`T3, F001-AC02`).
 
 ## Si algo no encaja
 
