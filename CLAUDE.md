@@ -141,6 +141,6 @@ Modelo `develop` + `main` (decisión `D0001`):
 - `main`: solo releases. PR `develop` → `main` titulado `release: vX.Y.Z` y, tras el merge, tag anotado `vX.Y.Z` en `main`; los builds de itch.io salen de un tag. El agente nunca abre un release sin pedido explícito.
 - Hotfix: `hotfix/<nombre>` desde `main` → PR a `main` + tag de parche → merge de `main` a `develop`.
 - Branches: `spike/NNN-nombre` (no se mergean; solo los docs llegan a `develop`), `feat/NNN-nombre`, `docs/*`, `chore/*`.
-- PR con checklist de playtest; el desarrollador mergea después de jugar.
+- **Un PR por feature.** Al terminar, el agente avisa: *"Todo finalizado, espero tu test y confirmación para mergear."* El desarrollador juega, tilda el checklist del PR y confirma; el agente hace el cierre (`close-feature`) como último commit de esa misma branch y mergea. Si el desarrollador mergea antes, el cierre va en un PR chico aparte.
 - No se usan las issues de GitHub: el avance de cada feature vive en su `tasks.md`.
 - Commits convencionales: `feat:`, `fix:`, `spike:`, `docs:`, `chore:`.
