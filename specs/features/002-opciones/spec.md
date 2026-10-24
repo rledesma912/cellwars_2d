@@ -1,7 +1,7 @@
 ---
 id: F002
 type: feature
-status: approved
+status: in-progress
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
 updated: 2026-10-24
@@ -74,7 +74,7 @@ No aplica: no son valores de juego. El paso de la barra de volumen (10 %) es una
 
 ## Dónde y cómo se guarda
 
-- En el archivo `settings.cfg` dentro de la carpeta que Godot reserva para cada juego en la compu del jugador (`user://`). En Linux es `~/.local/share/godot/app_userdata/Cellwars 2D/`.
+- En el archivo `settings.json` (formato JSON: solo admite datos simples) dentro de la carpeta que Godot reserva para cada juego en la compu del jugador (`user://`). En Linux es `~/.local/share/godot/app_userdata/Cellwars 2D/`.
 - Se guarda en el momento en que el jugador cambia una opción, solo si el valor cambió (AC05).
 - Seguro: guardado en dos pasos (AC08), y al leer solo se aceptan valores simples y conocidos (verdadero/falso, un número, `es` o `en`); cualquier otra cosa se descarta (AC07).
 
