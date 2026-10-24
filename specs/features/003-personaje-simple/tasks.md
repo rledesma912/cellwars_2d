@@ -15,7 +15,7 @@ updated: 2026-10-24
 - [x] T4 Baldosa greybox, `TileSet` con colisión y sala de prueba `test_room.tscn` (cubre: F003-AC07, F003-AC09)
 - [x] T5 Escena `Player` y `player_movement.tres` inicial (cubre: F003-AC08, F003-AC13)
 - [x] T6 `World` arma la partida: sala, personaje en `Spawn`, reubicación al caer; se quitan las etiquetas `WORLD_*` (cubre: F003-AC07, F003-AC10, F003-AC11)
-- [ ] T7 Overlay de debug con F3; smoke run (cubre: F003-AC12)
+- [x] T7 Overlay de debug con F3; smoke run (cubre: F003-AC12)
 - [ ] T8 Playtest: `playtest.md` y PR (cubre: F003-AC07 a F003-AC13)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f003_ac03_jump_reaches_jump_height`.

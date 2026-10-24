@@ -7,6 +7,7 @@ extends Node2D
 
 @onready var _room: Node2D = %TestRoom
 @onready var _player: Player = %Player
+@onready var _debug_overlay: DebugOverlay = %DebugOverlay
 # Spawn está dentro de la escena de la sala: los nombres únicos (%) solo valen dentro
 # de su propia escena, así que se busca a través de la sala.
 @onready var _spawn: Marker2D = _room.get_node("Spawn")
@@ -19,6 +20,7 @@ func _ready() -> void:
 	# El personaje lo hereda de World: también se congela.
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_player.reset_to(_spawn.position)
+	_debug_overlay.track(_player)
 
 
 func _physics_process(_delta: float) -> void:
