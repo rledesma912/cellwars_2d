@@ -31,6 +31,7 @@ Aplicá los criterios del principio 1 de `CLAUDE.md`. Si alguno se cumple, recom
    - `[feel]`: subjetivo; siempre lo cierra el desarrollador.
    Cada criterio es verificable por sí solo. Preferí `[unit]` cuando la regla se puede aislar.
 5. Parámetros de tuning: tabla con tipo, valor inicial y rango. Si vienen de un spike, usá los valores que funcionaron.
+   - **Verificá los números antes de pedir aprobación.** Si un criterio o parámetro depende de una fórmula (alturas, tiempos, distancias), calculá el caso concreto con un script rápido (`godot --headless -s` con un `extends SceneTree` en el scratchpad), simulando la física en pasos de 1/60 s como la corre Godot, y con los extremos del rango sugerido. Si el resultado no cumple el criterio, corregilo en el borrador.
 6. Casos límite y Fuera de alcance explícitos.
 7. Preguntas abiertas: solo las reales; cada una debe resolverse antes de aprobar o quedar como decisión del desarrollador.
 
