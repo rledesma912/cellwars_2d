@@ -1,6 +1,6 @@
 ---
 name: plan-feature
-description: Redacta el plan técnico (plan.md) y las tasks (tasks.md) de una feature aprobada de cellwars_2d y crea su issue en GitHub. Usala después de que spec-feature deje una spec en status approved por la vía completa.
+description: Redacta el plan técnico (plan.md) y las tasks (tasks.md) de una feature aprobada de cellwars_2d. Usala después de que spec-feature deje una spec en status approved por la vía completa.
 ---
 
 # Plan feature
@@ -26,10 +26,8 @@ Precondiciones (si alguna falla, detenete y reportá): estás en la branch `feat
 
 `tasks.md`: tasks chicas y ordenadas (cada una cerrable con un commit), cada una con `(cubre: FNNN-ACnn, ...)`. Todo criterio de la spec queda cubierto por al menos una task; los `[manual]`/`[feel]` se cubren con la task de playtest. Orden típico: Resource de config → lógica pura + tests → nodo → overlay → `.tres` inicial → playtest.
 
-## 3. Issue
+## 3. Commit
 
-1. `gh issue create` con título `FNNN: <nombre>`, cuerpo con enlace a la carpeta de la spec y la lista de tasks como checklist.
-2. Completá `Issue: #N` en la spec (es un dato administrativo, no un cambio de criterios).
-3. Commit `docs: plan y tasks FNNN` y push.
+Commit `docs: plan y tasks FNNN` y push.
 
 Mostrá plan y tasks y pedí revisión explícita antes de implementar. Siguiente paso: `implement-task`.

@@ -10,7 +10,6 @@ updated: 2026-10-23
 # Feature 001: Menú principal y flujo de pantallas
 
 - Origen: GDD `vision.md` (estructura del juego; primera pieza del esqueleto)
-- Issue: #5
 - Vía: completa (crea un sistema nuevo: el flujo de pantallas)
 
 ## Objetivo

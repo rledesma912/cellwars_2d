@@ -10,7 +10,6 @@ updated: YYYY-MM-DD
 # Feature NNN: <nombre>
 
 - Origen: GDD <archivo §> / decisión NNNN
-- Issue: #
 - Vía: completa | liviana
 
 ## Objetivo

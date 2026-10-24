@@ -40,4 +40,4 @@ Mostrá la spec y **pedí aprobación explícita**. Al aprobarse: `status: appro
 
 Siguiente paso (siempre en `feat/NNN-<nombre>`):
 - Vía completa → `plan-feature`.
-- Vía liviana → completá "Plan y tasks" en la spec, creá la issue (`gh issue create`, título `FNNN: <nombre>`), anotá `Issue: #N`, commit, y seguí con `implement-task`.
+- Vía liviana → completá "Plan y tasks" en la spec, commit, y seguí con `implement-task`.
