@@ -10,7 +10,7 @@ updated: 2026-10-24
 # Tasks: feature 002
 
 - [x] T1 Flujo de pantallas: estado Opciones y tests (cubre: F002-AC09)
-- [ ] T2 `PlayerSettings` en lógica pura y tests (cubre: F002-AC01, F002-AC02, F002-AC03, F002-AC04, F002-AC05)
+- [x] T2 `PlayerSettings` en lógica pura y tests (cubre: F002-AC01, F002-AC02, F002-AC03, F002-AC04, F002-AC05)
 - [ ] T3 `SettingsStore`: leer y guardar en dos pasos, con tests (cubre: F002-AC06, F002-AC07, F002-AC08)
 - [ ] T4 Traducciones: `game/i18n/texts.csv`, registro en el proyecto, textos de F001 pasados a etiquetas, carpeta `i18n/` documentada (cubre: F002-AC13)
 - [ ] T5 Botón B del gamepad en `ui_cancel` (cubre: F002-AC14)
