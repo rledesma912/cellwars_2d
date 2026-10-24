@@ -14,7 +14,7 @@ updated: 2026-10-23
 - [x] T3 Acción `pause` en `project.godot` (Esc, Start) (cubre: F001-AC10, F001-AC11)
 - [x] T4 Escena `MainMenu` (cubre: F001-AC08, F001-AC13, F001-AC14)
 - [x] T5 Escena `World` placeholder con contador de tiempo (cubre: F001-AC09, F001-AC12)
-- [ ] T6 Escena `PauseMenu` (cubre: F001-AC10, F001-AC11, F001-AC14)
+- [x] T6 Escena `PauseMenu` (cubre: F001-AC10, F001-AC11, F001-AC14)
 - [ ] T7 `Main`: cablea flujo, pantallas, pausa y salir; smoke run vía MCP (cubre: F001-AC08 a F001-AC13, F001-AC15)
 - [ ] T8 Playtest: `playtest.md` y PR (cubre: F001-AC08 a F001-AC15)
 

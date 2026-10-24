@@ -58,7 +58,7 @@ PauseMenu (CanvasLayer, layer 10) · pause_menu.gd
         └── VBoxContainer
             ├── TitleLabel (Label)        "Pausa"
             ├── ResumeButton (Button)     "Continuar"
-            └── MenuButton (Button)       "Volver al menú"
+            └── ToMenuButton (Button)     "Volver al menú"
 ```
 
 El contador de tiempo de `World` existe solo para poder ver en el playtest que la pausa congela la escena (AC10, AC11) y que "Volver al menú" la reinicia (AC12).
