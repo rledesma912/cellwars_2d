@@ -1,7 +1,7 @@
 ---
 id: F003
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0002], spike: }
 updated: 2026-10-24
@@ -70,7 +70,7 @@ Jugando:
 
 Con 80 px de salto, el rectángulo sube escalones de hasta 3 baldosas (60 px) con margen. Pero no sube un piso entero (6 baldosas, 120 px) de un salto, por eso la sala tiene escalones.
 
-## Preguntas abiertas
+## Decisiones del desarrollador
 
-1. **Permiso para la sala.** La regla 8 dice que el agente no edita `game/levels/` sin pedido explícito. Para esta feature hace falta crear `game/levels/test/test_room.tscn`, la sala de prueba. Propuesta: autorizar al agente a crear y editar **las salas de prueba** (`game/levels/test/`). Las salas de los niveles de verdad siguen siendo tuyas.
-2. **Textos del overlay de debug.** La regla dice que todo texto visible va traducido. El overlay es una herramienta de desarrollo que el jugador no ve. Propuesta: sus textos quedan fijos en castellano, sin traducir, como excepción anotada en `architecture.md`.
+- Salas de prueba: el agente puede crear y editar `game/levels/test/` (aprobado el 2026-10-24). Las salas de los niveles siguen siendo del desarrollador.
+- Overlay de debug: sus textos quedan en castellano, sin traducir (aprobado el 2026-10-24).

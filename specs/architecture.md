@@ -64,6 +64,7 @@ func _physics_process(delta: float) -> void:
 
 - Cada texto visible es una etiqueta (`MENU_PLAY`) en `game/i18n/texts.csv`, con columnas `es` y `en`, registrada en *Localization → Translations*. Idioma de respaldo: `en`.
 - Los nodos con `text` fijo se traducen solos; el texto armado por código usa `tr("ETIQUETA")`.
+- Excepción: el overlay de debug es una herramienta de desarrollo y sus textos van en castellano, sin traducir.
 - Los `.translation` que genera la importación del CSV no se versionan (`.gitignore`).
 
 ## Comunicación

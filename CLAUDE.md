@@ -43,7 +43,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 5. **Las specs son la fuente de verdad.** No cambies criterios, GDD ni decisiones aprobadas: si la spec es incorrecta o inviable, detenete y proponé el cambio.
 6. **Trazabilidad**: criterios con ID (`F003-AC02`). Tests lo citan en el nombre (`test_f003_ac02_...`), tasks lo referencian, playtest lo marca. GDD → (spike → decisión) → spec → plan → tasks → tests/playtest → PR.
 7. **Documentación mínima suficiente.** Features chicas sin incertidumbre usan la vía liviana (un solo `spec.md` con sección "Plan y tasks"). Vía completa si toca >1 sistema, crea un sistema nuevo o tiene `[feel]`.
-8. **Niveles**: no edites `.tscn` en `game/levels/` salvo pedido explícito.
+8. **Niveles**: no edites `.tscn` en `game/levels/` salvo pedido explícito. Excepción: las salas de prueba de `game/levels/test/` las crea y edita el agente.
 9. **Tuning**: todo valor ajustable vive en un Resource `.tres` en `game/data/`. El agente crea el `.tres` inicial de un Resource nuevo con los valores de la spec; desde ahí lo edita solo el desarrollador.
 10. **Vivos vs registros**: vivos (`gdd/`, `architecture.md`, `spec.md`, `INDEX.md`, `backlog.md`) reflejan la verdad actual y nunca contienen ideas descartadas, decisiones reemplazadas ni preguntas resueltas. Registros (spikes, decisiones) no se editan una vez cerrados; al vencer van a `specs/archive/`. **Nada se borra**: se mueve a `archive/` o queda en git; lo descartado va en una línea a `specs/discarded.md`.
 11. **Consolidar es parte de terminar**: nada está cerrado hasta que sus resultados se consolidaron en los documentos vivos.
@@ -63,7 +63,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación con timebox; produce eviden
 - Debug overlay `game/debug/debug_overlay.tscn` (F3, acción `debug_toggle`): estado, velocidad, `is_on_floor`, timers, FPS. Cada sistema nuevo agrega sus líneas.
 - Escenas: `game/main.tscn` es la raíz persistente y cambia de pantalla; `game/ui/` tiene los menús; `game/world/` es la escena activa mientras se juega (arma la partida con salas de `levels/` y entidades de `entities/`).
 - Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
-- Textos: nunca escritos directo; cada texto visible es una etiqueta (`MENU_PLAY`) traducida en `game/i18n/texts.csv` (columnas `es`, `en`). Los nodos con texto fijo se traducen solos; el texto armado por código usa `tr()`.
+- Textos: nunca escritos directo (excepción: el overlay de debug, herramienta de desarrollo, va en castellano sin traducir); cada texto visible es una etiqueta (`MENU_PLAY`) traducida en `game/i18n/texts.csv` (columnas `es`, `en`). Los nodos con texto fijo se traducen solos; el texto armado por código usa `tr()`.
 
 ## Nombres del juego
 
@@ -116,7 +116,7 @@ Los criterios de aceptación viven en el cuerpo con su ID, no en el frontmatter.
 | `plan.md`, `tasks.md` | Redactar y actualizar | Desarrollador revisa |
 | Código, tests | Implementar | Revisión en PR |
 | `playtest.md` | Generar checklist | Desarrollador marca `[manual]` y `[feel]` |
-| Niveles, `.tres` de tuning | No tocar salvo pedido (excepción: crear el `.tres` inicial de un Resource nuevo) | Desarrollador |
+| Niveles, `.tres` de tuning | No tocar salvo pedido (excepciones: crear el `.tres` inicial de un Resource nuevo; las salas de prueba de `game/levels/test/`) | Desarrollador |
 | Consolidación y archivo | Vía `close-spike`, `close-feature`, `curate-specs`, siempre por PR | Desarrollador. **El agente nunca borra: mueve a `archive/`** |
 | `INDEX.md`, `discarded.md` | Actualizar al consolidar | Desarrollador revisa en el PR |
 
