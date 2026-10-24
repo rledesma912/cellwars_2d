@@ -1,0 +1,77 @@
+---
+id: F003
+type: feature
+status: done
+superseded_by:
+links: { gdd: [G001], decisions: [D0002], spike: }
+updated: 2026-10-24
+---
+
+# Feature 003: Personaje simple en una sala de prueba
+
+- Origen: GDD `vision.md` § Estructura y núcleo (plataformas en pantallas fijas) / decisión 0002 (baldosas de 20 px)
+- Vía: completa (crea un sistema nuevo —el movimiento del personaje— y además toca la partida, una sala y el overlay de debug)
+
+## Objetivo
+
+Al tocar Jugar, en lugar de la pantalla provisoria aparece **una sala de prueba** en greybox (formas grises, sin arte) y **un rectángulo que hace de protagonista**. El rectángulo camina, cae y salta. Con eso se puede recorrer la sala entera: tres pisos conectados por escaleras y un hueco en el piso de abajo.
+
+**Regla de salas:** toda sala tiene una **entrada** y una **salida** en lados opuestos (izquierda y derecha, o abajo y arriba). La sala de prueba entra por la izquierda, en el piso 1, y sale por la derecha, en el piso 3.
+
+Es el primer paso del camino de menor a mayor: moverse antes que cambiar de sala (F004) o morir (F005).
+
+## Fuera de alcance
+
+- Arte, animaciones y sonido del personaje.
+- El "peso" del movimiento: aceleración, frenado, anticipación. El rectángulo arranca y frena en seco. El peso se trabaja más adelante (spike en el backlog).
+- Salto variable (más alto si se mantiene apretado), *coyote time* y *jump buffer*.
+- Colgarse de bordes, trepar, agacharse, dash.
+- Pasar a otra sala (F004) y morir de verdad (F005). Caer por el hueco o salir por la entrada o la salida solo reubica al personaje (ver AC10).
+- Cámara: la sala ocupa la pantalla entera y no hay scroll.
+
+## Criterios de aceptación
+
+Lógica pura (`PlayerMotor`, sin nodos):
+
+- ✅ F003-AC01 [unit] Caminar: con dirección derecha la velocidad horizontal es `run_speed`; con izquierda, `-run_speed`; sin dirección (o con las dos a la vez), 0. Vale igual en el piso y en el aire.
+- ✅ F003-AC02 [unit] Gravedad: en el aire la velocidad vertical aumenta `gravity × delta` por paso, sin superar `max_fall_speed`. En el piso no se acumula.
+- ✅ F003-AC03 [unit] Salto: en el piso y con salto recién apretado, el personaje sale hacia arriba; simulando pasos de 1/60 s, la altura máxima es `jump_height` (tolerancia: 2 px). Cambio aprobado el 2026-10-24: antes pedía además velocidad inicial exacta `-jump_velocity`, incompatible con la altura por el cálculo en pasos (ver plan, "Elecciones").
+- ✅ F003-AC04 [unit] Sin salto en el aire: salto apretado fuera del piso no cambia la velocidad vertical (no hay doble salto).
+- ✅ F003-AC05 [unit] Mantener apretado no repite: si el salto sigue apretado desde antes (no es "recién apretado"), al tocar el piso no salta de nuevo.
+- ✅ F003-AC06 [unit] Valores derivados: a partir de `jump_height` y `time_to_apex`, `gravity = 2·h / t²` y `jump_velocity = 2·h / t`.
+
+Jugando:
+
+- ✅ F003-AC07 [manual] Al tocar Jugar aparece la sala de prueba llenando la pantalla: 32 × 18 baldosas de 20 px, sin franjas ni baldosas cortadas. Tiene 3 pisos, escaleras de dos escalones entre pisos, paredes a los costados, un hueco en el piso de abajo, la entrada abierta en la pared izquierda (piso 1) y la salida abierta en la pared derecha (piso 3).
+- ✅ F003-AC08 [manual] El rectángulo (26 × 40 px) aparece parado en el punto de inicio. Camina con A/D, flechas, cruceta y stick izquierdo; salta con Espacio, K o el botón A del gamepad. No atraviesa paredes, pisos ni techos.
+- ✅ F003-AC09 [manual] Partiendo de la entrada se llega a la salida solo caminando y saltando por los escalones.
+- ✅ F003-AC10 [manual] Al salir entero de la pantalla, por debajo (el hueco) o por un costado (la entrada o la salida), el rectángulo reaparece en el punto de inicio, quieto. Es provisorio: la F004 cambia los costados por el paso a otra sala y la F005 cambia el hueco por la muerte.
+- ✅ F003-AC11 [manual] Pausa (Esc / Start) congela al rectángulo, incluso a mitad de un salto; Continuar lo deja seguir desde donde estaba.
+- ✅ F003-AC12 [manual] F3 (o el botón Select/Back del gamepad) muestra el overlay de debug con velocidad, si está en el piso y FPS; F3 de nuevo lo oculta. Los valores cambian al moverse.
+- ✅ F003-AC13 [manual] Cambiar `jump_height` en `game/data/player_movement.tres` desde el inspector cambia la altura del salto en la siguiente partida.
+
+## Casos límite
+
+- Chocar contra un techo a mitad de salto: el rectángulo empieza a caer en ese momento, no queda pegado.
+- Saltar pegado a una pared y apretando contra ella: sube igual, no se traba.
+- Caer desde el piso de arriba hasta el de abajo: aterriza sin atravesar el piso, aun a velocidad máxima de caída.
+- Stick apenas inclinado: por debajo de la zona muerta del gamepad no se mueve.
+
+## Parámetros de tuning (Resource)
+
+`PlayerMovementConfig` (`game/systems/player/player_movement_config.gd`), instanciado en `game/data/player_movement.tres`, que ajusta el desarrollador. Parámetros: `run_speed`, `jump_height`, `time_to_apex`, `max_fall_speed`. `gravity` y `jump_velocity` no se ajustan a mano: se calculan de `jump_height` y `time_to_apex` (AC06).
+
+La sala de prueba está pensada para un personaje de 40 px de alto y un salto que llega justo al techo debajo de cada piso (5 filas de aire = 100 px). Escalones de 2 baldosas; un piso entero se sube por una escalera de dos escalones. Si se cambia `jump_height`, la sala puede dejar de recorrerse o el personaje puede chocar con los techos.
+
+## Decisiones del desarrollador
+
+- Salas de prueba: el agente puede crear y editar `game/levels/test/` (aprobado el 2026-10-24). Las salas de los niveles siguen siendo del desarrollador.
+- Overlay de debug: sus textos quedan en castellano, sin traducir (aprobado el 2026-10-24).
+- Cambios pedidos durante la implementación (2026-10-24): regla de entrada y salida en lados opuestos (Objetivo, AC07, AC09, AC10) y rectángulo un tercio más chico, de 40 × 60 a 26 × 40 px (AC08). Para que no choque con los techos, salto de 80 a 60 px y escalones de 2 baldosas; el precipicio pasa a 3 baldosas para que se pueda saltar.
+
+## Notas finales
+
+- Playtest: el desarrollador jugó todos los criterios `[manual]` (AC07 a AC13) y los casos límite y confirmó en el chat que se cumplieron todos (2026-10-24). Los tildes no quedaron guardados en el checklist del PR #10; vale la confirmación del chat.
+- AC03 se ajustó antes de implementarse (aprobado): Godot integra la física en pasos de 1/60 s y, sin corrección, el salto medía 83,8 px en vez de 80. Se resta la gravedad de medio paso al despegar y la altura real coincide con `jump_height` en todo el rango sugerido.
+- Las simulaciones con un script que aprieta teclas (sin abrir el editor) encontraron tres errores de diseño de la sala antes del playtest: un hueco de subida justo del ancho del personaje, una escalera debajo del borde de un piso y un precipicio casi imposible con el salto nuevo. Vale la pena repetirlas en cada sala de prueba.
+- Las salas de prueba se generan con un script temporal que pinta las baldosas; después se pueden retocar con el editor de `TileMapLayer`.

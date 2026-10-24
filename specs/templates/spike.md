@@ -17,7 +17,7 @@ updated: YYYY-MM-DD
 
 - Pregunta: <qué incertidumbre resuelve, en una frase>
 - Motivo: <por qué importa resolverla antes de seguir>
-- Timebox: <horas> (vence: <fecha>; extensiones usadas: 0 de 1)
+- Alcance: <qué entra y qué no> (sin límite de tiempo; cierra cuando se cumplen los criterios de salida y el desarrollador lo decide)
 - Criterios de salida: <qué evidencia alcanza para decidir>
 - Alternativas a evaluar: <si aplica>
 - Destino del código: descartar (por defecto) | reutilizar tras revisión

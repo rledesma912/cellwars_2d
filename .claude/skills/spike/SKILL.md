@@ -1,6 +1,6 @@
 ---
 name: spike
-description: Abre y conduce un spike (investigación con timebox) en cellwars_2d - redacta la definición, pide aprobación, crea la branch spike/NNN-*, construye el prototipo mínimo, escribe el informe y propone la decisión. Usala cuando el desarrollador pida un spike o cuando spec-feature detecte incertidumbre relevante.
+description: Abre y conduce un spike (investigación de alcance acotado, sin límite de tiempo) en cellwars_2d - redacta la definición, pide aprobación, crea la branch spike/NNN-*, construye el prototipo mínimo, escribe el informe y propone la decisión. Usala cuando el desarrollador pida un spike o cuando spec-feature detecte incertidumbre relevante.
 ---
 
 # Spike
@@ -18,7 +18,7 @@ Plantilla: `specs/templates/spike.md`. Decisión: `specs/templates/decision.md`.
 
 1. Número: siguiente `NNN` libre mirando `specs/archive/spikes/`, las branches `spike/*` y los tags `archive/spike-*` (3 dígitos, desde `001`). Id `SNNN`.
 2. Creá la branch `spike/NNN-<nombre>` desde `develop` y en ella `specs/spikes/NNN-<nombre>.md` desde la plantilla, `status: draft`. Completá solo frontmatter, encabezado y **Definición**:
-   - Pregunta en una frase, criterios de salida observables, timebox en horas con fecha de vencimiento, alternativas a comparar.
+   - Pregunta en una frase, criterios de salida observables, alternativas a comparar. Sin timebox: el alcance es el límite.
    - Leé antes el GDD relevante (`specs/gdd/`) y `architecture.md`.
 3. Commit `spike: definición SNNN` y push (así el spike queda visible como abierto).
 4. Mostrá la definición y **pedí aprobación explícita**. No escribas código hasta tenerla. Si el desarrollador la rechaza, la branch queda para que él decida (no la borres).
@@ -29,7 +29,7 @@ Plantilla: `specs/templates/spike.md`. Decisión: `specs/templates/decision.md`.
 2. Prototipo mínimo en `prototypes/spike_NNN/` (escena propia, ejecutable con `run_project` + `scene`). Es código descartable: priorizá velocidad de iteración, pero seguí la forma lógica pura + Resource cuando lo que se mide es tuning (así los valores se trasladan).
 3. Valores de tuning en un Resource `.tres` dentro de `prototypes/spike_NNN/` para que el desarrollador itere en el inspector.
 4. Smoke run vía MCP antes de pedir que pruebe. Pedí playtest con qué mirar y qué variantes comparar.
-5. **Timebox**: llevá la cuenta. Al vencer, detenete y proponé: (a) cerrar con lo que se sabe, o (b) **una** extensión con nuevo límite (actualizá "extensiones usadas"). Decide el desarrollador.
+5. **Alcance**: cuando se cumplan los criterios de salida, proponé cerrar. Si surge algo fuera de la pregunta o de las alternativas, no lo sumes por tu cuenta: anotalo y proponé (a) sumarlo al spike o (b) mandarlo al backlog. Decide el desarrollador.
 
 ## 3. Informe y decisión
 

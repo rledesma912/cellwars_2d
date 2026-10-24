@@ -1,29 +1,30 @@
-## Partida en curso. Por ahora es provisoria: muestra un texto y un contador de
-## segundos. El contador sirve para ver en el playtest que la pausa congela la
-## partida y que volver a jugar la empieza de cero. En F003 pasa a cargar las salas.
+## Partida en curso: arma la sala de prueba con el personaje en su punto de inicio.
+##
+## Nodo fino: la regla de "cayó fuera de la sala" está en RoomGeometry; acá solo se
+## aplica. En la F004 va a cargar distintas salas; en la F005, caer va a ser morir.
 class_name World
 extends Node2D
 
-var _elapsed: float = 0.0
-
-@onready var _elapsed_label: Label = %ElapsedLabel
+@onready var _room: Node2D = %TestRoom
+@onready var _player: Player = %Player
+@onready var _debug_overlay: DebugOverlay = %DebugOverlay
+# Spawn está dentro de la escena de la sala: los nombres únicos (%) solo valen dentro
+# de su propia escena, así que se busca a través de la sala.
+@onready var _spawn: Marker2D = _room.get_node("Spawn")
 
 
 func _ready() -> void:
 	# Cada nodo hereda el "modo de proceso" de su padre. Main corre siempre, aun en
 	# pausa, para poder escuchar Esc; si World heredara eso, nunca se congelaría.
 	# Por eso declara explícitamente que se detiene cuando el juego está en pausa.
+	# El personaje lo hereda de World: también se congela.
 	process_mode = Node.PROCESS_MODE_PAUSABLE
-	_update_label()
+	_player.reset_to(_spawn.position)
+	_debug_overlay.track(_player)
 
 
-func _process(delta: float) -> void:
-	_elapsed += delta
-	_update_label()
-
-
-func _update_label() -> void:
-	# tr() busca la etiqueta en la tabla de traducciones (game/i18n/texts.csv) y
-	# devuelve el texto en el idioma activo. Los botones y textos fijos se traducen
-	# solos; este se arma por código, así que se traduce a mano.
-	_elapsed_label.text = tr("WORLD_ELAPSED") % _elapsed
+func _physics_process(_delta: float) -> void:
+	# Provisorio (F003-AC10): si sale de la sala (por el precipicio, la entrada o la
+	# salida), vuelve al inicio. En la F004, salir por un costado va a llevar a otra sala.
+	if RoomGeometry.is_outside_room(_player.get_bounds()):
+		_player.reset_to(_spawn.position)

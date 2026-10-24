@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerMovementConfig" format=3 uid="uid://cs8aim6cd61ir"]
+
+[ext_resource type="Script" uid="uid://b1qwxmxffr0sr" path="res://game/systems/player/player_movement_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+run_speed = 140.0
+jump_height = 60.0
+time_to_apex = 0.35
+max_fall_speed = 600.0

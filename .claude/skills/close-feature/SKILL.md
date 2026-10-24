@@ -1,15 +1,20 @@
 ---
 name: close-feature
-description: Cierra una feature de cellwars_2d después del merge - consolida la spec como as-built, actualiza INDEX.md, GDD y backlog, y archiva plan, tasks y playtest. Usala cuando el desarrollador haya mergeado el PR de una feature.
+description: Cierra una feature de cellwars_2d en su propia branch y mergea su PR - consolida la spec como as-built, actualiza INDEX.md, GDD y backlog, y archiva plan, tasks y playtest. Usala cuando el desarrollador confirme que jugó y aprueba el PR de una feature.
 ---
 
 # Close feature
 
-Precondiciones (si alguna falla, detenete y reportá): el PR de `FNNN` está mergeado en `develop`; working tree limpio; `develop` al día con `origin/develop`.
+Un solo PR por feature: el cierre es el último commit del PR de la feature, antes del merge.
+
+Precondiciones (si alguna falla, detenete y reportá):
+
+- El desarrollador **confirmó explícitamente** que jugó y que se puede mergear (citá su mensaje).
+- El PR de `FNNN` está **abierto** contra `develop`; estás en su branch `feat/NNN-*`, con working tree limpio y la branch al día con su remota.
 
 Fuente de verdad del playtest: el checklist del PR, marcado por el desarrollador (`gh pr view <N> --json body`).
 
-Branch `docs/close-feature-NNN` desde `develop` actualizado.
+Plan B: si el PR ya se mergeó sin cierre, hacelo en una branch `docs/close-feature-NNN` desde `develop` actualizado y abrí un PR chico con el mismo contenido; el desarrollador lo mergea.
 
 ## 1. Spec as-built
 
@@ -46,8 +51,10 @@ ls "$src"   # debe listar únicamente spec.md
 
 Si `ls` muestra algo más que `spec.md`, detenete y preguntá qué hacer con ese archivo.
 
-## 4. PR
+## 4. Commit y merge
 
-Commit `docs: cierre FNNN`, push y PR a `develop` con la lista de documentos tocados. El desarrollador revisa y mergea. Borrá la branch `feat/NNN-*` solo con confirmación.
+1. Commit `docs: cierre FNNN` en la branch de la feature y push. Agregá al cuerpo del PR una sección corta "Cierre" con los documentos tocados y las desviaciones aceptadas.
+2. Mergeá: `gh pr merge <N> --merge --delete-branch` (la confirmación del desarrollador incluye borrar la branch ya mergeada, local y remota).
+3. Volvé a `develop` actualizado (`git checkout develop && git pull`) y avisale en lenguaje llano qué quedó cerrado.
 
 El agente nunca borra documentos: los mueve a `archive/`.
