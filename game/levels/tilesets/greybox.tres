@@ -1,0 +1,14 @@
+[gd_resource type="TileSet" format=3 uid="uid://whs3ikxhh8j0"]
+
+[ext_resource type="Texture2D" uid="uid://ba2vmcbqccg2p" path="res://game/art/greybox/block.png" id="1_12eot"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i73wd"]
+texture = ExtResource("1_12eot")
+texture_region_size = Vector2i(20, 20)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-10, -10, 10, -10, 10, 10, -10, 10)
+
+[resource]
+tile_size = Vector2i(20, 20)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_i73wd")
