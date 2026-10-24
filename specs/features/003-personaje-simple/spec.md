@@ -33,7 +33,7 @@ Lógica pura (`PlayerMotor`, sin nodos):
 
 - F003-AC01 [unit] Caminar: con dirección derecha la velocidad horizontal es `run_speed`; con izquierda, `-run_speed`; sin dirección (o con las dos a la vez), 0. Vale igual en el piso y en el aire.
 - F003-AC02 [unit] Gravedad: en el aire la velocidad vertical aumenta `gravity × delta` por paso, sin superar `max_fall_speed`. En el piso no se acumula.
-- F003-AC03 [unit] Salto: en el piso y con salto recién apretado, la velocidad vertical pasa a `-jump_velocity`. Simulando pasos de 1/60 s, la altura máxima alcanzada es `jump_height` (tolerancia: 2 px).
+- F003-AC03 [unit] Salto: en el piso y con salto recién apretado, el personaje sale hacia arriba; simulando pasos de 1/60 s, la altura máxima es `jump_height` (tolerancia: 2 px). Cambio aprobado el 2026-10-24: antes pedía además velocidad inicial exacta `-jump_velocity`, incompatible con la altura por el cálculo en pasos (ver plan, "Elecciones").
 - F003-AC04 [unit] Sin salto en el aire: salto apretado fuera del piso no cambia la velocidad vertical (no hay doble salto).
 - F003-AC05 [unit] Mantener apretado no repite: si el salto sigue apretado desde antes (no es "recién apretado"), al tocar el piso no salta de nuevo.
 - F003-AC06 [unit] Valores derivados: a partir de `jump_height` y `time_to_apex`, `gravity = 2·h / t²` y `jump_velocity = 2·h / t`.

@@ -39,6 +39,7 @@ World (Node2D, world.gd)                         game/world/world.tscn
 | "Recién apretado" | `Input.is_action_just_pressed("jump")` en el nodo | Guardar el estado anterior del botón en el motor | Godot ya lo resuelve. Mantener apretado no repite el salto (AC05). |
 | Caída fuera de la sala | `World` pregunta a `RoomGeometry.is_below_room(y)` y, si da verdadero, reubica al personaje en `Spawn` | Un `Area2D` "zona de muerte" bajo la sala | La regla (cuándo está afuera) queda en lógica pura y testeable. Además no hay que agregar un área a cada sala. La F005 lo reemplaza por la muerte. |
 | Overlay | `CanvasLayer` que cada cuadro pide `get_debug_info()` al personaje | El personaje emitiendo una señal en cada cuadro | Es una herramienta de desarrollo que se consulta cuando está visible. Una señal por cuadro sería ruido sin beneficio. |
+| Altura exacta del salto | Al despegar, la velocidad de salto se corrige restando la gravedad de medio paso | Aceptar el error y subir la tolerancia | Godot mueve en pasos de 1/60 s. Sin corregir, el salto mide de más (83,8 px en vez de 80). La corrección de medio paso hace que `jump_height` sea la altura real. |
 | Pausa | `Player` hereda `PAUSABLE` de `World` | — | Ya funciona así: al pausar se congela todo lo que está dentro de `World`. El overlay usa `ALWAYS` para poder abrirse con F3 también en pausa. |
 
 ## Scripts y responsabilidades
