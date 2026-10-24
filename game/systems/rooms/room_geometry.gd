@@ -14,8 +14,8 @@ const ROWS := 18
 const SIZE_PX := Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE)
 
 
-## true si algo cuyo borde de arriba está en top_y quedó entero por debajo de la sala.
-## Recibe el borde de arriba (y no el centro) para que cuente como "afuera" recién
-## cuando ya no se ve nada.
-static func is_below_room(top_y: float) -> bool:
-	return top_y > SIZE_PX.y
+## true si algo que ocupa el rectángulo bounds salió entero de la sala: por debajo
+## (precipicio) o por un costado (entrada o salida). Cuenta recién cuando ya no se ve
+## nada de él. Arriba no cuenta: un salto puede asomar por encima de la pantalla.
+static func is_outside_room(bounds: Rect2) -> bool:
+	return bounds.position.y > SIZE_PX.y or bounds.end.x < 0.0 or bounds.position.x > SIZE_PX.x

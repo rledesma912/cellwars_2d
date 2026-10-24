@@ -17,8 +17,8 @@ World (Node2D, world.gd)                         game/world/world.tscn
 │   ├── Tiles (TileMapLayer, tile_set = greybox.tres)
 │   └── Spawn (Marker2D)                          punto de inicio del personaje
 ├── Player (instancia)                            game/entities/player/player.tscn
-│   ├── Body (ColorRect 40×60, gris claro)        el "rectángulo"
-│   └── Shape (CollisionShape2D, RectangleShape2D 40×60)
+│   ├── Body (ColorRect 26×40, gris claro)        el "rectángulo"
+│   └── Shape (CollisionShape2D, RectangleShape2D 26×40)
 └── DebugOverlay (instancia)                      game/debug/debug_overlay.tscn
     └── (CanvasLayer, layer 5) > Panel > Label
 ```
@@ -37,7 +37,7 @@ World (Node2D, world.gd)                         game/world/world.tscn
 | `TileSet` | Archivo aparte, `game/levels/tilesets/greybox.tres` | Guardado dentro de la sala | Lo comparten todas las salas de prueba; si se cambia, cambia en todas. |
 | Lectura de input | En el nodo `Player`, que arma un `PlayerInput` (dirección + salto recién apretado) | Que `PlayerMotor` lea `Input` directamente | La lógica pura no toca `Input` (convención 1). Así los tests le pasan un input inventado. |
 | "Recién apretado" | `Input.is_action_just_pressed("jump")` en el nodo | Guardar el estado anterior del botón en el motor | Godot ya lo resuelve. Mantener apretado no repite el salto (AC05). |
-| Caída fuera de la sala | `World` pregunta a `RoomGeometry.is_below_room(y)` y, si da verdadero, reubica al personaje en `Spawn` | Un `Area2D` "zona de muerte" bajo la sala | La regla (cuándo está afuera) queda en lógica pura y testeable. Además no hay que agregar un área a cada sala. La F005 lo reemplaza por la muerte. |
+| Salida de la sala | `World` pregunta a `RoomGeometry.is_outside_room(rect)` (debajo, izquierda o derecha) y, si da verdadero, reubica al personaje en `Spawn` | Un `Area2D` "zona de muerte" bajo la sala | La regla (cuándo está afuera) queda en lógica pura y testeable. Además no hay que agregar un área a cada sala. La F005 lo reemplaza por la muerte. |
 | Overlay | `CanvasLayer` que cada cuadro pide `get_debug_info()` al personaje | El personaje emitiendo una señal en cada cuadro | Es una herramienta de desarrollo que se consulta cuando está visible. Una señal por cuadro sería ruido sin beneficio. |
 | Altura exacta del salto | Al despegar, la velocidad de salto se corrige restando la gravedad de medio paso | Aceptar el error y subir la tolerancia | Godot mueve en pasos de 1/60 s. Sin corregir, el salto mide de más (83,8 px en vez de 80). La corrección de medio paso hace que `jump_height` sea la altura real. |
 | Pausa | `Player` hereda `PAUSABLE` de `World` | — | Ya funciona así: al pausar se congela todo lo que está dentro de `World`. El overlay usa `ALWAYS` para poder abrirse con F3 también en pausa. |
@@ -49,13 +49,13 @@ World (Node2D, world.gd)                         game/world/world.tscn
 | `game/systems/player/player_movement_config.gd` | Resource | `PlayerMovementConfig`: `run_speed`, `jump_height`, `time_to_apex`, `max_fall_speed` (`@export`). Métodos `get_gravity()` y `get_jump_velocity()` (AC06). |
 | `game/systems/player/player_input.gd` | lógica pura | `PlayerInput`: valor con `direction: float` (−1 a 1) y `jump_just_pressed: bool`. Sin lectura de teclado. |
 | `game/systems/player/player_motor.gd` | lógica pura | `PlayerMotor.step(velocity, input, on_floor, delta) -> Vector2`: caminar, gravedad con tope, salto solo en el piso (AC01–AC05). |
-| `game/systems/rooms/room_geometry.gd` | lógica pura | Constantes de D0002 (`TILE_SIZE = 20`, `COLUMNS = 32`, `ROWS = 18`, tamaño en px) y `is_below_room(y)`. |
-| `game/entities/player/player.gd` | nodo | `Player` (`CharacterBody2D`): arma `PlayerInput` con `Input.get_axis("move_left", "move_right")` y `is_action_just_pressed("jump")`, llama al motor, `move_and_slide()`. `get_debug_info()` para el overlay. `reset_to(pos)` deja posición y velocidad en cero. |
-| `game/world/world.gd` | nodo | Pone al personaje en `Spawn`, le pasa el personaje al overlay y, en `_physics_process`, reubica si cae fuera de la sala. |
+| `game/systems/rooms/room_geometry.gd` | lógica pura | Constantes de D0002 (`TILE_SIZE = 20`, `COLUMNS = 32`, `ROWS = 18`, tamaño en px) y `is_outside_room(rect)`. |
+| `game/entities/player/player.gd` | nodo | `Player` (`CharacterBody2D`): arma `PlayerInput` con `Input.get_axis("move_left", "move_right")` y `is_action_just_pressed("jump")`, llama al motor, `move_and_slide()`. `get_debug_info()` para el overlay; `get_bounds()` da su rectángulo; `reset_to(pos)` lo pone ahí con velocidad cero. |
+| `game/world/world.gd` | nodo | Pone al personaje en `Spawn`, le pasa el personaje al overlay y, en `_physics_process`, reubica si sale de la sala. |
 | `game/debug/debug_overlay.gd` | nodo | `DebugOverlay`: F3 (`debug_toggle`) muestra u oculta; si está visible, escribe las líneas de `get_debug_info()` más los FPS. |
 | `game/data/player_movement.tres` | Resource (instancia) | Valores iniciales de la spec. Después lo edita solo el desarrollador. |
 | `game/levels/tilesets/greybox.tres` + `game/art/greybox/block.png` | Resource + imagen | Baldosa gris de 20×20 con borde, para distinguir baldosas, y colisión de cuadrado completo. |
-| `game/levels/test/test_room.tscn` | escena | Sala de 32 × 18: paredes, 3 pisos de 6 filas, escalones de 3 filas o menos, hueco en el piso de abajo y `Spawn`. Se genera con un script temporal que pinta las baldosas (más preciso que a mano); después se puede editar en el editor. |
+| `game/levels/test/test_room.tscn` | escena | Sala de 32 × 18: paredes con entrada (izquierda, piso 1) y salida (derecha, piso 3), 3 pisos de 6 filas, escalones de 3 filas, hueco en el piso de abajo y `Spawn` junto a la entrada. Se genera con un script temporal que pinta las baldosas (más preciso que a mano); después se puede editar en el editor. |
 
 ## Señales
 
@@ -75,7 +75,7 @@ Ninguna nueva. El overlay consulta al personaje (ver "Elecciones") y la reubicac
 
 `test/rooms/room_geometry_test.gd`:
 - `test_room_size_matches_viewport`: 32 × 20 = 640 y 18 × 20 = 360 (D0002).
-- `test_f003_ac10_below_room`: justo en el borde no está afuera; con el personaje entero debajo, sí.
+- `test_f003_ac10_outside_room`: asomando por un borde no está afuera; entero por debajo, por la izquierda o por la derecha, sí; por arriba nunca.
 
 ## Impacto en overlay debug
 

@@ -16,6 +16,8 @@ updated: 2026-10-24
 
 Al tocar Jugar, en lugar de la pantalla provisoria aparece **una sala de prueba** en greybox (formas grises, sin arte) y **un rectángulo que hace de protagonista**. El rectángulo camina, cae y salta. Con eso se puede recorrer la sala entera: tres pisos conectados por escalones y un hueco en el piso de abajo.
 
+**Regla de salas:** toda sala tiene una **entrada** y una **salida** en lados opuestos (izquierda y derecha, o abajo y arriba). La sala de prueba entra por la izquierda, en el piso 1, y sale por la derecha, en el piso 3.
+
 Es el primer paso del camino de menor a mayor: moverse antes que cambiar de sala (F004) o morir (F005).
 
 ## Fuera de alcance
@@ -24,7 +26,7 @@ Es el primer paso del camino de menor a mayor: moverse antes que cambiar de sala
 - El "peso" del movimiento: aceleración, frenado, anticipación. El rectángulo arranca y frena en seco. El peso se trabaja más adelante (spike en el backlog).
 - Salto variable (más alto si se mantiene apretado), *coyote time* y *jump buffer*.
 - Colgarse de bordes, trepar, agacharse, dash.
-- Pasar a otra sala (F004) y morir de verdad (F005). Caer por el hueco solo reubica al personaje (ver AC10).
+- Pasar a otra sala (F004) y morir de verdad (F005). Caer por el hueco o salir por la entrada o la salida solo reubica al personaje (ver AC10).
 - Cámara: la sala ocupa la pantalla entera y no hay scroll.
 
 ## Criterios de aceptación
@@ -40,10 +42,10 @@ Lógica pura (`PlayerMotor`, sin nodos):
 
 Jugando:
 
-- F003-AC07 [manual] Al tocar Jugar aparece la sala de prueba llenando la pantalla: 32 × 18 baldosas de 20 px, sin franjas ni baldosas cortadas. Tiene 3 pisos, escalones entre pisos, paredes a los costados y un hueco en el piso de abajo.
-- F003-AC08 [manual] El rectángulo (40 × 60 px, 2 × 3 baldosas) aparece parado en el punto de inicio. Camina con A/D, flechas, cruceta y stick izquierdo; salta con Espacio, K o el botón A del gamepad. No atraviesa paredes, pisos ni techos.
-- F003-AC09 [manual] Partiendo del piso de abajo se llega al piso de arriba de todo solo caminando y saltando por los escalones.
-- F003-AC10 [manual] Al caer por el hueco y salir por debajo de la pantalla, el rectángulo reaparece en el punto de inicio, quieto. Es provisorio: la F005 lo reemplaza por la muerte.
+- F003-AC07 [manual] Al tocar Jugar aparece la sala de prueba llenando la pantalla: 32 × 18 baldosas de 20 px, sin franjas ni baldosas cortadas. Tiene 3 pisos, escalones entre pisos, paredes a los costados, un hueco en el piso de abajo, la entrada abierta en la pared izquierda (piso 1) y la salida abierta en la pared derecha (piso 3).
+- F003-AC08 [manual] El rectángulo (26 × 40 px) aparece parado en el punto de inicio. Camina con A/D, flechas, cruceta y stick izquierdo; salta con Espacio, K o el botón A del gamepad. No atraviesa paredes, pisos ni techos.
+- F003-AC09 [manual] Partiendo de la entrada se llega a la salida solo caminando y saltando por los escalones.
+- F003-AC10 [manual] Al salir entero de la pantalla, por debajo (el hueco) o por un costado (la entrada o la salida), el rectángulo reaparece en el punto de inicio, quieto. Es provisorio: la F004 cambia los costados por el paso a otra sala y la F005 cambia el hueco por la muerte.
 - F003-AC11 [manual] Pausa (Esc / Start) congela al rectángulo, incluso a mitad de un salto; Continuar lo deja seguir desde donde estaba.
 - F003-AC12 [manual] F3 (o el botón Select/Back del gamepad) muestra el overlay de debug con velocidad, si está en el piso y FPS; F3 de nuevo lo oculta. Los valores cambian al moverse.
 - F003-AC13 [manual] Cambiar `jump_height` en `game/data/player_movement.tres` desde el inspector cambia la altura del salto en la siguiente partida.
@@ -74,3 +76,4 @@ Con 80 px de salto, el rectángulo sube escalones de hasta 3 baldosas (60 px) co
 
 - Salas de prueba: el agente puede crear y editar `game/levels/test/` (aprobado el 2026-10-24). Las salas de los niveles siguen siendo del desarrollador.
 - Overlay de debug: sus textos quedan en castellano, sin traducir (aprobado el 2026-10-24).
+- Cambios pedidos durante la implementación (2026-10-24): regla de entrada y salida en lados opuestos (Objetivo, AC07, AC09, AC10) y rectángulo un tercio más chico, de 40 × 60 a 26 × 40 px (AC08).

@@ -14,9 +14,17 @@ func test_room_size_matches_viewport() -> void:
 	assert_that(RoomGeometry.SIZE_PX).is_equal(viewport)
 
 
-func test_f003_ac10_below_room() -> void:
-	# Se mide el borde de arriba del personaje: afuera es cuando ya no se ve nada de él.
-	assert_bool(RoomGeometry.is_below_room(100.0)).is_false()
-	assert_bool(RoomGeometry.is_below_room(360.0)).is_false()
-	assert_bool(RoomGeometry.is_below_room(360.5)).is_true()
-	assert_bool(RoomGeometry.is_below_room(1000.0)).is_true()
+func test_f003_ac10_outside_room() -> void:
+	# Rectángulo del personaje (26×40). Cuenta como afuera recién cuando no se ve nada de él.
+	var size := Vector2(26, 40)
+	# Adentro, o asomando por un borde.
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(100, 300), size))).is_false()
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(100, 320), size))).is_false()
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(-25, 260), size))).is_false()
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(639, 40), size))).is_false()
+	# Arriba no cuenta: un salto puede asomar por encima de la pantalla y volver.
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(300, -50), size))).is_false()
+	# Entero por debajo (precipicio), por la izquierda (entrada) o por la derecha (salida).
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(100, 360.5), size))).is_true()
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(-26.5, 260), size))).is_true()
+	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(640.5, 40), size))).is_true()

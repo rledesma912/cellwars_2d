@@ -22,6 +22,7 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
-	# Provisorio (F003-AC10): si cae por el precipicio, vuelve al inicio de la sala.
-	if RoomGeometry.is_below_room(_player.get_top_y()):
+	# Provisorio (F003-AC10): si sale de la sala (por el precipicio, la entrada o la
+	# salida), vuelve al inicio. En la F004, salir por un costado va a llevar a otra sala.
+	if RoomGeometry.is_outside_room(_player.get_bounds()):
 		_player.reset_to(_spawn.position)

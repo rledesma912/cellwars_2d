@@ -40,9 +40,12 @@ func reset_to(feet_position: Vector2) -> void:
 	velocity = Vector2.ZERO
 
 
-## Altura (en Y) del borde de arriba del personaje.
-func get_top_y() -> float:
-	return position.y - (_shape.shape as RectangleShape2D).size.y
+## Rectángulo que ocupa el personaje, en coordenadas de la sala.
+func get_bounds() -> Rect2:
+	var size := (_shape.shape as RectangleShape2D).size
+	# El origen está en los pies: el rectángulo empieza medio ancho a la izquierda y
+	# un alto entero más arriba.
+	return Rect2(position - Vector2(size.x / 2.0, size.y), size)
 
 
 ## Datos para el overlay de debug (F3).
