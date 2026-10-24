@@ -1,7 +1,7 @@
 ---
 id: F001
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
 updated: 2026-10-23
@@ -31,24 +31,24 @@ Que el juego tenga su esqueleto de navegación: arranca en un menú principal, d
 
 Flujo (lógica pura, independiente de las escenas):
 
-- F001-AC01 [unit] El flujo arranca en el estado `MENU`.
-- F001-AC02 [unit] `MENU` + evento `play` → `PLAYING`.
-- F001-AC03 [unit] `PLAYING` + evento `pause` → `PAUSED`.
-- F001-AC04 [unit] `PAUSED` + evento `resume` → `PLAYING`; `PAUSED` + evento `pause` → `PLAYING` (la misma tecla pausa y despausa).
-- F001-AC05 [unit] `PAUSED` + evento `to_menu` → `MENU`.
-- F001-AC06 [unit] Un evento que no corresponde al estado actual no cambia el estado (p. ej. `MENU` + `pause` → `MENU`; `PLAYING` + `to_menu` → `PLAYING`).
-- F001-AC07 [unit] Cada cambio de estado se notifica una sola vez con el estado anterior y el nuevo; un evento ignorado no notifica nada.
+- F001-AC01 [unit] ✅ El flujo arranca en el estado `MENU`.
+- F001-AC02 [unit] ✅ `MENU` + evento `play` → `PLAYING`.
+- F001-AC03 [unit] ✅ `PLAYING` + evento `pause` → `PAUSED`.
+- F001-AC04 [unit] ✅ `PAUSED` + evento `resume` → `PLAYING`; `PAUSED` + evento `pause` → `PLAYING` (la misma tecla pausa y despausa).
+- F001-AC05 [unit] ✅ `PAUSED` + evento `to_menu` → `MENU`.
+- F001-AC06 [unit] ✅ Un evento que no corresponde al estado actual no cambia el estado (p. ej. `MENU` + `pause` → `MENU`; `PLAYING` + `to_menu` → `PLAYING`).
+- F001-AC07 [unit] ✅ Cada cambio de estado se notifica una sola vez con el estado anterior y el nuevo; un evento ignorado no notifica nada.
 
 Pantallas (jugando):
 
-- F001-AC08 [manual] Al abrir el juego aparece el menú principal con el título "Cellwars 2D" y los botones "Jugar" y "Salir", con el foco en "Jugar".
-- F001-AC09 [manual] "Jugar" lleva a la escena de juego, que muestra un texto placeholder.
-- F001-AC10 [manual] En la escena de juego, Esc (teclado) o Start (gamepad) abre el menú de pausa encima de la escena, con "Continuar" y "Volver al menú", foco en "Continuar". Mientras está abierto, la escena de juego no avanza.
-- F001-AC11 [manual] En pausa, "Continuar" o volver a apretar Esc/Start cierra la pausa y la escena sigue desde donde estaba.
-- F001-AC12 [manual] En pausa, "Volver al menú" lleva al menú principal; al volver a "Jugar", la escena de juego empieza de cero.
-- F001-AC13 [manual] "Salir" cierra el juego sin errores en la consola.
-- F001-AC14 [manual] En los dos menús se navega con flechas y con el pad direccional/stick, se confirma con Enter/Espacio y con el botón A, y los botones también funcionan con clic del mouse.
-- F001-AC15 [manual] Recorrer el ciclo menú → jugar → pausa → menú cinco veces seguidas no deja errores ni advertencias en la consola.
+- F001-AC08 [manual] ✅ Al abrir el juego aparece el menú principal con el título "Cellwars 2D" y los botones "Jugar" y "Salir", con el foco en "Jugar".
+- F001-AC09 [manual] ✅ "Jugar" lleva a la escena de juego, que muestra un texto placeholder.
+- F001-AC10 [manual] ✅ En la escena de juego, Esc (teclado) o Start (gamepad) abre el menú de pausa encima de la escena, con "Continuar" y "Volver al menú", foco en "Continuar". Mientras está abierto, la escena de juego no avanza.
+- F001-AC11 [manual] ✅ En pausa, "Continuar" o volver a apretar Esc/Start cierra la pausa y la escena sigue desde donde estaba.
+- F001-AC12 [manual] ✅ En pausa, "Volver al menú" lleva al menú principal; al volver a "Jugar", la escena de juego empieza de cero.
+- F001-AC13 [manual] ✅ "Salir" cierra el juego sin errores en la consola.
+- F001-AC14 [manual] ✅ En los dos menús se navega con flechas y con el pad direccional/stick, se confirma con Enter/Espacio y con el botón A, y los botones también funcionan con clic del mouse.
+- F001-AC15 [manual] ✅ Recorrer el ciclo menú → jugar → pausa → menú cinco veces seguidas no deja errores ni advertencias en la consola.
 
 ## Casos límite
 
@@ -61,6 +61,9 @@ Pantallas (jugando):
 
 No aplica: la feature no tiene valores de juego ajustables.
 
-## Preguntas abiertas
+## Notas finales
 
-Ninguna.
+- Todos los criterios se cumplieron: los `[unit]` con los tests de `test/flow/screen_flow_test.gd` y los `[manual]` (más los casos límite) marcados por el desarrollador en el playtest del PR #6.
+- La acción `ui_accept` de Godot no trae el botón A del gamepad por defecto: se agregó en `project.godot`. Cualquier menú futuro ya la hereda.
+- El modo de pausa se hereda del nodo padre: como `Main` corre siempre, toda escena que deba congelarse en pausa tiene que declarar `PROCESS_MODE_PAUSABLE` (hoy lo hace `World`). Quedó documentado en `architecture.md`.
+- `World` es provisoria (texto y contador); F003 la convierte en la escena que carga las salas.
