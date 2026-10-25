@@ -14,7 +14,7 @@ Para ver cómo se vería Elyon a escala de juego (Spike 001). Todo corre local e
 
 - Con la vista de perfil sale de perfil; con la de tres cuartos, no.
 - Sin nombrar la mochila, la manguera y el arma, las pierde. Nombradas, aparecen; la manguera a veces cuelga en vez de llegar al arma.
-- El arma sale como un fusil actual: el diseño del arma de Elyon no está en la hoja de personaje.
+- El **Hemofusil** es la mochila: delgada y pegada a la espalda, con una manguera negra hasta un arma negra tipo metralleta. Pedir "large backpack" la agranda de más.
 - Copiar una pose dándole una segunda imagen (un maniquí en la pose) **no funcionó**: ignoró la pose y dibujó otra. Ver "Poses" abajo.
 - Pedir "face hidden behind the visor" deformó la cara: no hace falta, a tamaño real no se ve.
 
@@ -34,49 +34,49 @@ Todas comparten la misma orden; solo cambia la pose.
 ### Quieto — `elyon_quieto.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, standing idle, holding the rifle low. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, standing idle, holding the submachine gun low. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Correr — `elyon_correr.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, running mid stride, holding the rifle. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, running mid stride, holding the submachine gun. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Frenar — `elyon_frenar.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, skidding to a stop, torso leaning back, front leg planted forward. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, skidding to a stop, torso leaning back, front leg planted forward. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Preparar salto — `elyon_preparar_salto.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, crouching before a jump, knees bent, torso leaning forward. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, crouching before a jump, knees bent, torso leaning forward. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Subiendo (en el aire) — `elyon_subiendo.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, jumping upward, knees pulled up. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, jumping upward, knees pulled up. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Cayendo — `elyon_cayendo.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, falling, legs extended down, one arm out for balance. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, falling, legs extended down, one arm out for balance. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Aterrizar — `elyon_aterrizar.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, landing from a high fall, deep crouch. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, landing from a high fall, deep crouch. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ### Apuntar — `elyon_apuntar.png`
 
 ```
-Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, standing and aiming the rifle forward with both hands. He wears a large rectangular armored backpack on his back. A thick black hose comes out of the backpack and connects to a futuristic rifle he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
+Convert this character into a simple low-detail 16-bit pixel art game sprite, side view facing right, full body, standing and aiming the submachine gun forward with both hands. He wears a thin flat armored backpack tight against his back. A thick black hose comes out of the backpack and connects to a black submachine gun he holds in both hands. Keep the same white and grey armor plates over the black bodysuit and the same helmet. Chunky large pixels, flat colors, dark outline. Plain white background, no shadow.
 ```
 
 ## Poses
