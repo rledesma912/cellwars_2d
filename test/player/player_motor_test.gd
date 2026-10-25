@@ -107,3 +107,97 @@ func test_left_and_right_together_brake_like_no_direction() -> void:
 	# Input.get_axis ya devuelve 0 con las dos apretadas: el motor recibe dirección 0.
 	_ground_step(NONE)
 	assert_int(_motor.state).is_equal(PlayerMotor.State.BRAKE)
+
+
+# --- Salto (T3) ---
+
+
+# Simula un salto desde el piso (y = 0) hasta volver a tocarlo, como lo haría Godot:
+# primero el motor calcula la velocidad, después se mueve con ella (pos += v·dt).
+# El botón se aprieta en el paso 0 y se suelta en el paso release_step (−1 = nunca).
+# Devuelve la altura máxima alcanzada, en píxeles.
+func _jump_height(release_step: int) -> float:
+	var pos := Vector2.ZERO
+	var on_floor := true
+	var top := 0.0
+	for i in 300:
+		var held := release_step < 0 or i < release_step
+		var input := PlayerInput.new(NONE, i == 0, held)
+		_velocity = _motor.step(_velocity, input, on_floor, DT)
+		pos += _velocity * DT
+		top = minf(top, pos.y)
+		on_floor = pos.y >= 0.0
+		if on_floor:
+			pos.y = 0.0
+			if i > 0 and top < 0.0:
+				break
+	return -top
+
+
+func test_f004_ac05_jump_prep_keeps_momentum_and_ignores_input() -> void:
+	_run_right_to_full_speed()
+	var speed := _velocity.x
+	_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, true, true), true, DT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.JUMP_PREP)
+	var prep_steps := 1
+	while _motor.state == PlayerMotor.State.JUMP_PREP and prep_steps < 60:
+		# Sigue en el piso, con la misma velocidad, aunque pida ir para el otro lado.
+		assert_float(_velocity.y).is_equal(0.0)
+		assert_float(_velocity.x).is_equal(speed)
+		_velocity = _motor.step(_velocity, PlayerInput.new(LEFT, false, true), true, DT)
+		prep_steps += 1
+	# Al terminar la preparación despega (velocidad hacia arriba) y conserva el impulso.
+	assert_int(_motor.state).is_equal(PlayerMotor.State.AIR)
+	assert_float(_velocity.y).is_less(0.0)
+	assert_float(_velocity.x).is_equal(speed)
+	assert_float(absf(prep_steps * DT - _config.jump_prep_time)).is_less_equal(DT + 0.0001)
+
+
+func test_f004_ac06_held_jump_reaches_jump_height() -> void:
+	assert_float(_jump_height(-1)).is_equal_approx(_config.jump_height, 2.0)
+
+
+func test_f004_ac07_tap_reaches_min_jump_height() -> void:
+	# Soltado en el paso 1: antes de que termine la preparación.
+	assert_float(_jump_height(1)).is_equal_approx(_config.min_jump_height, 2.0)
+
+
+func test_f004_ac08_mid_release_height_between_min_and_max() -> void:
+	# La preparación dura unos 4 pasos; se suelta a distintos momentos de la subida.
+	for release_step: int in [6, 8, 10, 12]:
+		before_test()
+		var height := _jump_height(release_step)
+		assert_float(height).is_greater_equal(_config.min_jump_height - 2.0)
+		assert_float(height).is_less_equal(_config.jump_height + 2.0)
+
+
+func test_f004_ac09_fall_gravity_scaled_and_capped() -> void:
+	_motor.state = PlayerMotor.State.AIR
+	var idle := PlayerInput.new(NONE, false)
+	# Bajando: gravedad de subida × fall_gravity_scale.
+	var v := _motor.step(Vector2(0.0, 10.0), idle, false, DT)
+	assert_float(v.y).is_equal_approx(10.0 + _config.get_fall_gravity() * DT, 0.001)
+	# Subiendo: gravedad de subida sola.
+	v = _motor.step(Vector2(0.0, -100.0), idle, false, DT)
+	assert_float(v.y).is_equal_approx(-100.0 + _config.get_gravity() * DT, 0.001)
+	# Nunca más rápido que max_fall_speed.
+	v = _motor.step(Vector2(0.0, _config.max_fall_speed - 1.0), idle, false, DT)
+	assert_float(v.y).is_equal(_config.max_fall_speed)
+
+
+func test_f004_ac10_no_double_jump() -> void:
+	_motor.state = PlayerMotor.State.AIR
+	var v := _motor.step(Vector2(0.0, 50.0), PlayerInput.new(NONE, true, true), false, DT)
+	assert_float(v.y).is_equal_approx(50.0 + _config.get_fall_gravity() * DT, 0.001)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.AIR)
+
+
+func test_f004_ac11_held_jump_does_not_repeat_on_landing() -> void:
+	_motor.state = PlayerMotor.State.AIR
+	# Toca el piso con el botón todavía apretado desde antes (no es "recién apretado").
+	_velocity = _motor.step(Vector2(0.0, 200.0), PlayerInput.new(NONE, false, true), true, DT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
+	for i in 10:
+		_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false, true), true, DT)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
+		assert_float(_velocity.y).is_equal(0.0)

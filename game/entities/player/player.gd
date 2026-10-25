@@ -25,8 +25,14 @@ func _physics_process(delta: float) -> void:
 	# get_axis da −1, 0 o 1 con teclas (o un valor intermedio con el stick) y ya
 	# aplica la zona muerta del gamepad. Izquierda y derecha juntas se anulan en 0.
 	# is_action_just_pressed es true solo en el paso en que se apretó: mantener no repite.
-	var input := PlayerInput.new(
-		Input.get_axis("move_left", "move_right"), Input.is_action_just_pressed("jump")
+	# is_action_pressed es true mientras siga apretado: soltarlo antes corta el salto.
+	var input := (
+		PlayerInput
+		. new(
+			Input.get_axis("move_left", "move_right"),
+			Input.is_action_just_pressed("jump"),
+			Input.is_action_pressed("jump"),
+		)
 	)
 	velocity = _motor.step(velocity, input, is_on_floor(), delta)
 	# move_and_slide() mueve según velocity, frena contra paredes y pisos y actualiza

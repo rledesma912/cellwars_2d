@@ -20,6 +20,8 @@ var facing: int = 1
 var _config: PlayerMovementConfig
 # Tiempo restante del estado actual (giro, preparación o recuperación).
 var _state_timer: float = 0.0
+# Si está en el aire por un salto (y no por caminar al vacío): solo así vale el corte.
+var _jumping: bool = false
 
 
 func _init(config: PlayerMovementConfig) -> void:
@@ -31,6 +33,7 @@ func reset() -> void:
 	state = State.IDLE
 	facing = 1
 	_state_timer = 0.0
+	_jumping = false
 
 
 ## Segundos que le quedan al giro, la preparación o la recuperación.
@@ -43,22 +46,33 @@ func step(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float) -
 	if on_floor:
 		if state == State.AIR:
 			state = State.IDLE
+			_jumping = false
 	elif state != State.AIR:
+		# Se fue del piso sin saltar (caminó al vacío, o el impulso lo sacó del borde
+		# durante la preparación): cae sin saltar.
 		state = State.AIR
+		_jumping = false
 
 	match state:
 		State.IDLE, State.RUN, State.BRAKE:
 			return _ground(velocity, input, delta)
 		State.TURN:
 			return _turn(delta)
+		State.JUMP_PREP:
+			return _prep(velocity, input, delta)
 		_:
-			return _air(velocity, delta)
+			return _air(velocity, input, delta)
 
 
 func _ground(v: Vector2, input: PlayerInput, delta: float) -> Vector2:
 	v.y = 0.0
 	if input.jump_just_pressed:
-		return _launch(v, delta)
+		if _config.jump_prep_time > 0.0:
+			# Compromiso: durante la preparación se ignora la dirección y sigue el impulso.
+			_enter_timed(State.JUMP_PREP, _config.jump_prep_time, delta)
+			if _state_timer > 0.0:
+				return v
+		return _launch(v, input, delta)
 
 	var dir := int(signf(input.direction))
 	if dir != 0 and dir != facing:
@@ -105,17 +119,38 @@ func _turn(delta: float) -> Vector2:
 	return Vector2.ZERO
 
 
-# Provisorio hasta la T3/T4: salto inmediato y caída simple (sin preparación ni ayudas).
-func _air(v: Vector2, delta: float) -> Vector2:
+func _prep(v: Vector2, input: PlayerInput, delta: float) -> Vector2:
+	v.y = 0.0
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_state_timer = 0.0
+		return _launch(v, input, delta)
+	return v
+
+
+# Provisorio hasta la T4: sin control horizontal ni ayudas en el aire.
+func _air(v: Vector2, input: PlayerInput, delta: float) -> Vector2:
+	# Salto variable: si suelta el botón mientras sube rápido, la subida se corta a la
+	# velocidad que todavía llega a min_jump_height.
+	var release := _config.get_release_velocity()
+	if _jumping and not input.jump_held and v.y < -release:
+		v.y = -release
+
 	var gravity := _config.get_gravity() if v.y < 0.0 else _config.get_fall_gravity()
 	v.y = minf(v.y + gravity * delta, _config.max_fall_speed)
 	return v
 
 
-func _launch(v: Vector2, delta: float) -> Vector2:
+func _launch(v: Vector2, input: PlayerInput, delta: float) -> Vector2:
+	# Si ya soltó el botón (toque corto durante la preparación), despega directo con
+	# la velocidad de corte: así llega justo a min_jump_height.
+	var speed := _config.get_jump_velocity()
+	if not input.jump_held:
+		speed = minf(speed, _config.get_release_velocity())
 	# Godot mueve en pasos (60 por segundo) usando la velocidad de cada paso, y así
 	# el salto subiría unos píxeles de más. Restar la gravedad de medio paso al
-	# despegar compensa ese error: la altura real queda igual a jump_height.
-	v.y = -_config.get_jump_velocity() + _config.get_gravity() * delta * 0.5
+	# despegar compensa ese error: la altura real queda igual a la buscada.
+	v.y = -speed + _config.get_gravity() * delta * 0.5
 	state = State.AIR
+	_jumping = true
 	return v
