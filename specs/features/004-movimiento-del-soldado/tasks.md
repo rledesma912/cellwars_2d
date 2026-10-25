@@ -21,7 +21,7 @@ updated: 2026-10-25
   - líneas nuevas en el overlay F3.
 
   (cubre: F004-AC20, F004-AC22, F004-AC23)
-- [ ] T7 `game/data/player_movement.tres` con los valores iniciales (cambio único autorizado), simulación de la sala de prueba de entrada a salida apretando teclas y smoke run (cubre: F004-AC21, F004-AC24)
+- [x] T7 `game/data/player_movement.tres` con los valores iniciales (cambio único autorizado), simulación de la sala de prueba de entrada a salida apretando teclas y smoke run (cubre: F004-AC21, F004-AC24)
 - [ ] T8 Playtest: checklist en el PR (cubre: F004-AC20, F004-AC21, F004-AC22, F004-AC23, F004-AC24, F004-AC25, F004-AC26)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f004_ac12_coyote_time_allows_late_jump`.
