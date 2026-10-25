@@ -1,7 +1,7 @@
 ---
 id: F004
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0002, D0003], spike: S001 }
 updated: 2026-10-25
@@ -159,6 +159,12 @@ No son parámetros, sino reglas de D0003:
 - Animaciones: `quieto`, `arrancar`, `correr`, `frenar`, `girar`, `preparar`, `subir`, `caer`, `aterrizar`.
 - Son provisorias, sin animación de muerte ni de combate.
 - Reemplazan al greybox solo en el personaje; la sala sigue en greybox.
+
+## Decisiones del desarrollador
+
+- Spec aprobada el 2026-10-25 ("Apruebo"), incluyendo:
+  - el cambio único de `game/data/player_movement.tres` a los valores iniciales por el agente;
+  - las imágenes provisorias de Elyon en el juego.
 
 ## Preguntas abiertas
 
