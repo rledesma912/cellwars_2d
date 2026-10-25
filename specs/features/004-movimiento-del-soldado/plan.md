@@ -1,7 +1,7 @@
 ---
 id: F004
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0002, D0003], spike: S001 }
 updated: 2026-10-25
