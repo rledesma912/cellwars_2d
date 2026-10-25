@@ -3,8 +3,8 @@ id: ARCH
 type: architecture
 status: approved
 superseded_by:
-links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-24
+links: { gdd: [], decisions: [D0002, D0003], spike: }
+updated: 2026-10-25
 ---
 
 # Arquitectura
@@ -60,6 +60,13 @@ func _physics_process(delta: float) -> void:
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
 - Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y marcadores como `Spawn`. Las medidas (D0002) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados opuestos.
 - Entidades: el origen de un personaje está en sus pies, al centro.
+
+## Personaje y movimiento (D0003)
+
+- **Movimiento híbrido**: un motor de lógica pura con estados (enum: quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse) decide qué acciones valen en cada momento. Arranque y frenado cortos, preparación corta del salto, salto variable, coyote time y jump buffer, control reducido en el aire sin darse vuelta, recuperación al caer de alto. Máquina de estados con enum y no con nodos: pocos estados con poca lógica de entrada/salida, y así sigue siendo testeable sin escenas.
+- **Tamaño**: el soldado mide 48 px de alto (cuerpo de colisión 20 × 48) y salta 52 px: cuerpo + salto = 100 px, el aire de un piso en una sala de 3 pisos (D0002). Un escalón de 2 baldosas se sube; uno de 3, no.
+- **El motor manda los tiempos y la animación se adapta**: cada tiempo de acción (preparación, giro, recuperación) vive en el `.tres` del movimiento, y la animación correspondiente se estira o acorta para durarlo.
+- **Animación**: `AnimatedSprite2D` cuya animación elige el estado del motor. Cuadros de 64 × 64 px, pies abajo al centro (32, 63), mirando a la derecha; la izquierda se obtiene espejando. Toda acción nueva sigue la misma filosofía (anticipación y recuperación cortas) y su sensación se prueba en su propia feature.
 - Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
 
 ## Textos e idiomas
@@ -83,10 +90,10 @@ func _physics_process(delta: float) -> void:
 | Parámetro | Valor | Estado |
 |---|---|---|
 | Renderer | `gl_compatibility` | Vigente |
-| Viewport | 640×360, ventana 1280×720 | A validar en Spike 001 (alternativa: 960×540) |
+| Viewport | 640×360, ventana 1280×720 | Vigente (D0003) |
 | Stretch | `viewport`, aspect `keep`, scale `integer` | Vigente |
 | Filtro de texturas | Nearest | Vigente |
-| `snap_2d_transforms_to_pixel` | `true` | A validar en Spike 001 (posible jitter con `Camera2D` suavizada) |
+| `snap_2d_transforms_to_pixel` | `true` | Vigente: sin efectos visibles en pantalla fija (D0003); revisar si algún día hay `Camera2D` suavizada |
 | Tile | 20 px; una sala = una pantalla = 32 × 18 tiles | Vigente (D0002) |
 | Display driver Linux | Wayland (`display_server/driver.linuxbsd`) | Vigente: el entorno del agente no tiene X11 |
 
