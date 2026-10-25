@@ -1,10 +1,10 @@
 ---
 id: S001
 type: spike
-status: approved
+status: done
 superseded_by:
-links: { gdd: [G001], decisions: [D0002], spike: }
-updated: 2026-10-24
+links: { gdd: [G001], decisions: [D0002, D0003], spike: }
+updated: 2026-10-25
 ---
 
 # Spike 001: Movimiento y peso del soldado
@@ -51,49 +51,75 @@ updated: 2026-10-24
 
 Prototipo en `prototypes/spike_001/` (escena `spike_001.tscn`):
 
-- `spike_motor.gd`: motor de lógica pura con estados (enum): quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse. Mismo motor para las tres variantes; cambian los valores.
-- `spike_movement_config.gd` + `variant_a.tres`, `variant_b.tres`, `variant_c.tres`: un Resource por variante, editable desde el inspector.
-- `soldier.tscn`: `CharacterBody2D` de 20 × 40 px con un `AnimatedSprite2D`. Las animaciones se eligen según el estado del motor; la preparación, el giro y la recuperación se estiran para durar lo que dice el `.tres`.
-- `silhouette.png` y `silhouette_frames.tres`: silueta provisoria de 32 × 48 por cuadro, generada con `make_silhouette.py`.
-- `challenge_room.tscn`: sala de desafíos. Entra por arriba a la izquierda y sale por abajo a la derecha. Tiene:
-  - bloques de 1, 2 y 3 baldosas de alto;
-  - un borde para medir la frenada;
-  - una caída de 180 px;
-  - un pasillo para ir y volver;
-  - huecos de 3 y 4 baldosas con una plataforma de 2 en el medio.
-- Teclas del prototipo: 1/2/3 variante, Tab sala (la de prueba de la F003 o la de desafíos), R reinicia, P snap a píxel, F3 datos con las mediciones del último salto, caída y frenada.
-- `elyon_prompts.md`: prompts para generar a Elyon en pixel art a 40 y 48 px (modelos de difusión en general y Flux Kontext en ComfyUI).
+- `spike_motor.gd`: motor de lógica pura con estados (enum): quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse. Mismo motor para todas las variantes; cambian los valores.
+- `spike_movement_config.gd` + `variant_a.tres`, `variant_b.tres`, `variant_c.tres`, `variant_c48.tres`: un Resource por variante.
+- `soldier.tscn`: `CharacterBody2D` con un `AnimatedSprite2D` cuyas animaciones elige el estado del motor; la preparación, el giro y la recuperación se estiran para durar lo que dice el `.tres`.
+- Tres aspectos intercambiables (tecla S): silueta provisoria (`silhouette.png`, generada con `make_silhouette.py`), Elyon a 40 px y Elyon a 48 px (`elyon_40.png`, `elyon_48.png`).
+- `challenge_room.tscn`: sala de desafíos (bloques de 1, 2 y 3 baldosas, borde para frenar, caída de 180 px, pasillo, huecos de 3 y 4 baldosas con plataforma de 2).
+- `comfy/`: flujo de imágenes con ComfyUI local por su API HTTP:
+  - `make_poses.py`: esqueletos OpenPose de los 21 cuadros a partir de las poses de la silueta;
+  - `sdxl_pose_run.py`: SDXL + ControlNet OpenPose (pose) + IP-Adapter (diseño, con `elyon_ref_hemofusil.png` como referencia) + LoRA Pixel Art XL;
+  - `kontext_run.py`: Flux Kontext Dev (usado para crear la referencia con el Hemofusil);
+  - `anim_sprites.py` y `build_frames.gd`: hoja de sprites con escala y paleta comunes y su `SpriteFrames`.
+- `elyon_prompts.md`: órdenes y aprendizajes para generar a Elyon con ComfyUI.
+- Teclas: S aspecto, 1-4 variante, Tab sala, R reinicia, P snap a píxel, F3 datos (mediciones del último salto, caída y frenada).
 
 ## Evidencia y findings
 
-Parcial (2026-10-24; el spike sigue abierto):
-
-- **Variante elegida: C (híbrido)**, con los valores de arranque de `variant_c.tres`. El desarrollador: *"El híbrido logra el equilibrio de un movimiento moderno y el feeling de peso del soldado, me gusta."* Después confirmó que los valores le quedan bien.
-- **Snap a píxel**: activarlo o desactivarlo (tecla P) no cambia nada visible a 640×360 con la silueta animada.
-- Mediciones por simulación con los valores de arranque:
+- **Variante elegida: C (híbrido).** El desarrollador: *"El híbrido logra el equilibrio de un movimiento moderno y el feeling de peso del soldado, me gusta."* Los valores de arranque le quedaron bien.
+- **Tamaño elegido: 48 px de alto con salto de 52 px.** Elyon a 40 px: *"Le falta definición"*. A 48 px: *"me gusta más el Elyon de 48"*; el salto de 52 *"está bien por ahora"*.
+  - El desarrollador quiere mantener 3 pisos por sala (`D0002`: 100 px de aire por piso). Cuerpo + salto debe entrar en esos 100 px: 48 + 52 = 100, verificado por simulación.
+  - Con salto de 52 px, un bloque de 3 baldosas (60 px) no se alcanza; 2 baldosas (40 px) sí.
+- **Snap a píxel**: activarlo o desactivarlo no cambia nada visible a 640×360.
+- Mediciones por simulación (pasos de 1/60 s):
 
 | Variante | Salto corriendo (largo / alto) | Toque corto | Frenada | Giro |
 |---|---|---|---|---|
-| A | 93 / 60 px | 29 px | 3 px | inmediato |
-| B | 102 / 60 px | 60 px (fija) | 13 px | 0,28 s |
-| C | 97 / 60 px | 38 px | 5 px | 0,1 s |
+| A moderno | 93 / 60 px | 29 px | 3 px | inmediato |
+| B cinemático | 102 / 60 px | 60 px (fija) | 13 px | 0,28 s |
+| C híbrido | 97 / 60 px | 38 px | 5 px | 0,1 s |
+| **C 48 (elegida)** | **97 / 52 px** | **33 px** | **5 px** | **0,1 s** |
 
-- Regla propuesta para la decisión: **el motor manda los tiempos y la animación se adapta** (se estira o acorta para durar lo que dice el `.tres`), al revés que en *Prince of Persia*.
-- Fuera del alcance original, aceptado para revisar dentro del spike: **el tamaño del soldado**.
-  - Con 3 pisos por sala (100 px de aire por piso), el soldado más su salto deben entrar en 100 px. Las opciones son 40 px de alto (salto de 60 px) o 48 px (salto de unos 52 px).
-  - Para decidir, el desarrollador genera imágenes de Elyon en pixel art a 40 y 48 px con ComfyUI (Flux Kontext Dev, local) y el agente las pone a tamaño real en el prototipo.
+- **El motor manda los tiempos y la animación se adapta**: el prototipo estira o acorta la animación para que dure lo que dice el `.tres`. Así el control no depende de cuántos cuadros tenga el dibujo.
+- **Generación de imágenes con IA (ComfyUI local, RTX 3060 12 GB):**
+  - Kontext conserva el ángulo de la imagen de entrada: hace falta la vista de perfil. Agrega bien la mochila, la manguera y el arma, pero cambia las poses poco comunes (endereza el agachado) y varía el diseño entre cuadros: no sirve para animación.
+  - SDXL + OpenPose respeta las poses (incluido el agachado) y mantiene la coherencia entre cuadros. No dibuja la manguera ni el arma si la referencia no las tiene: con la referencia generada por Kontext sí lo hace (la manguera, a veces).
+  - El esqueleto debe ocupar ~60 % del alto de la imagen; al 80 % SDXL corta los pies.
+  - Tiempos: ~40 s por cuadro con SDXL; ~3 min con Kontext.
+  - Los cuadros salen con defectos (manguera intermitente, restos de fondo, casco algo grande): sirven para evaluar tamaño y como base, no como arte final.
 
 ## Valores de tuning que funcionaron
 
+`prototypes/spike_001/variant_c48.tres`:
+
 | Parámetro | Valor | Nota |
 |---|---|---|
+| run_speed | 135 px/s | |
+| accel_time / decel_time | 0,15 / 0,12 s | arranque y frenado cortos |
+| turn_time | 0,08 s | giro quieto |
+| jump_height / min_jump_height | 52 / 30 px | salto variable |
+| time_to_apex | 0,36 s | |
+| fall_gravity_scale | 1,25 | cae algo más rápido de lo que sube |
+| max_fall_speed | 600 px/s | |
+| jump_prep_time | 0,07 s | anticipación |
+| air_control / air_can_reverse | 0,5 / no | corrige en el aire, no se da vuelta |
+| hard_landing_height / land_recovery_time | 100 px / 0,15 s | recuperación al caer de alto |
+| coyote_time / jump_buffer_time | 0,08 / 0,1 s | |
+| Cuerpo de colisión | 20 × 48 px | |
 
 ## Riesgos y limitaciones
 
+- El salto de 52 px con el techo de 100 px deja la cabeza tocando justo el techo: cualquier aumento de altura del salto o del cuerpo choca. El desarrollador lo aceptó "por ahora".
+- Los valores salen de jugar en dos salas de prueba; el ajuste fino va a seguir en el `.tres` del juego.
+- 48 px puede quedarse corto de definición para el arte final; subirlo implicaría cambiar la resolución del juego (fuera de este spike).
+- `ComfyUI_IPAdapter_plus` ya no tiene mantenimiento: puede romperse con versiones futuras de ComfyUI.
+
 ## Recomendación
+
+Adoptar el movimiento híbrido (variante C) con un soldado de 48 px de alto y salto de 52 px, con la regla "el motor manda los tiempos". Implementarlo en una feature que reemplace el movimiento de la F003 por el motor con estados, con tests. Ver `D0003`.
 
 ## Siguiente paso
 
-- [ ] Decisión DNNNN → actualizar GDD / arquitectura / spec
+- [x] Decisión D0003 → actualizar arquitectura, `CLAUDE.md`, backlog
 - [ ] Otro spike (qué incertidumbre queda)
 - [ ] Descartar la idea (motivo)
