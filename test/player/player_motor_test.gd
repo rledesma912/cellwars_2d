@@ -1,67 +1,109 @@
-# Tests de PlayerMotor (F003-AC01 a AC05).
+# Tests de PlayerMotor (F004). Se simula en pasos de 1/60 s, como corre la física de Godot.
 extends GdUnitTestSuite
 
-# Godot calcula la física a 60 pasos por segundo.
 const DT := 1.0 / 60.0
+const RIGHT := 1.0
+const LEFT := -1.0
+const NONE := 0.0
 
 var _config: PlayerMovementConfig
 var _motor: PlayerMotor
+var _velocity: Vector2
 
 
 func before_test() -> void:
 	_config = PlayerMovementConfig.new()
 	_motor = PlayerMotor.new(_config)
+	_velocity = Vector2.ZERO
 
 
-func test_f003_ac01_walks_at_run_speed() -> void:
-	for on_floor: bool in [true, false]:
-		var right := _motor.step(Vector2.ZERO, PlayerInput.new(1.0, false), on_floor, DT)
-		assert_float(right.x).is_equal(_config.run_speed)
-		var left := _motor.step(Vector2.ZERO, PlayerInput.new(-1.0, false), on_floor, DT)
-		assert_float(left.x).is_equal(-_config.run_speed)
-		# "Las dos a la vez" llega como dirección 0, igual que no apretar nada.
-		var none := _motor.step(Vector2(99.0, 0.0), PlayerInput.new(0.0, false), on_floor, DT)
-		assert_float(none.x).is_equal(0.0)
+# Un paso en el piso con la dirección dada y sin tocar el salto.
+func _ground_step(direction: float) -> void:
+	_velocity = _motor.step(_velocity, PlayerInput.new(direction, false), true, DT)
 
 
-func test_f003_ac02_gravity_accumulates_and_caps() -> void:
-	var idle := PlayerInput.new(0.0, false)
-	var falling := _motor.step(Vector2.ZERO, idle, false, DT)
-	assert_float(falling.y).is_equal_approx(_config.get_gravity() * DT, 0.001)
-	falling = _motor.step(falling, idle, false, DT)
-	assert_float(falling.y).is_equal_approx(2.0 * _config.get_gravity() * DT, 0.001)
-	# Cayendo mucho tiempo, nunca pasa del tope.
-	for i in 300:
-		falling = _motor.step(falling, idle, false, DT)
-	assert_float(falling.y).is_equal(_config.max_fall_speed)
-	# En el piso no acumula.
-	var standing := _motor.step(Vector2.ZERO, idle, true, DT)
-	assert_float(standing.y).is_equal(0.0)
+# Corre hacia la derecha hasta llegar a la velocidad máxima.
+func _run_right_to_full_speed() -> void:
+	for i in 60:
+		_ground_step(RIGHT)
+		if _velocity.x >= _config.run_speed:
+			return
 
 
-func test_f003_ac03_jump_reaches_jump_height() -> void:
-	var velocity := _motor.step(Vector2.ZERO, PlayerInput.new(0.0, true), true, DT)
-	assert_float(velocity.y).is_less(0.0)
-	# Igual que move_and_slide(): cada paso, la posición avanza velocidad × delta.
-	# En Godot Y crece hacia abajo, así que subir es restar.
-	var y := 0.0
-	var highest := 0.0
-	while velocity.y < 0.0:
-		y += velocity.y * DT
-		highest = minf(highest, y)
-		velocity = _motor.step(velocity, PlayerInput.new(0.0, false), false, DT)
-	assert_float(-highest).is_equal_approx(_config.jump_height, 2.0)
+func test_f004_ac01_accelerates_to_run_speed_in_accel_time() -> void:
+	var steps := 0
+	var last_x := 0.0
+	while _velocity.x < _config.run_speed and steps < 120:
+		_ground_step(RIGHT)
+		steps += 1
+		# Sube de a poco: nunca baja y nunca salta de golpe al máximo (salvo el último paso).
+		assert_float(_velocity.x).is_greater(last_x)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.RUN)
+		last_x = _velocity.x
+	assert_float(_velocity.x).is_equal(_config.run_speed)
+	assert_bool(steps > 1).is_true()
+	assert_float(absf(steps * DT - _config.accel_time)).is_less_equal(DT + 0.0001)
 
 
-func test_f003_ac04_no_jump_in_air() -> void:
-	var rising := Vector2(0.0, -100.0)
-	var after := _motor.step(rising, PlayerInput.new(0.0, true), false, DT)
-	# Solo actuó la gravedad: el salto no se repite en el aire.
-	assert_float(after.y).is_equal_approx(-100.0 + _config.get_gravity() * DT, 0.001)
+func test_f004_ac02_brakes_to_zero_in_decel_time() -> void:
+	_run_right_to_full_speed()
+	var steps := 0
+	while _velocity.x > 0.0 and steps < 120:
+		_ground_step(NONE)
+		steps += 1
+		if _velocity.x > 0.0:
+			assert_int(_motor.state).is_equal(PlayerMotor.State.BRAKE)
+	assert_float(_velocity.x).is_equal(0.0)
+	assert_float(absf(steps * DT - _config.decel_time)).is_less_equal(DT + 0.0001)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
 
 
-func test_f003_ac05_held_jump_does_not_repeat() -> void:
-	# Salto mantenido desde antes: PlayerInput llega con jump_just_pressed en false.
-	var held := PlayerInput.new(0.0, false)
-	var landed := _motor.step(Vector2(0.0, 300.0), held, true, DT)
-	assert_float(landed.y).is_equal(0.0)
+func test_f004_ac03_turns_in_place_after_turn_time() -> void:
+	assert_int(_motor.facing).is_equal(1)
+	_ground_step(LEFT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.TURN)
+	var turn_steps := 1
+	while _motor.state == PlayerMotor.State.TURN and turn_steps < 60:
+		assert_float(_velocity.x).is_equal(0.0)
+		assert_int(_motor.facing).is_equal(1)
+		_ground_step(LEFT)
+		turn_steps += 1
+	# El giro termina en el paso en que se acaba turn_time: ya mira a la izquierda.
+	assert_float(_velocity.x).is_equal(0.0)
+	assert_int(_motor.facing).is_equal(-1)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
+	assert_float(absf(turn_steps * DT - _config.turn_time)).is_less_equal(DT + 0.0001)
+	# Con la izquierda sostenida, después arranca hacia ese lado.
+	_ground_step(LEFT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.RUN)
+	assert_float(_velocity.x).is_less(0.0)
+
+
+func test_f004_ac04_running_turn_brakes_first() -> void:
+	_run_right_to_full_speed()
+	var saw_brake := false
+	var saw_turn := false
+	for i in 120:
+		_ground_step(LEFT)
+		match _motor.state:
+			PlayerMotor.State.BRAKE:
+				assert_bool(saw_turn).is_false()
+				saw_brake = true
+			PlayerMotor.State.TURN:
+				assert_bool(saw_brake).is_true()
+				assert_float(_velocity.x).is_equal(0.0)
+				saw_turn = true
+		# Nunca va hacia la izquierda antes de frenar del todo y darse vuelta.
+		if _velocity.x < 0.0:
+			assert_bool(saw_turn).is_true()
+			assert_int(_motor.facing).is_equal(-1)
+	assert_bool(saw_brake).is_true()
+	assert_bool(saw_turn).is_true()
+	assert_float(_velocity.x).is_equal(-_config.run_speed)
+
+
+func test_left_and_right_together_brake_like_no_direction() -> void:
+	_run_right_to_full_speed()
+	# Input.get_axis ya devuelve 0 con las dos apretadas: el motor recibe dirección 0.
+	_ground_step(NONE)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.BRAKE)

@@ -9,8 +9,12 @@ extends RefCounted
 var direction: float
 ## true solo en el paso en que se apretó el salto (mantenerlo apretado no cuenta).
 var jump_just_pressed: bool
+## true mientras el salto esté apretado (incluye el paso en que se apretó).
+## Sirve para el salto variable: soltarlo antes corta la subida.
+var jump_held: bool
 
 
-func _init(p_direction: float, p_jump_just_pressed: bool) -> void:
+func _init(p_direction: float, p_jump_just_pressed: bool, p_jump_held: bool = false) -> void:
 	direction = p_direction
 	jump_just_pressed = p_jump_just_pressed
+	jump_held = p_jump_held
