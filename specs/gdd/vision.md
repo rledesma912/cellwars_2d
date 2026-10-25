@@ -4,7 +4,7 @@ type: gdd
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-24
+updated: 2026-10-25
 ---
 
 # Visión: Cellwars 2D
@@ -69,7 +69,7 @@ Sin diálogos ni historia hablada. Sin cinemáticas extensas (las animaciones de
 
 - ¿Qué arsenal tiene el soldado? ¿Un solo arma o varias, con munición limitada o infinita?
 - ¿Cómo funciona la vida? ¿Muero de un golpe o aguanto varios? Si aguanto varios, ¿cómo lo muestro sin HUD?
-- ¿Qué conjunto de movimientos tiene el personaje: agacharse, rodar, colgarse de bordes? (Lo empieza a responder el Spike 001.)
+- ¿El personaje puede agacharse, rodar o colgarse de bordes? (Correr, frenar, girar y saltar ya están definidos en D0003.)
 - ¿Los enemigos tienen patrones fijos o alguna variación?
 - ¿Cuántos tipos de enemigos entran en la v1?
 - ¿Los refugios son solo el final del nivel o tienen alguna otra función (narrativa o mecánica)?
