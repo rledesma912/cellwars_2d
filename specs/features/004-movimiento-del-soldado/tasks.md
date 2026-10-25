@@ -13,7 +13,7 @@ updated: 2026-10-25
 - [x] T2 `PlayerInput` con `jump_held`; `PlayerMotor` con estados para el piso: arrancar, frenar, girar quieto y girar corriendo; tests (cubre: F004-AC01, F004-AC02, F004-AC03, F004-AC04)
 - [x] T3 Salto en el motor: preparación, salto lleno, toque corto, soltar subiendo, caída más pesada, sin doble salto, mantener no repite; tests (cubre: F004-AC05, F004-AC06, F004-AC07, F004-AC08, F004-AC09, F004-AC10, F004-AC11)
 - [x] T4 Ayudas, aire y aterrizaje en el motor: coyote time, jump buffer, control reducido sin darse vuelta, aterrizaje normal y pesado, más los tests de los casos límite (cubre: F004-AC12, F004-AC13, F004-AC14, F004-AC15, F004-AC16)
-- [ ] T5 `PlayerAnimation` (qué animación según el estado y velocidad para durar un tiempo); tests (cubre: F004-AC18, F004-AC19)
+- [x] T5 `PlayerAnimation` (qué animación según el estado y velocidad para durar un tiempo); tests (cubre: F004-AC18, F004-AC19)
 - [ ] T6 Arte provisorio y nodo:
   - `game/art/elyon/` con la tira y su `SpriteFrames`;
   - `player.tscn` con `AnimatedSprite2D` y cuerpo de 20 × 48;
