@@ -1,13 +1,22 @@
 ## Spike 001: escena del prototipo. Cambia variante, sala y snap a píxel con teclas.
 ##
 ## Teclas (solo del prototipo, leídas directo y no desde el Input Map):
-## 1/2/3 variante A/B/C · Tab cambia de sala · R vuelve al inicio · P snap a píxel.
+## 1/2/3/4 variante A/B/C/C48 · S aspecto (silueta, Elyon 40, Elyon 48) · Tab sala ·
+## R vuelve al inicio · P snap a píxel.
 extends Node2D
 
 const VARIANTS: Array[Spike001Config] = [
 	preload("res://prototypes/spike_001/variant_a.tres"),
 	preload("res://prototypes/spike_001/variant_b.tres"),
 	preload("res://prototypes/spike_001/variant_c.tres"),
+	preload("res://prototypes/spike_001/variant_c48.tres"),
+]
+# Aspectos: cuadros, pies dentro del cuadro y alto del cuerpo. Elyon sale de las imágenes
+# generadas con ComfyUI (prototypes/spike_001/comfy/).
+const LOOKS := [
+	["silueta", "res://prototypes/spike_001/silhouette_frames.tres", Vector2(16, 47), 40.0],
+	["Elyon 40", "res://prototypes/spike_001/elyon_40_frames.tres", Vector2(32, 63), 40.0],
+	["Elyon 48", "res://prototypes/spike_001/elyon_48_frames.tres", Vector2(32, 63), 48.0],
 ]
 const ROOMS: Array[PackedScene] = [
 	preload("res://game/levels/test/test_room.tscn"),
@@ -17,6 +26,7 @@ const ROOMS: Array[PackedScene] = [
 var _room_index := 0
 var _room: Node2D
 var _hint: Label
+var _look_index := 0
 
 @onready var _soldier: Spike001Soldier = %Soldier
 @onready var _debug_overlay: DebugOverlay = %DebugOverlay
@@ -36,8 +46,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if key == null or not key.pressed or key.echo:
 		return
 	match key.keycode:
-		KEY_1, KEY_2, KEY_3:
+		KEY_1, KEY_2, KEY_3, KEY_4:
 			_soldier.set_config(VARIANTS[key.keycode - KEY_1])
+			_update_hint()
+		KEY_S:
+			_look_index = (_look_index + 1) % LOOKS.size()
+			var look: Array = LOOKS[_look_index]
+			_soldier.set_look(load(look[1]), look[2], look[3])
+			_respawn()
 			_update_hint()
 		KEY_TAB:
 			_load_room((_room_index + 1) % ROOMS.size())
@@ -78,8 +94,8 @@ func _add_hint() -> void:
 
 func _update_hint() -> void:
 	_hint.text = (
-		"Variante %s  ·  1/2/3 variante · Tab sala · R reinicia · P snap · F3 datos"
-		% _soldier.motor.config.variant_name
+		"%s · variante %s  ·  S aspecto · 1-4 variante · Tab sala · R reinicia · F3 datos"
+		% [LOOKS[_look_index][0], _soldier.motor.config.variant_name]
 	)
 
 

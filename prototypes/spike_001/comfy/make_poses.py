@@ -19,8 +19,10 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 import make_silhouette as sil  # noqa: E402
 
 W, H = 832, 1216
-SCALE = 24  # 1 píxel de la silueta = 24 px del esqueleto (40 px de alto ≈ 960 px)
-FOOT_Y = 1150
+# 1 píxel de la silueta = 18 px del esqueleto (40 px de alto ≈ 720 px, 60 % del alto).
+# Con más (24) SDXL dibujaba al personaje más grande que el esqueleto y cortaba los pies.
+SCALE = 18
+FOOT_Y = 1080
 
 # Pares de puntos (índices COCO de OpenPose) y sus colores estándar.
 LIMBS = [(1, 2), (1, 5), (2, 3), (3, 4), (5, 6), (6, 7), (1, 8), (8, 9), (9, 10), (1, 11),

@@ -24,6 +24,18 @@ var _land_flash: float = 0.0
 @onready var _shape: CollisionShape2D = %Shape
 
 
+## Cambia el aspecto: cuadros de animación, dónde están los pies en cada cuadro y el
+## alto del cuerpo de colisión (40 px la silueta y Elyon 40; 48 px Elyon 48).
+func set_look(frames: SpriteFrames, feet_in_frame: Vector2, body_height: float) -> void:
+	var anim := _sprite.animation
+	_sprite.sprite_frames = frames
+	_sprite.offset = -feet_in_frame
+	_sprite.play(anim)
+	var rect := _shape.shape as RectangleShape2D
+	rect.size.y = body_height
+	_shape.position.y = -body_height / 2.0
+
+
 func set_config(config: Spike001Config) -> void:
 	if motor == null:
 		motor = Spike001Motor.new(config)

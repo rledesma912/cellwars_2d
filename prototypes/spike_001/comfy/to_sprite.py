@@ -22,6 +22,22 @@ def remove_background(im: Image.Image, tolerance: int = 40) -> Image.Image:
         ImageDraw.floodfill(probe, corner, (255, 0, 255), thresh=tolerance)
         hit = ImageChops.difference(probe, rgb).convert("L").point(lambda v: 255 if v else 0)
         mask = ImageChops.lighter(mask, hit)
+    # Huecos de fondo encerrados (por ejemplo dentro del lazo de la manguera): zonas del
+    # color exacto del fondo que no tocan los bordes. Tolerancia baja para no comerse
+    # los brillos blancos de la armadura.
+    bg = rgb.getpixel((0, 0))
+    seen = mask.copy()  # zonas ya revisadas (o ya fondo)
+    for y in range(0, im.height, 6):
+        for x in range(0, im.width, 6):
+            if seen.getpixel((x, y)) or max(abs(a - b) for a, b in zip(rgb.getpixel((x, y)), bg)) > 6:
+                continue
+            probe = rgb.copy()
+            ImageDraw.floodfill(probe, (x, y), (255, 0, 255), thresh=6)
+            hit = ImageChops.difference(probe, rgb).convert("L").point(lambda v: 255 if v else 0)
+            seen = ImageChops.lighter(seen, hit)
+            bbox = hit.getbbox()
+            if bbox and (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]) > 600:
+                mask = ImageChops.lighter(mask, hit)
     rgba.putalpha(ImageChops.invert(mask))
     return rgba
 
