@@ -103,7 +103,7 @@ Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (res
 
 ## Debug overlay
 
-`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy: velocidad y "en el piso" del personaje. Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
+`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy, del personaje: velocidad, "en el piso", estado del motor, hacia dónde mira y sus timers (estado, coyote, buffer). Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
 
 ## Tooling
 
