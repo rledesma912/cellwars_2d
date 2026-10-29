@@ -310,7 +310,7 @@ func _autotest(out_dir: String) -> void:
 			_scaling = combo[1]
 			_apply_display()
 			await get_tree().create_timer(1.0).timeout
-			var name := (
+			var shot := (
 				"%d_%s_%s"
 				% [
 					variants[i].base_size.y,
@@ -318,6 +318,6 @@ func _autotest(out_dir: String) -> void:
 					["entero", "fraccional", "suavizado"][_scaling],
 				]
 			)
-			OS.execute("spectacle", ["-b", "-n", "-a", "-o", out_dir.path_join(name + ".png")])
-			print("captura ", name, " ventana ", get_window().size)
+			OS.execute("spectacle", ["-b", "-n", "-a", "-o", out_dir.path_join(shot + ".png")])
+			print("captura ", shot, " ventana ", get_window().size)
 	get_tree().quit()
