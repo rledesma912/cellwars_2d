@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ResolutionVariant" format=3]
+
+[ext_resource type="Script" path="res://prototypes/spike_002/resolution_variant.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+label = "1280×720"
+base_size = Vector2i(1280, 720)
+elyon_scale = 2.2
+sheet_path = "res://prototypes/spike_002/elyon_99.png"
+step_tiles = 4
