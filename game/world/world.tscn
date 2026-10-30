@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c8qvaw2idegb1"]
 
 [ext_resource type="Script" uid="uid://cqt8xi7kmqc77" path="res://game/world/world.gd" id="1_script"]
-[ext_resource type="PackedScene" uid="uid://cu02g2yu1js65" path="res://game/levels/test/test_room.tscn" id="2_room"]
+[ext_resource type="PackedScene" uid="uid://cu02g2yu1js65" path="res://game/levels/test/test_room_1.tscn" id="2_room"]
 [ext_resource type="PackedScene" uid="uid://crbnf1soc7u7t" path="res://game/entities/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://favcsy7x4nln" path="res://game/debug/debug_overlay.tscn" id="4_debug"]
 

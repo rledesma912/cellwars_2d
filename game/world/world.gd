@@ -5,12 +5,9 @@
 class_name World
 extends Node2D
 
-@onready var _room: Node2D = %TestRoom
+@onready var _room: Room = %TestRoom
 @onready var _player: Player = %Player
 @onready var _debug_overlay: DebugOverlay = %DebugOverlay
-# Spawn está dentro de la escena de la sala: los nombres únicos (%) solo valen dentro
-# de su propia escena, así que se busca a través de la sala.
-@onready var _spawn: Marker2D = _room.get_node("Spawn")
 
 
 func _ready() -> void:
@@ -19,7 +16,7 @@ func _ready() -> void:
 	# Por eso declara explícitamente que se detiene cuando el juego está en pausa.
 	# El personaje lo hereda de World: también se congela.
 	process_mode = Node.PROCESS_MODE_PAUSABLE
-	_player.reset_to(_spawn.position)
+	_player.reset_to(_room.entrance_position())
 	_debug_overlay.track(_player)
 	_debug_overlay.track(self)
 
@@ -28,7 +25,7 @@ func _physics_process(_delta: float) -> void:
 	# Provisorio (F003-AC10): si sale de la sala (por el precipicio, la entrada o la
 	# salida), vuelve al inicio. En la F004, salir por un costado va a llevar a otra sala.
 	if RoomGeometry.is_outside_room(_player.get_bounds()):
-		_player.reset_to(_spawn.position)
+		_player.reset_to(_room.entrance_position())
 
 
 ## Datos para el overlay de debug (F3): la escala que usa el shader de suavizado.
