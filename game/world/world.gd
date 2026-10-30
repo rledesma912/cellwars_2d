@@ -21,6 +21,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_PAUSABLE
 	_player.reset_to(_spawn.position)
 	_debug_overlay.track(_player)
+	_debug_overlay.track(self)
 
 
 func _physics_process(_delta: float) -> void:
@@ -28,3 +29,12 @@ func _physics_process(_delta: float) -> void:
 	# salida), vuelve al inicio. En la F004, salir por un costado va a llevar a otra sala.
 	if RoomGeometry.is_outside_room(_player.get_bounds()):
 		_player.reset_to(_spawn.position)
+
+
+## Datos para el overlay de debug (F3): la escala que usa el shader de suavizado.
+func get_debug_info() -> Dictionary:
+	# Godot no deja leer un uniform global fuera del editor: se recalcula con la
+	# misma función que usa Main para publicarlo.
+	var window := get_window()
+	var scale := PixelScale.for_window(window.size, window.content_scale_size)
+	return {"escala pixel art": "×%.2f" % scale}

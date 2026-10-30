@@ -73,7 +73,11 @@ Ninguna nueva. `Main` usa la señal propia de Godot `Window.size_changed` (sin p
 
 ## Impacto en overlay debug
 
-Una línea nueva: **"escala pixel art"** con el valor actual (por ejemplo, "×1,50"). Sirve para verificar F005-AC03 y AC05 jugando. La publica `Main` en el overlay solo cuando hay partida: `World` lo registra con `track()` a través de un nodo que implementa `get_debug_info()`. Se decide en la task: si complica, se muestra desde `World` leyendo el mismo cálculo.
+Una línea nueva: **"escala pixel art"** con el valor actual (por ejemplo, "×1.50"). Sirve para verificar F005-AC03 y AC05 jugando.
+
+La agrega `World`: implementa `get_debug_info()` y se registra con `track(self)`. Recalcula con la misma `PixelScale.for_window()` que usa `Main` para publicar el uniform.
+
+Cambio respecto de la primera versión del plan: no se lee el uniform global porque Godot no deja leerlo fuera del editor. `RenderingServer.global_shader_parameter_get()` da error en el juego.
 
 ## Riesgos
 
