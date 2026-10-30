@@ -1,7 +1,7 @@
 ---
 id: F005
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: S002 }
 updated: 2026-10-29
@@ -98,4 +98,4 @@ Las medidas de sala (baldosa, columnas, filas) son constantes de `RoomGeometry` 
 
 ## Preguntas abiertas
 
-- `game/data/player_movement.tres` es tuyo y el agente no lo edita sin pedido. ¿Me autorizás a escribirle los valores de la tabla, o los cargás vos en el inspector? AC10 depende de esto.
+Ninguna. El desarrollador autorizó al agente a escribir en `game/data/player_movement.tres` los valores de la tabla de tuning (2026-10-29: "Autorizo y apruebo").
