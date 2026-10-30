@@ -10,7 +10,7 @@ updated: 2026-10-29
 # Tasks: feature 005
 
 - [x] T1 `RoomGeometry` a 64 × 36 y `project.godot`: viewport 1280×720, `canvas_items` fraccional, aspecto `keep`, snap en `false`. Tests de sala actualizados (cubre: F005-AC01, F005-AC03)
-- [ ] T2 `PixelScale` (lógica pura) con su test (cubre: F005-AC02)
+- [x] T2 `PixelScale` (lógica pura) con su test (cubre: F005-AC02)
 - [ ] T3 Shader `sharp_pixel`, material compartido, uniform global en `project.godot` y `Main` que publica la escala al arrancar y al cambiar el tamaño de la ventana. Línea "escala pixel art" en F3 (cubre: F005-AC04, F005-AC05)
 - [ ] T4 Valores por defecto de `PlayerMovementConfig` × 2,2, `player_movement.tres` con los mismos valores y tests (cubre: F005-AC07, F005-AC08, F005-AC10)
 - [ ] T5 Elyon de 99 px: imágenes y `SpriteFrames` en `game/art/elyon/`, sprite, offset, colisión de 44 × 106 y material en `player.tscn` (cubre: F005-AC06, F005-AC09)
