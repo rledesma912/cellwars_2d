@@ -30,3 +30,20 @@ func test_f003_ac10_outside_room() -> void:
 	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(200, 720.5), size))).is_true()
 	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(-44.5, 500), size))).is_true()
 	assert_bool(RoomGeometry.is_outside_room(Rect2(Vector2(1280.5, 80), size))).is_true()
+
+
+func test_f006_ac03_crossed_edge() -> void:
+	var size := Vector2(44, 106)
+	var edge := func(pos: Vector2) -> RoomGeometry.Edge:
+		return RoomGeometry.crossed_edge(Rect2(pos, size))
+	# Adentro o asomando: ningún borde.
+	assert_int(edge.call(Vector2(200, 560))).is_equal(RoomGeometry.Edge.NONE)
+	assert_int(edge.call(Vector2(-43, 500))).is_equal(RoomGeometry.Edge.NONE)
+	assert_int(edge.call(Vector2(1279, 80))).is_equal(RoomGeometry.Edge.NONE)
+	assert_int(edge.call(Vector2(200, 650))).is_equal(RoomGeometry.Edge.NONE)
+	# Arriba no cuenta, ni siquiera entero afuera.
+	assert_int(edge.call(Vector2(600, -120))).is_equal(RoomGeometry.Edge.NONE)
+	# Entero afuera por cada borde que cuenta.
+	assert_int(edge.call(Vector2(-44.5, 500))).is_equal(RoomGeometry.Edge.LEFT)
+	assert_int(edge.call(Vector2(1280.5, 80))).is_equal(RoomGeometry.Edge.RIGHT)
+	assert_int(edge.call(Vector2(200, 720.5))).is_equal(RoomGeometry.Edge.BOTTOM)

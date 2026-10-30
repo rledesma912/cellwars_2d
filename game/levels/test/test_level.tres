@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="LevelData" format=3 uid="uid://bdd7ffi3570bb"]
+
+[ext_resource type="PackedScene" path="res://game/levels/test/test_room_1.tscn" id="1_p2wii"]
+[ext_resource type="PackedScene" path="res://game/levels/test/test_room_2.tscn" id="2_ldibb"]
+[ext_resource type="PackedScene" path="res://game/levels/test/test_room_3.tscn" id="3_w46a1"]
+[ext_resource type="Script" path="res://game/systems/rooms/level_data.gd" id="4_wjlr5"]
+
+[resource]
+script = ExtResource("4_wjlr5")
+rooms = Array[PackedScene]([ExtResource("1_p2wii"), ExtResource("2_ldibb"), ExtResource("3_w46a1")])

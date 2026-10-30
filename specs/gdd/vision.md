@@ -4,7 +4,7 @@ type: gdd
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-25
+updated: 2026-10-30
 ---
 
 # Visión: Cellwars 2D
@@ -31,7 +31,7 @@ Loop central: entrar a una sala (checkpoint) → identificar amenazas y ruta →
 
 ## Estructura y núcleo de gameplay
 
-**Estructura**: Niveles lineales divididos en pantallas fijas (sin scroll continuo). Cada nivel representa una zona del cuerpo (órgano, tejido, conducto) y termina al alcanzar un refugio en su última sala. Cada sala es un checkpoint. Cada sala tiene una entrada y una salida en lados opuestos.
+**Estructura**: Niveles lineales divididos en pantallas fijas (sin scroll continuo). Cada nivel representa una zona del cuerpo (órgano, tejido, conducto) y termina al alcanzar un refugio en su última sala. Cada sala es un checkpoint. Cada sala tiene una entrada y una salida en lados distintos (la salida nunca arriba), así el recorrido puede avanzar de costado y bajar.
 
 **Núcleo**: Plataformas + combate. El peso está repartido: las plataformas exigen precisión y timing; el combate exige posicionamiento y lectura de patrones. No hay énfasis en combos ni en acción frenética.
 
