@@ -36,5 +36,5 @@ func get_debug_info() -> Dictionary:
 	# Godot no deja leer un uniform global fuera del editor: se recalcula con la
 	# misma función que usa Main para publicarlo.
 	var window := get_window()
-	var scale := PixelScale.for_window(window.size, window.content_scale_size)
-	return {"escala pixel art": "×%.2f" % scale}
+	var pixel_scale := PixelScale.for_window(window.size, window.content_scale_size)
+	return {"escala pixel art": "×%.2f" % pixel_scale}
