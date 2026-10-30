@@ -1,4 +1,4 @@
-## El protagonista: Elyon, el soldado (48 px, imágenes provisorias).
+## El protagonista: Elyon, el soldado (99 px, imágenes provisorias; D0004).
 ##
 ## Nodo fino: lee las teclas, le pide a PlayerMotor la velocidad nueva y se mueve.
 ## Las reglas (cuánto corre, cómo cae, cuándo puede saltar) están en PlayerMotor, y
@@ -27,7 +27,8 @@ var _motor: PlayerMotor
 
 @onready var _shape: CollisionShape2D = %Shape
 # AnimatedSprite2D pasa los cuadros de una animación de SpriteFrames, como un flipbook.
-# Sus cuadros miden 64 × 64 con los pies abajo al centro; el offset los pone en el origen.
+# Sus cuadros miden 144 × 144 con los pies abajo al centro; el offset los pone en el
+# origen. Usa el material de suavizado (sharp_pixel) con filtro lineal: ver player.tscn.
 @onready var _sprite: AnimatedSprite2D = %Sprite
 
 

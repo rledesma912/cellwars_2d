@@ -9,16 +9,18 @@ updated: YYYY-MM-DD
 
 # Playtest: feature NNN
 
+> Guía de pasos. Se tilda en el checklist del PR, que es la fuente de verdad: este archivo no lleva casillas.
+
 ## Preparación (escena, overlay F3)
 
 ## Checklist [manual]
 
-- [ ] Paso → resultado esperado
+- FNNN-ACnn: paso → resultado esperado
 
 ## Checklist [feel]
 
 <!-- Solo lo marca el desarrollador. -->
 
-- [ ] ¿...? (anotar sensación y valor de tuning probado)
+- FNNN-ACnn: ¿...? (qué parámetros del `.tres` mueven esa sensación)
 
 ## Notas del playtest

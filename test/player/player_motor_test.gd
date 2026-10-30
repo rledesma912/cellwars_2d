@@ -7,6 +7,10 @@ const DT := 1.0 / 60.0
 const RIGHT := 1.0
 const LEFT := -1.0
 const NONE := 0.0
+## Alto del cuerpo de colisión de Elyon (player.tscn, D0004).
+const BODY_HEIGHT := 106.0
+## Aire de un piso en una sala de 3 pisos: 12 baldosas menos la del piso (D0004).
+const FLOOR_AIR := 220.0
 
 var _config: PlayerMovementConfig
 var _motor: PlayerMotor
@@ -365,3 +369,8 @@ func test_reset_clears_state_and_timers() -> void:
 	assert_float(_motor.get_state_timer()).is_equal(0.0)
 	assert_float(_motor.get_coyote()).is_equal(0.0)
 	assert_float(_motor.get_buffer()).is_equal(0.0)
+
+
+func test_f005_ac08_body_plus_jump_fits_floor() -> void:
+	# Con el salto más alto, la cabeza no pasa del techo del piso: 113,96 + 106 ≤ 220.
+	assert_float(_jump_height(-1) + BODY_HEIGHT).is_less_equal(FLOOR_AIR)

@@ -4,7 +4,8 @@
 ## No decide el flujo: traduce lo que pasa (botones, tecla de pausa) a eventos
 ## para ScreenFlow, y cuando ScreenFlow avisa un cambio de estado, lo aplica en pantalla.
 ## También es dueño de la configuración del jugador: la carga al arrancar, la aplica
-## y la guarda cuando cambia.
+## y la guarda cuando cambia. Y publica la escala del pixel art para el shader de
+## suavizado (D0004), que depende del tamaño de la ventana.
 extends Node
 
 # preload carga las escenas una sola vez al iniciar; después instantiate() crea
@@ -34,6 +35,10 @@ func _ready() -> void:
 	_apply_fullscreen()
 	_apply_volume()
 	_apply_language()
+	# size_changed avisa cada vez que cambia el tamaño de la ventana: al pasar a
+	# pantalla completa o al arrastrar un borde. La escala se recalcula ahí mismo.
+	get_window().size_changed.connect(_update_pixel_scale)
+	_update_pixel_scale()
 
 	_flow.state_changed.connect(_on_state_changed)
 	# bind() fija el argumento: al apretar el botón se llama _flow.send(Event.RESUME).
@@ -131,6 +136,15 @@ func _apply_fullscreen() -> void:
 		else DisplayServer.WINDOW_MODE_WINDOWED
 	)
 	DisplayServer.window_set_mode(mode)
+
+
+func _update_pixel_scale() -> void:
+	var window := get_window()
+	# content_scale_size es la resolución interna (1280×720 en project.godot).
+	var scale := PixelScale.for_window(window.size, window.content_scale_size)
+	# Cambia el uniform global "pixel_scale": lo leen a la vez todos los shaders que
+	# lo declaran, sin tener que buscar cada material.
+	RenderingServer.global_shader_parameter_set("pixel_scale", scale)
 
 
 func _apply_volume() -> void:
