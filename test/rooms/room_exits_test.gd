@@ -64,3 +64,21 @@ func test_f006_ac06_validate_rules() -> void:
 	# Nivel vacío.
 	bad = RoomExits.validate(PackedInt32Array(), PackedInt32Array())
 	assert_int(bad.size()).is_equal(1)
+
+
+func test_f006_ac06_test_level_is_valid() -> void:
+	var level: LevelData = load("res://game/levels/test/test_level.tres")
+	assert_int(level.rooms.size()).is_equal(3)
+	var entrances := PackedInt32Array()
+	var exits := PackedInt32Array()
+	for scene in level.rooms:
+		# Se instancia fuera del árbol: alcanza para leer sus datos y marcadores.
+		var room := scene.instantiate() as Room
+		assert_object(room).is_not_null()
+		if room == null:
+			continue
+		assert_bool(room.has_node("Entrance") and room.has_node("Exit")).is_true()
+		entrances.append(room.entrance_side)
+		exits.append(room.exit_side)
+		room.free()
+	assert_array(Array(RoomExits.validate(entrances, exits))).is_empty()
