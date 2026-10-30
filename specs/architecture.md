@@ -4,7 +4,7 @@ type: architecture
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [D0003, D0004], spike: }
-updated: 2026-10-29
+updated: 2026-10-30
 ---
 
 # Arquitectura
@@ -58,7 +58,7 @@ func _physics_process(delta: float) -> void:
 - `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
 - `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
-- Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y marcadores como `Spawn`. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados opuestos.
+- Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y marcadores como `Spawn`. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados distintos, y la salida nunca está arriba (F006).
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)

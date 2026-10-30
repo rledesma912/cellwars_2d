@@ -17,7 +17,7 @@ updated: 2026-10-30
 Que un nivel sea una **lista ordenada de salas** y que Elyon pase de una a otra al salir por un borde, como en los clásicos de pantalla fija: la pantalla cambia de golpe y Elyon aparece del otro lado, en la sala vecina.
 
 - El nivel es un Resource (`LevelData`) con la lista de salas en orden.
-- Las salas no conocen a sus vecinas. Cada una marca su **entrada** y su **salida**, en lados opuestos: izquierda y derecha, o arriba y abajo.
+- Las salas no conocen a sus vecinas. Cada una marca su **entrada** y su **salida**, en lados distintos. La salida nunca está arriba, porque asomar por arriba no cuenta como salir; por eso tampoco hay entradas abajo. Así un nivel puede avanzar a la derecha, bajar y seguir.
 - `World` tiene una sola sala cargada:
   - salir por la **salida** lleva a la sala siguiente;
   - salir por la **entrada** lleva a la anterior.
@@ -57,7 +57,7 @@ Lógica del nivel:
   - en un paso horizontal conserva la altura relativa: si salió 30 px por encima del marcador de salida, entra 30 px por encima del marcador de entrada;
   - en un paso por abajo conserva la distancia horizontal relativa;
   - conserva la velocidad y hacia dónde mira, así que un salto o una carrera siguen del otro lado.
-- F006-AC06 [unit] Validación del nivel de prueba. Cada sala de `LevelData` de prueba tiene entrada y salida en lados opuestos. Las salas vecinas encajan: si la salida de una está a la derecha, la entrada de la siguiente está a la izquierda; si está abajo, la siguiente entra por arriba.
+- F006-AC06 [unit] Validación del nivel de prueba. Cada sala de `LevelData` de prueba tiene entrada y salida en lados distintos, y la salida no está arriba. Las salas vecinas encajan: si la salida de una está a la derecha, la entrada de la siguiente está a la izquierda; si está abajo, la siguiente entra por arriba.
 
 Jugando:
 
