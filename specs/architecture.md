@@ -58,7 +58,8 @@ func _physics_process(delta: float) -> void:
 - `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
 - `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
-- Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y marcadores como `Spawn`. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados distintos, y la salida nunca está arriba (F006).
+- Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y la raíz con el script `Room` (`game/world/room.gd`): dice de qué lado están la entrada y la salida (`entrance_side`, `exit_side`) y las marca con los `Marker2D` `Entrance` y `Exit`, un poco hacia adentro del borde. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados distintos; la salida nunca está arriba y la entrada nunca abajo.
+- Niveles (F006): un nivel es un `LevelData` (`.tres` en `game/levels/`) con la lista ordenada de salas. `World` tiene una sola sala en el árbol y deja la anterior y la siguiente instanciadas fuera de él. En cada paso de física, `RoomGeometry.crossed_edge` dice qué borde cruzó Elyon, `RoomExits.resolve` qué significa en esa sala y `LevelProgress` a qué sala va. El cambio es sacar un nodo y poner otro, y Elyon solo cambia de `position`, así conserva el movimiento. Cruzar por arriba nunca cuenta; abajo es la sala siguiente si la salida está abajo y, si no, el vacío.
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
@@ -114,7 +115,7 @@ Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (res
 
 ## Debug overlay
 
-`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy, del personaje: velocidad, "en el piso", estado del motor, hacia dónde mira y sus timers (estado, coyote, buffer). Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
+`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy: la sala actual ("sala: 2 / 3") y la escala del pixel art, y del personaje: velocidad, "en el piso", estado del motor, hacia dónde mira y sus timers (estado, coyote, buffer). Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
 
 ## Tooling
 

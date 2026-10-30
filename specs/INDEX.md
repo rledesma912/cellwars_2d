@@ -14,8 +14,12 @@
 
 ## Movimiento
 
-- Sala de prueba greybox de 3 pisos con escaleras, precipicio, entrada y salida; salir de la sala devuelve al inicio. Panel de debug con F3. [F003](features/003-personaje-simple/spec.md)
+- Sala de prueba greybox de 3 pisos con escaleras, precipicio, entrada y salida. Panel de debug con F3. [F003](features/003-personaje-simple/spec.md)
 - Elyon, el soldado (99 px, animado con imágenes provisorias), corre y frena con peso, se da vuelta, se prepara antes de saltar, tiene salto variable, coyote time y jump buffer, corrige poco en el aire sin darse vuelta y se recupera al caer de más de un piso. Todo ajustable en `player_movement.tres`. [F004](features/004-movimiento-del-soldado/spec.md)
+
+## Niveles
+
+- Un nivel es una lista ordenada de salas: al salir por la salida se pasa a la siguiente y por la entrada a la anterior, al instante y sin cortar el movimiento; también se baja a la sala de abajo. Caer al vacío devuelve a la entrada de la sala. Nivel de prueba de 3 salas; la salida de la última vuelve por ahora a la sala 1. [F006](features/006-varias-salas/spec.md)
 
 ## En curso
 

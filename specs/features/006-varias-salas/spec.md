@@ -1,7 +1,7 @@
 ---
 id: F006
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: }
 updated: 2026-10-30
@@ -39,42 +39,42 @@ Para probarlo se arma un nivel de prueba con 3 salas en `game/levels/test/`.
 
 Lógica del nivel:
 
-- F006-AC01 [unit] Avance por la lista. Con un nivel de 3 salas:
+- F006-AC01 [unit] ✅ Avance por la lista. Con un nivel de 3 salas:
   - salir por la salida de la sala 1 → sala 2; de la 2 → sala 3;
   - salir por la entrada de la sala 3 → sala 2; de la 2 → sala 1.
-- F006-AC02 [unit] Bordes de la lista:
+- F006-AC02 [unit] ✅ Bordes de la lista:
   - salir por la entrada de la sala 1 no cambia de sala: Elyon vuelve a la entrada de la sala 1;
   - salir por la salida de la última sala lleva a la entrada de la sala 1, quieto. Es provisorio hasta que exista el refugio.
-- F006-AC03 [unit] Qué borde cruzó. A partir del rectángulo de Elyon y la sala de 1280×720, se sabe si salió entero por la izquierda, por la derecha o por abajo, o si sigue adentro:
+- F006-AC03 [unit] ✅ Qué borde cruzó. A partir del rectángulo de Elyon y la sala de 1280×720, se sabe si salió entero por la izquierda, por la derecha o por abajo, o si sigue adentro:
   - cuenta recién cuando ya no se ve nada de él;
   - asomar por arriba en un salto no cuenta como salir.
-- F006-AC04 [unit] Qué significa ese borde en cada sala:
+- F006-AC04 [unit] ✅ Qué significa ese borde en cada sala:
   - el borde de la salida → sala siguiente;
   - el borde de la entrada → sala anterior;
   - el borde de abajo, si no es la salida → vacío mortal (vuelve a la entrada de la sala actual);
   - cualquier otro borde no cuenta: las salas tienen paredes ahí.
-- F006-AC05 [unit] Posición al llegar. Al pasar por un borde, Elyon aparece en el marcador del lado opuesto de la sala nueva (la entrada si avanzó, la salida si volvió) y conserva su desplazamiento respecto del marcador que cruzó:
+- F006-AC05 [unit] ✅ Posición al llegar. Al pasar por un borde, Elyon aparece en el marcador del lado opuesto de la sala nueva (la entrada si avanzó, la salida si volvió) y conserva su desplazamiento respecto del marcador que cruzó:
   - en un paso horizontal conserva la altura relativa: si salió 30 px por encima del marcador de salida, entra 30 px por encima del marcador de entrada;
   - en un paso por abajo conserva la distancia horizontal relativa;
   - conserva la velocidad y hacia dónde mira, así que un salto o una carrera siguen del otro lado.
-- F006-AC06 [unit] Validación del nivel de prueba. Cada sala de `LevelData` de prueba tiene entrada y salida en lados distintos, y la salida no está arriba. Las salas vecinas encajan: si la salida de una está a la derecha, la entrada de la siguiente está a la izquierda; si está abajo, la siguiente entra por arriba.
+- F006-AC06 [unit] ✅ Validación del nivel de prueba. Cada sala de `LevelData` de prueba tiene entrada y salida en lados distintos, y la salida no está arriba. Las salas vecinas encajan: si la salida de una está a la derecha, la entrada de la siguiente está a la izquierda; si está abajo, la siguiente entra por arriba.
 
 Jugando:
 
-- F006-AC07 [manual] Al tocar Jugar aparece la sala 1 del nivel de prueba, con Elyon en su entrada. El nivel tiene 3 salas en greybox, cada una con 3 pisos y escalones de hasta 4 baldosas:
+- F006-AC07 [manual] ✅ Al tocar Jugar aparece la sala 1 del nivel de prueba, con Elyon en su entrada. El nivel tiene 3 salas en greybox, cada una con 3 pisos y escalones de hasta 4 baldosas:
   - una sala sale por la derecha;
   - otra sale por abajo, hacia la sala de abajo;
   - la última sale por la derecha.
-- F006-AC08 [manual] Corriendo o saltando por la salida, la pantalla cambia a la sala siguiente en el cuadro siguiente. Elyon aparece del lado de la entrada, sigue en el mismo movimiento y mira para el mismo lado.
-- F006-AC09 [manual] Volviendo por la entrada se llega a la sala anterior, del lado de su salida. Se puede ir y volver varias veces.
-- F006-AC10 [manual] En la sala que sale por abajo, al caer por la salida Elyon aparece cayendo desde arriba en la sala siguiente. En una sala sin salida abajo, caer al vacío lo devuelve a la entrada de esa sala.
-- F006-AC11 [manual] El cambio de sala no se traba: el FPS del overlay no baja al cruzar, ni la primera vez ni las siguientes (overlay: "FPS").
-- F006-AC12 [manual] El overlay F3 muestra en qué sala está ("sala: 2 / 3"), y la línea cambia al cruzar.
-- F006-AC13 [manual] La pausa sigue funcionando en cualquier sala. Volver al menú y Jugar de nuevo empieza en la sala 1.
+- F006-AC08 [manual] ✅ Corriendo o saltando por la salida, la pantalla cambia a la sala siguiente en el cuadro siguiente. Elyon aparece del lado de la entrada, sigue en el mismo movimiento y mira para el mismo lado.
+- F006-AC09 [manual] ✅ Volviendo por la entrada se llega a la sala anterior, del lado de su salida. Se puede ir y volver varias veces.
+- F006-AC10 [manual] ✅ En la sala que sale por abajo, al caer por la salida Elyon aparece cayendo desde arriba en la sala siguiente. En una sala sin salida abajo, caer al vacío lo devuelve a la entrada de esa sala.
+- F006-AC11 [manual] ✅ El cambio de sala no se traba: el FPS del overlay no baja al cruzar, ni la primera vez ni las siguientes (overlay: "FPS").
+- F006-AC12 [manual] ✅ El overlay F3 muestra en qué sala está ("sala: 2 / 3"), y la línea cambia al cruzar.
+- F006-AC13 [manual] ✅ La pausa sigue funcionando en cualquier sala. Volver al menú y Jugar de nuevo empieza en la sala 1.
 
 Sensación:
 
-- F006-AC14 [feel] Pasar de una sala a otra se siente continuo, como el cambio de pantalla de *Flashback* o *Prince of Persia*: no corta el ritmo de la carrera ni del salto.
+- F006-AC14 [feel] ✅ Pasar de una sala a otra se siente continuo, como el cambio de pantalla de *Flashback* o *Prince of Persia*: no corta el ritmo de la carrera ni del salto.
 
 ## Casos límite
 
@@ -86,18 +86,11 @@ Sensación:
 
 ## Parámetros de tuning (Resource)
 
-`LevelData` (`.tres` en `game/levels/`) no es tuning de juego: es el contenido del nivel. Lo arma el desarrollador; el agente crea el del nivel de prueba.
+Sin tuning nuevo. El nivel es contenido, no tuning: `LevelData` (`game/systems/rooms/level_data.gd`) con su lista `rooms`; el de prueba es `game/levels/test/test_level.tres`. Cada sala (script `Room`, `game/world/room.gd`) declara `entrance_side` y `exit_side` y marca `Entrance` y `Exit` con dos `Marker2D`.
 
-| Parámetro | Tipo | Valor inicial | Rango sugerido |
-|---|---|---|---|
-| `rooms` (en `LevelData`) | `Array[PackedScene]` | las 3 salas de prueba, en orden | 1 o más |
+## Notas finales
 
-Cada sala marca su entrada y su salida con dos `Marker2D` (`Entrance` y `Exit`) y declara de qué lado está cada uno. No hay valores numéricos nuevos de movimiento.
-
-## Preguntas abiertas
-
-Ninguna. El desarrollador eligió las recomendadas (2026-10-29, "Las recomendadas"):
-
-1. La salida de la última sala lleva a la entrada de la sala 1, provisoriamente, hasta que exista el refugio (AC02).
-2. El cambio de sala es de golpe, sin fundido (AC08).
-3. La salida por abajo entra en esta feature (AC07 y AC10). Desde una sala a la que se entró por arriba no se puede volver hacia arriba.
+- **Resultado**: playtest completo del desarrollador (2026-10-30, PR #19). Los 8 criterios `[manual]` y `[feel]` quedaron tildados, más su confirmación ("Confirmo, mergealo"). Los 6 `[unit]` pasan en la suite (59 tests). Sin desviaciones.
+- **Cambio de regla durante la implementación** (aprobado por el desarrollador, "Si apruebo la opcion A"): entrada y salida en lados **distintos**, no opuestos. Con lados opuestos todo el nivel quedaba horizontal o vertical y no se podía bajar en medio del recorrido. Lo detectó el test de AC06. Se cambiaron el objetivo y AC06 de esta spec, el GDD G001 y `architecture.md`.
+- **Precarga**: es instanciar la anterior y la siguiente fuera del árbol, no cargar en otro hilo. El `.tres` del nivel ya carga sus escenas. Con salas de este tamaño, el FPS no baja al cruzar (AC11).
+- **Aprendido**: el editor de Godot también omite en `project.godot` los valores iguales a los de fábrica (`aspect`, `scale_mode`, snap). Se descartó ese cambio para que los valores de D0004 sigan escritos.
