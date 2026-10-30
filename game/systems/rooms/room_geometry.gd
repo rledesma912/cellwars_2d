@@ -1,4 +1,4 @@
-## Medidas de una sala (decisión D0002): una sala ocupa exactamente una pantalla.
+## Medidas de una sala (decisión D0004): una sala ocupa exactamente una pantalla.
 ##
 ## Lógica pura. Son constantes, no tuning: cambiarlas cambia todas las salas, así que
 ## solo se tocan con una decisión nueva.
@@ -8,9 +8,9 @@ extends RefCounted
 ## Lado de una baldosa, en píxeles.
 const TILE_SIZE := 20
 ## Ancho y alto de una sala, en baldosas.
-const COLUMNS := 32
-const ROWS := 18
-## Tamaño de una sala en píxeles: 640×360, igual que la pantalla interna del juego.
+const COLUMNS := 64
+const ROWS := 36
+## Tamaño de una sala en píxeles: 1280×720, igual que la pantalla interna del juego.
 const SIZE_PX := Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE)
 
 
