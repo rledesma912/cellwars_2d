@@ -57,7 +57,7 @@ Elecciones no obvias:
   - un autoload nuevo: la arquitectura permite como máximo un bus de eventos y el estado global;
   - que cada sala o personaje lo calcule: se repetiría y podría desincronizarse.
 - **Filtro de textura lineal solo en los nodos con el material**: el shader necesita leer la mezcla de los bordes. El filtro por defecto del proyecto sigue en *Nearest*. Así un sprite que se quede sin material se nota enseguida, con píxeles desparejos, en lugar de verse borroso sin que nadie lo note.
-- **Interfaz al doble en las escenas, no por código.** En `canvas_items` las letras se dibujan a la resolución de la pantalla y quedan nítidas. Duplicar los tamaños en cada escena es más simple que ajustar el `content_scale_factor` y no cambia cómo se arma la interfaz.
+- **Interfaz al doble con `gui/theme/default_theme_scale = 2` y en las escenas.** El ajuste de proyecto agranda el tema por defecto de Godot: letra base, márgenes de botones, íconos de casillas y deslizadores. Los tamaños que las escenas fijan a mano (letras de títulos, `custom_minimum_size`, separaciones y márgenes del overlay) se duplican en cada escena. No se usa `content_scale_factor`, que agrandaría también el juego. Cambio respecto de la primera versión del plan, que solo duplicaba las escenas: así quedaban chicos los controles que usan el tema por defecto.
 
 ## Señales
 

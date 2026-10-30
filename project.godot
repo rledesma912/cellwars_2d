@@ -102,6 +102,10 @@ debug_toggle={
 ]
 }
 
+[gui]
+
+theme/default_theme_scale=2.0
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://game/i18n/texts.es.translation", "res://game/i18n/texts.en.translation")
