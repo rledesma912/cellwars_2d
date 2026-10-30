@@ -2,14 +2,6 @@
 
 > Documento vivo. Lo que falta hacer, en orden aproximado de prioridad. Lo descartado no queda acá: va a `discarded.md`.
 
-- Feature 005: migración a 1280×720 (D0004), antes que todo lo demás. Abarca:
-  - render: viewport 1280×720, `canvas_items` fraccional, `snap_2d_transforms_to_pixel` en `false`;
-  - material compartido de suavizado *sharp bilinear* para todo el pixel art, con escala global que sigue a la ventana;
-  - Elyon de 99 px con imágenes provisorias en `game/art/elyon/` (cuadros de 144 × 144, pies en (72, 143)) y colisión de 44 × 106;
-  - valores por defecto de `PlayerMovementConfig` y sus tests a la nueva escala;
-  - propuesta de valores × 2,2 para `player_movement.tres`, que aplica o autoriza el desarrollador;
-  - `RoomGeometry` y la sala de prueba de `game/levels/test/` a 64 × 36;
-  - menús, opciones y overlay de debug reacomodados.
 - Feature 006: varias salas y el paso entre ellas (el personaje sale por un borde y aparece en la sala vecina). Enfoque aprobado: el nivel es una lista ordenada de salas en un Resource (`LevelData`); las salas no conocen a sus vecinas, solo marcan su entrada y su salida; `World` tiene una sola sala cargada, sale por la salida → siguiente, por la entrada → anterior; precarga en segundo plano de la anterior y la siguiente. Cada sala define qué hay bajo su borde inferior: "vacío mortal" o "sala de abajo". Regla (desde F003): toda sala tiene entrada y salida en lados opuestos. Con salto de unos 114 px (D0004), escalones de hasta 4 baldosas.
 - Feature 007: muerte y checkpoint por sala (caer al vacío mortal reinicia desde la entrada de la sala).
 - Después de la F007: mapa del nivel 1 (documento en `specs/gdd/levels/`, con plantilla y preguntas guía).

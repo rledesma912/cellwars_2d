@@ -15,7 +15,7 @@ updated: 2026-10-29
 
 - **Lógica pura**: las reglas de juego viven en clases `RefCounted` sin dependencia del árbol de escenas, en `game/systems/`. Son las únicas con unit tests (gdUnit4); `test/` es espejo de `game/systems/`.
 - **Nodo fino**: los nodos (`CharacterBody2D`, `Area2D`…) en `game/entities/` leen input, llaman a la lógica pura y aplican el resultado. No contienen reglas.
-- **Config en Resource**: todo parámetro ajustable es un Resource tipado con `@export` (p. ej. `PlayerMovementConfig`), instanciado como `.tres` en `game/data/`. Lo edita el desarrollador en el inspector.
+- **Config en Resource**: todo parámetro ajustable es un Resource tipado con `@export` (p. ej. `PlayerMovementConfig`), instanciado como `.tres` en `game/data/`. Lo edita el desarrollador en el inspector. Ojo: al guardar un `.tres`, el editor omite los valores iguales a los valores por defecto del script. El juego se comporta igual, pero el archivo deja de mostrarlos; si se vacía, se restaura con los valores escritos.
 
 Forma esperada (bosquejo):
 
@@ -87,22 +87,24 @@ func _physics_process(delta: float) -> void:
 
 ## Render y resolución
 
-D0004. Lo marcado "D0004" se aplica en la feature de migración a 1280×720; hasta entonces el juego corre con la configuración anterior.
+D0004, aplicada en la F005.
 
 | Parámetro | Valor | Estado |
 |---|---|---|
 | Renderer | `gl_compatibility` | Vigente |
-| Viewport | 1280×720, ventana inicial 1280×720 | D0004 |
-| Stretch | `canvas_items`, aspect `keep`, scale `fractional` | D0004 |
-| Suavizado del pixel art | *sharp bilinear* por sprite y baldosa (ver abajo) | D0004 |
-| `snap_2d_transforms_to_pixel` | `false`: el movimiento suave entre píxeles es parte del look | D0004 |
-| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 por piso | D0004 |
+| Viewport | 1280×720, ventana inicial 1280×720 | Vigente (D0004) |
+| Stretch | `canvas_items`, aspect `keep`, scale `fractional` | Vigente (D0004) |
+| Suavizado del pixel art | *sharp bilinear* por sprite y baldosa (ver abajo) | Vigente (D0004) |
+| `snap_2d_transforms_to_pixel` | `false`: el movimiento suave entre píxeles es parte del look | Vigente (D0004) |
+| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 por piso | Vigente (D0004) |
+| Escala del tema de la interfaz | `gui/theme/default_theme_scale = 2` | Vigente: la interfaz se diseña al doble que a 640×360 |
 | Display driver Linux | Wayland (`display_server/driver.linuxbsd`) | Vigente: el entorno del agente no tiene X11 |
 
 Reglas del pixel art en `canvas_items`:
 
 - La escena se dibuja a la resolución de la pantalla, y a 1080p cada píxel del arte ocupa 1,5 píxeles de pantalla. Para que no queden unos píxeles dobles y otros simples, **todo sprite y toda baldosa de pixel art usan un material compartido con el shader *sharp bilinear*** y filtro lineal. Ningún pixel art se dibuja sin él.
-- La escala del shader (píxeles de pantalla por píxel del arte) es un valor global que se recalcula cuando cambia el tamaño de la ventana.
+- Todo el pixel art usa el material compartido `game/art/shaders/sharp_pixel.tres` (shader `sharp_pixel.gdshader`) con `texture_filter` lineal en el nodo. El filtro por defecto del proyecto sigue en *Nearest*: un sprite sin material se nota enseguida.
+- La escala del shader (píxeles de pantalla por píxel del arte) es el uniform global `pixel_scale` (*Shader Globals*). La calcula `PixelScale.for_window()` (`game/systems/render/`) y la publica `Main` al arrancar y en cada `size_changed` de la ventana. Godot no deja leer un uniform global mientras corre el juego: quien necesite el valor lo recalcula con `PixelScale`.
 - No escalar ni rotar sprites de pixel art en el juego: mezcla tamaños de píxel. Si hace falta, se dibuja la variante.
 - La luz 2D, las partículas y los efectos salen a la resolución de la pantalla.
 

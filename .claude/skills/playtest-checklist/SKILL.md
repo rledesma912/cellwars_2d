@@ -17,7 +17,7 @@ Plantilla: `specs/templates/playtest.md`.
 `specs/features/NNN-<nombre>/playtest.md` (vía completa). En vía liviana no hay archivo: el checklist va directo en el PR.
 
 - **Preparación**: qué escena abrir (o `main.tscn`), cómo activar el overlay (F3) y qué `.tres` editar para tunear.
-- **Checklist [manual]**: un ítem por criterio, con su ID. Formato `- [ ] FNNN-ACnn: <pasos concretos> → <resultado esperado> (overlay: <qué línea mirar>)`.
+- **Checklist [manual]**: un ítem por criterio, con su ID. Formato `- FNNN-ACnn: <pasos concretos> → <resultado esperado> (overlay: <qué línea mirar>)`, **sin casillas**: se tilda solo en el checklist del PR (con `- [ ]`), así no hay dos listas.
 - **Checklist [feel]**: un ítem por criterio, como pregunta, con qué parámetros del `.tres` mueven esa sensación.
 - **Notas del playtest**: vacío; lo llena el desarrollador.
 

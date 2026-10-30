@@ -20,7 +20,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación de alcance acotado, sin lí
 | Motor | Godot 4.7.x estable, `godot` en el PATH |
 | Lenguaje | GDScript (sin C#) |
 | Renderer | `gl_compatibility` |
-| Tile / resolución | 20 px, sala de 64 × 36 tiles · viewport 1280×720, stretch `canvas_items` fraccional con *sharp bilinear* por sprite · soldado de 99 px (`D0004`; se aplica en la feature de migración) |
+| Tile / resolución | 20 px, sala de 64 × 36 tiles · viewport 1280×720, stretch `canvas_items` fraccional con *sharp bilinear* por sprite · soldado de 99 px (`D0004`) |
 | Niveles | `TileMapLayer` nativo; sin LDtk ni editores externos |
 | Arte | Pixelorama / LibreSprite. Greybox hasta que el sistema pase su `[feel]` |
 | Unit tests | gdUnit4, solo lógica pura, headless: `godot --headless -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test -c` (gdUnit4 v6.2.2; `--ignoreHeadlessMode` es seguro porque no testeamos input/UI) |

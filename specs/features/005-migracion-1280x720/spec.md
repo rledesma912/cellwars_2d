@@ -1,7 +1,7 @@
 ---
 id: F005
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: S002 }
 updated: 2026-10-29
@@ -36,8 +36,8 @@ Al jugar se tiene que ver como el "suavizado moderno" del spike 002 y sentirse i
 
 Render y escala:
 
-- F005-AC01 [unit] `RoomGeometry` mide baldosas de 20 px y salas de 64 × 36. `SIZE_PX` es 1280×720 e igual a la resolución interna del proyecto (`viewport_width` / `viewport_height`).
-- F005-AC02 [unit] La escala del pixel art (píxeles de pantalla por píxel del arte) para un tamaño de ventana es el menor de ancho / 1280 y alto / 720:
+- F005-AC01 [unit] ✅ `RoomGeometry` mide baldosas de 20 px y salas de 64 × 36. `SIZE_PX` es 1280×720 e igual a la resolución interna del proyecto (`viewport_width` / `viewport_height`).
+- F005-AC02 [unit] ✅ La escala del pixel art (píxeles de pantalla por píxel del arte) para un tamaño de ventana es el menor de ancho / 1280 y alto / 720:
   - 1920×1080 → 1,5;
   - 1280×720 → 1;
   - 2560×1440 → 2;
@@ -45,33 +45,33 @@ Render y escala:
   - 1366×768 → ≈ 1,067;
   - 2560×1080 → 1,5;
   - 960×540 → 0,75.
-- F005-AC03 [manual] En pantalla completa en un monitor de 1920×1080, la sala llena la pantalla sin bordes negros. La configuración es la de D0004: `canvas_items`, aspecto `keep`, escalado fraccional y `snap_2d_transforms_to_pixel` en `false`.
-- F005-AC04 [manual] En pantalla completa a 1080p, Elyon y las baldosas se ven con los píxeles parejos, sin filas o columnas dobles alternadas. Se ven como el "suavizado moderno" del spike 002.
-- F005-AC05 [manual] En ventana, al cambiar su tamaño a mano, la imagen mantiene 16:9, con bordes si hace falta, y el pixel art sigue parejo. La escala se recalcula sola, sin reiniciar.
-- F005-AC06 [manual] Ningún sprite ni baldosa de pixel art del juego se dibuja sin el material de suavizado. Se verifica revisando las escenas: Elyon, las baldosas de la sala de prueba y cualquier otro sprite que exista.
+- F005-AC03 [manual] ✅ En pantalla completa en un monitor de 1920×1080, la sala llena la pantalla sin bordes negros. La configuración es la de D0004: `canvas_items`, aspecto `keep`, escalado fraccional y `snap_2d_transforms_to_pixel` en `false`.
+- F005-AC04 [manual] ✅ En pantalla completa a 1080p, Elyon y las baldosas se ven con los píxeles parejos, sin filas o columnas dobles alternadas. Se ven como el "suavizado moderno" del spike 002.
+- F005-AC05 [manual] ✅ En ventana, al cambiar su tamaño a mano, la imagen mantiene 16:9, con bordes si hace falta, y el pixel art sigue parejo. La escala se recalcula sola, sin reiniciar.
+- F005-AC06 [manual] ✅ Ningún sprite ni baldosa de pixel art del juego se dibuja sin el material de suavizado. Se verifica revisando las escenas: Elyon, las baldosas de la sala de prueba y cualquier otro sprite que exista.
 
 Elyon y movimiento:
 
-- F005-AC07 [unit] Los valores por defecto de `PlayerMovementConfig` son los de D0003 con distancias y velocidades × 2,2 y los mismos tiempos (ver la tabla de tuning).
-- F005-AC08 [unit] Con los valores por defecto, el salto máximo más el alto de la colisión (106 px) no pasa de 220 px, el aire de un piso. Simulado en pasos de 1/60 s: 113,96 + 106 = 219,96.
-- F005-AC09 [manual] Elyon mide 99 px visibles y su colisión es de 44 × 106. Pasa todas las animaciones de la F004 (quieto, arrancar, correr, frenar, girar, preparar, subir, caer, aterrizar) con los pies apoyados en el piso, sin flotar ni hundirse, mirando a los dos lados.
-- F005-AC10 [manual] `game/data/player_movement.tres` tiene los valores × 2,2 de la tabla de tuning, y el overlay F3 muestra velocidades del orden esperado: unos 297 px/s corriendo.
+- F005-AC07 [unit] ✅ Los valores por defecto de `PlayerMovementConfig` son los de D0003 con distancias y velocidades × 2,2 y los mismos tiempos (ver la tabla de tuning).
+- F005-AC08 [unit] ✅ Con los valores por defecto, el salto máximo más el alto de la colisión (106 px) no pasa de 220 px, el aire de un piso. Simulado en pasos de 1/60 s: 113,96 + 106 = 219,96.
+- F005-AC09 [manual] ✅ Elyon mide 99 px visibles y su colisión es de 44 × 106. Pasa todas las animaciones de la F004 (quieto, arrancar, correr, frenar, girar, preparar, subir, caer, aterrizar) con los pies apoyados en el piso, sin flotar ni hundirse, mirando a los dos lados.
+- F005-AC10 [manual] ✅ `game/data/player_movement.tres` tiene los valores × 2,2 de la tabla de tuning, y el overlay F3 muestra velocidades del orden esperado: unos 297 px/s corriendo.
 
 Sala de prueba:
 
-- F005-AC11 [manual] La sala de prueba de `game/levels/test/` mide 64 × 36 baldosas y tiene la misma forma que la de la F003 al doble: cada baldosa vieja ocupa 2 × 2. Quedan 3 pisos, escalones de 4 baldosas, el precipicio, la entrada y la salida.
-- F005-AC12 [manual] En esa sala Elyon sube todos los escalones de 4 baldosas y llega del piso de abajo al de arriba. Al caer al precipicio o salir por un costado vuelve al inicio, como en la F003.
+- F005-AC11 [manual] ✅ La sala de prueba de `game/levels/test/` mide 64 × 36 baldosas y tiene la misma forma que la de la F003 al doble: cada baldosa vieja ocupa 2 × 2. Quedan 3 pisos, escalones de 4 baldosas, el precipicio, la entrada y la salida.
+- F005-AC12 [manual] ✅ En esa sala Elyon sube todos los escalones de 4 baldosas y llega del piso de abajo al de arriba. Al caer al precipicio o salir por un costado vuelve al inicio, como en la F003.
 
 Menús y overlay:
 
-- F005-AC13 [manual] El menú principal, la pausa y las opciones se ven con el mismo tamaño en pantalla que antes de la migración: textos, botones y separaciones al doble, centrados. Se navegan con teclado, gamepad y mouse, y los textos siguen traducidos (es / en).
-- F005-AC14 [manual] El overlay de debug (F3) se lee con el mismo tamaño en pantalla que antes y muestra los mismos datos.
-- F005-AC15 [manual] Las opciones de la F002 siguen funcionando: pantalla completa, volumen e idioma se aplican y se recuerdan entre sesiones.
+- F005-AC13 [manual] ✅ El menú principal, la pausa y las opciones se ven con el mismo tamaño en pantalla que antes de la migración: textos, botones y separaciones al doble, centrados. Se navegan con teclado, gamepad y mouse, y los textos siguen traducidos (es / en).
+- F005-AC14 [manual] ✅ El overlay de debug (F3) se lee con el mismo tamaño en pantalla que antes y muestra los mismos datos.
+- F005-AC15 [manual] ✅ Las opciones de la F002 siguen funcionando: pantalla completa, volumen e idioma se aplican y se recuerdan entre sesiones.
 
 Sensación:
 
-- F005-AC16 [feel] El movimiento de Elyon se siente igual que en la F004: mismo peso, mismo ritmo y mismo control.
-- F005-AC17 [feel] El juego se ve como el pixel art moderno elegido en el spike 002: parejo, nítido y con movimiento fluido.
+- F005-AC16 [feel] ✅ El movimiento de Elyon se siente igual que en la F004: mismo peso, mismo ritmo y mismo control.
+- F005-AC17 [feel] ✅ El juego se ve como el pixel art moderno elegido en el spike 002: parejo, nítido y con movimiento fluido.
 
 ## Casos límite
 
@@ -83,19 +83,14 @@ Sensación:
 
 ## Parámetros de tuning (Resource)
 
-`PlayerMovementConfig` (`game/data/player_movement.tres` y valores por defecto del script). Solo cambian distancias y velocidades; los tiempos quedan como están.
-
-| Parámetro | Tipo | Valor inicial | Rango sugerido |
-|---|---|---|---|
-| `run_speed` | float (px/s) | 297 (135 × 2,2) | 220–380 |
-| `jump_height` | float (px) | 114 (52 × 2,2, redondeado para que cuerpo + salto ≤ 220) | 90–114 |
-| `min_jump_height` | float (px) | 66 (30 × 2,2) | 40–90 |
-| `max_fall_speed` | float (px/s) | 1320 (600 × 2,2) | 900–1800 |
-| `hard_landing_height` | float (px) | 220 (100 × 2,2) | 150–300 |
-| Resto (`accel_time`, `decel_time`, `turn_time`, `time_to_apex`, `fall_gravity_scale`, `jump_prep_time`, `air_control`, `land_recovery_time`, `coyote_time`, `jump_buffer_time`) | float | sin cambios | — |
+`game/data/player_movement.tres` (`PlayerMovementConfig`). La F005 cambió las distancias y velocidades: `run_speed`, `jump_height`, `min_jump_height`, `max_fall_speed` y `hard_landing_height`. Los tiempos quedaron como estaban: `accel_time`, `decel_time`, `turn_time`, `time_to_apex`, `fall_gravity_scale`, `jump_prep_time`, `air_control`, `land_recovery_time`, `coyote_time` y `jump_buffer_time`.
 
 Las medidas de sala (baldosa, columnas, filas) son constantes de `RoomGeometry` y no son tuning: cambian solo con una decisión nueva.
 
-## Preguntas abiertas
+## Notas finales
 
-Ninguna. El desarrollador autorizó al agente a escribir en `game/data/player_movement.tres` los valores de la tabla de tuning (2026-10-29: "Autorizo y apruebo").
+- **Resultado**: playtest completo del desarrollador (2026-10-29, PR #18). Los 13 criterios `[manual]` y `[feel]` quedaron tildados, más su confirmación ("Confirmo"). Los 4 `[unit]` pasan en la suite (51 tests). Sin desviaciones.
+- **Cambios de diseño durante la implementación** (registrados en el plan):
+  - la línea de F3 recalcula la escala con `PixelScale`, porque Godot no deja leer un uniform global mientras corre el juego;
+  - la interfaz usa `gui/theme/default_theme_scale = 2` además de duplicar los tamaños de las escenas, porque los controles que usan el tema por defecto quedaban chicos.
+- **Aprendido**: el editor de Godot vuelve a guardar los `.tres` sin los valores que coinciden con los valores por defecto del script. `player_movement.tres` llegó a quedar vacío. El juego se comportaba igual, pero el archivo dejaba de mostrar los valores elegidos. Se restauró con los 15 valores escritos.
