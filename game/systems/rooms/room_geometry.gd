@@ -5,6 +5,10 @@
 class_name RoomGeometry
 extends RefCounted
 
+## Bordes de una sala. Sirve para "por dónde salió" y para "de qué lado está la
+## entrada o la salida". NONE: no salió.
+enum Edge { NONE, LEFT, RIGHT, TOP, BOTTOM }
+
 ## Lado de una baldosa, en píxeles.
 const TILE_SIZE := 20
 ## Ancho y alto de una sala, en baldosas.
@@ -14,8 +18,20 @@ const ROWS := 36
 const SIZE_PX := Vector2(COLUMNS * TILE_SIZE, ROWS * TILE_SIZE)
 
 
-## true si algo que ocupa el rectángulo bounds salió entero de la sala: por debajo
-## (precipicio) o por un costado (entrada o salida). Cuenta recién cuando ya no se ve
-## nada de él. Arriba no cuenta: un salto puede asomar por encima de la pantalla.
+## Por qué borde salió entero de la sala algo que ocupa el rectángulo bounds.
+## Cuenta recién cuando ya no se ve nada de él. Arriba nunca cuenta (devuelve NONE):
+## un salto puede asomar por encima de la pantalla y volver.
+static func crossed_edge(bounds: Rect2) -> Edge:
+	if bounds.end.x < 0.0:
+		return Edge.LEFT
+	if bounds.position.x > SIZE_PX.x:
+		return Edge.RIGHT
+	if bounds.position.y > SIZE_PX.y:
+		return Edge.BOTTOM
+	return Edge.NONE
+
+
+## true si algo que ocupa el rectángulo bounds salió entero de la sala por algún
+## borde que cuenta (ver crossed_edge).
 static func is_outside_room(bounds: Rect2) -> bool:
-	return bounds.position.y > SIZE_PX.y or bounds.end.x < 0.0 or bounds.position.x > SIZE_PX.x
+	return crossed_edge(bounds) != Edge.NONE

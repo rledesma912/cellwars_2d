@@ -1,15 +1,15 @@
 ---
 id: F006
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: }
-updated: 2026-10-29
+updated: 2026-10-30
 ---
 
 # Tasks: feature 006 — varias salas y el paso entre ellas
 
-- [ ] T1 `RoomGeometry`: enum `Edge` y `crossed_edge()`; `is_outside_room()` reescrita encima. Tests primero. (cubre: F006-AC03)
+- [x] T1 `RoomGeometry`: enum `Edge` y `crossed_edge()`; `is_outside_room()` reescrita encima. Tests primero. (cubre: F006-AC03)
 - [ ] T2 `LevelProgress` con `apply(outcome) -> RoomChange`: avance, vuelta, bordes de la lista y si conserva el movimiento. Tests primero. (cubre: F006-AC01, F006-AC02, F006-AC05)
 - [ ] T3 `RoomExits`: `resolve()`, `arrival()`, `opposite()` y `validate()`. Tests primero. (cubre: F006-AC04, F006-AC05, F006-AC06)
 - [ ] T4 `LevelData` (Resource) y `Room` (script de la raíz de una sala). `test_room.tscn` pasa a `test_room_1.tscn` con `Entrance`/`Exit` y sus lados (izquierda → derecha). (cubre: F006-AC07)

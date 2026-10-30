@@ -1,10 +1,10 @@
 ---
 id: F006
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: }
-updated: 2026-10-29
+updated: 2026-10-30
 ---
 
 # Plan: feature 006 — varias salas y el paso entre ellas
