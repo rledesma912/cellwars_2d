@@ -9,3 +9,8 @@
 | 2026-10-25 | Movimiento cinemático comprometido, arco fijo y giro lento, estilo Prince of Persia (variante B del spike 001) | Mucho peso, pero traba el control | `archive/spikes/001-movimiento-y-peso.md`, D0003 |
 | 2026-10-25 | Soldado de 40 px de alto | Le falta definición | `archive/spikes/001-movimiento-y-peso.md`, D0003 |
 | 2026-10-25 | Soldado de más de 48 px de alto | Obliga a bajar el salto de 52 px o a pasar a 2 pisos por sala; se mantienen 3 pisos | `archive/spikes/001-movimiento-y-peso.md`, D0003 |
+| 2026-10-29 | Resolución 640×360 en modo `viewport` (retro), como base del juego | Poca definición para el pixel art moderno buscado; la luz y el movimiento van en escalones | `archive/spikes/002-resolucion.md`, D0004 |
+| 2026-10-29 | Resolución 960×540 | Escala exacto a 1080p, pero no fue la elegida frente a 1280×720 | `archive/spikes/002-resolucion.md`, D0004 |
+| 2026-10-29 | Escalado entero con base 1280×720 | En 1080p queda ×1, chico y con un marco negro grande | `archive/spikes/002-resolucion.md`, D0004 |
+| 2026-10-29 | Escalado fraccional nítido (sin suavizar) | Unos píxeles quedan dobles y otros simples | `archive/spikes/002-resolucion.md`, D0004 |
+| 2026-10-29 | Suavizado *sharp bilinear* sobre la imagen terminada | Obliga a dibujar a la resolución interna: pierde la luz y el movimiento suaves de `canvas_items` | `archive/spikes/002-resolucion.md`, D0004 |

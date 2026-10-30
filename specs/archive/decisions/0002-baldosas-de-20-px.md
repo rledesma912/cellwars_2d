@@ -1,10 +1,10 @@
 ---
 id: D0002
 type: decision
-status: approved
-superseded_by:
+status: superseded
+superseded_by: D0004
 links: { gdd: [G001], decisions: [], spike: }
-updated: 2026-10-24
+updated: 2026-10-29
 ---
 
 # 0002: Baldosas de 20 px y salas de 32 × 18
