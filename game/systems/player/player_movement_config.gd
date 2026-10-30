@@ -1,15 +1,16 @@
-## Parámetros ajustables del movimiento del soldado (D0003).
+## Parámetros ajustables del movimiento del soldado (D0003, tamaños de D0004).
 ##
 ## Es un Resource: se guarda como archivo .tres (game/data/player_movement.tres) y
 ## se edita en el inspector de Godot sin tocar código. PlayerMotor solo lo lee.
-## Los valores por defecto son los de la spec F004 (los que funcionaron en el spike 001).
+## Los valores por defecto son los de la spec F004 con distancias y velocidades × 2,2
+## (spec F005, D0004): los tiempos no cambian.
 class_name PlayerMovementConfig
 extends Resource
 
 # @export_group agrupa los parámetros en secciones plegables del inspector.
 @export_group("Suelo")
 ## Velocidad máxima al correr, en píxeles por segundo.
-@export_range(0.0, 500.0, 1.0, "suffix:px/s") var run_speed: float = 135.0
+@export_range(0.0, 500.0, 1.0, "suffix:px/s") var run_speed: float = 297.0
 ## Tiempo para pasar de quieto a velocidad máxima. 0 = arranca en seco.
 @export_range(0.0, 1.0, 0.01, "suffix:s") var accel_time: float = 0.15
 ## Tiempo para frenar desde velocidad máxima. 0 = frena en seco.
@@ -19,15 +20,15 @@ extends Resource
 
 @export_group("Salto")
 ## Altura con el botón sostenido, en píxeles (20 px = 1 baldosa).
-@export_range(1.0, 300.0, 1.0, "suffix:px") var jump_height: float = 52.0
+@export_range(1.0, 300.0, 1.0, "suffix:px") var jump_height: float = 114.0
 ## Altura con un toque corto. Igual a jump_height = salto de altura fija.
-@export_range(1.0, 300.0, 1.0, "suffix:px") var min_jump_height: float = 30.0
+@export_range(1.0, 300.0, 1.0, "suffix:px") var min_jump_height: float = 66.0
 ## Segundos que tarda el salto lleno en llegar a su punto más alto.
 @export_range(0.05, 2.0, 0.01, "suffix:s") var time_to_apex: float = 0.36
 ## Gravedad al caer comparada con la de subida. Más de 1 = cae más rápido (más peso).
 @export_range(0.5, 4.0, 0.05) var fall_gravity_scale: float = 1.25
 ## Velocidad máxima de caída, en píxeles por segundo.
-@export_range(1.0, 2000.0, 1.0, "suffix:px/s") var max_fall_speed: float = 600.0
+@export_range(1.0, 2000.0, 1.0, "suffix:px/s") var max_fall_speed: float = 1320.0
 ## Preparación antes de despegar (anticipación). 0 = despega al apretar.
 @export_range(0.0, 0.5, 0.01, "suffix:s") var jump_prep_time: float = 0.07
 
@@ -37,7 +38,7 @@ extends Resource
 
 @export_group("Aterrizaje")
 ## Caída mínima, en píxeles, para que el aterrizaje cueste una recuperación.
-@export_range(0.0, 400.0, 1.0, "suffix:px") var hard_landing_height: float = 100.0
+@export_range(0.0, 400.0, 1.0, "suffix:px") var hard_landing_height: float = 220.0
 ## Tiempo sin control al aterrizar de alto. 0 = sin recuperación.
 @export_range(0.0, 1.0, 0.01, "suffix:s") var land_recovery_time: float = 0.15
 
@@ -48,7 +49,7 @@ extends Resource
 @export_range(0.0, 0.3, 0.01, "suffix:s") var jump_buffer_time: float = 0.1
 
 # La gravedad y las velocidades no se ajustan a mano: salen de alturas y tiempos,
-# que son más fáciles de pensar ("salta 52 px en 0,36 s").
+# que son más fáciles de pensar ("salta 114 px en 0,36 s").
 # Son las fórmulas del tiro vertical: h = v·t / 2, v = g·t y v² = 2·g·h.
 
 

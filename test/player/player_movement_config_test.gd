@@ -29,20 +29,22 @@ func test_zero_times_mean_instant() -> void:
 	assert_float(config.get_decel_rate()).is_equal(INF)
 
 
-func test_defaults_match_spec() -> void:
+# D0004: los valores de D0003 con distancias y velocidades × 2,2; los tiempos no cambian.
+func test_f005_ac07_defaults_scaled() -> void:
 	var config := PlayerMovementConfig.new()
-	assert_float(config.run_speed).is_equal(135.0)
+	assert_float(config.run_speed).is_equal(297.0)
 	assert_float(config.accel_time).is_equal(0.15)
 	assert_float(config.decel_time).is_equal(0.12)
 	assert_float(config.turn_time).is_equal(0.08)
-	assert_float(config.jump_height).is_equal(52.0)
-	assert_float(config.min_jump_height).is_equal(30.0)
+	# 52 × 2,2 = 114,4, redondeado a 114 para que cuerpo + salto entren en 220 px.
+	assert_float(config.jump_height).is_equal(114.0)
+	assert_float(config.min_jump_height).is_equal(66.0)
 	assert_float(config.time_to_apex).is_equal(0.36)
 	assert_float(config.fall_gravity_scale).is_equal(1.25)
-	assert_float(config.max_fall_speed).is_equal(600.0)
+	assert_float(config.max_fall_speed).is_equal(1320.0)
 	assert_float(config.jump_prep_time).is_equal(0.07)
 	assert_float(config.air_control).is_equal(0.5)
-	assert_float(config.hard_landing_height).is_equal(100.0)
+	assert_float(config.hard_landing_height).is_equal(220.0)
 	assert_float(config.land_recovery_time).is_equal(0.15)
 	assert_float(config.coyote_time).is_equal(0.08)
 	assert_float(config.jump_buffer_time).is_equal(0.1)
