@@ -3,22 +3,25 @@
 ## Código descartable. Teclas:
 ##   1 / 2 / 3  resolución (640×360, 960×540, 1280×720)
 ##   M          modo de dibujado: viewport (retro) ↔ canvas_items (moderno)
-##   E          escalado: entero → fraccional nítido → fraccional suavizado
+##   E          escalado: entero → fraccional nítido → fraccional suavizado →
+##              suavizado moderno (canvas_items + suavizado en cada sprite)
 ##   L          luz de prueba sí/no
 ##   F11        pantalla completa · R vuelve a la entrada · H oculta este cartel
 ## Moverse y saltar: las mismas teclas del juego.
 extends Node
 
-enum Scaling { INTEGER, FRACTIONAL, SHARP }
+enum Scaling { INTEGER, FRACTIONAL, SHARP, SHARP_MODERN }
 
 const SCALING_NAMES := {
 	Scaling.INTEGER: "entero",
 	Scaling.FRACTIONAL: "fraccional nítido",
 	Scaling.SHARP: "fraccional suavizado",
+	Scaling.SHARP_MODERN: "suavizado moderno (por sprite)",
 }
 const PLAYER_SCENE := preload("res://game/entities/player/player.tscn")
 const BASE_CONFIG := preload("res://game/data/player_movement.tres")
 const SHARP_SHADER := preload("res://prototypes/spike_002/sharp_bilinear.gdshader")
+const SHARP_SPRITE_SHADER := preload("res://prototypes/spike_002/sharp_sprite.gdshader")
 
 ## Las tres resoluciones; cada .tres se edita en el inspector.
 var variants: Array[ResolutionVariant] = [
@@ -91,7 +94,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_canvas_items = not _canvas_items
 			_apply_display()
 		KEY_E:
-			_scaling = ((_scaling + 1) % 3) as Scaling
+			_scaling = ((_scaling + 1) % 4) as Scaling
 			_apply_display()
 		KEY_L:
 			_light_on = not _light_on
@@ -229,6 +232,9 @@ func _apply_display() -> void:
 		if not sharp:
 			move_child(_world, 0)
 	_screen.visible = sharp
+	# El suavizado moderno siempre usa canvas_items: es la combinación de los dos.
+	var modern := _scaling == Scaling.SHARP_MODERN
+	var canvas := _canvas_items or modern
 
 	var fit := minf(float(win.size.x) / _base.x, float(win.size.y) / _base.y)
 	var factor := fit
@@ -248,9 +254,7 @@ func _apply_display() -> void:
 		# canvas_items: dibuja a la resolución de la pantalla; el arte se agranda por
 		# separado y el movimiento puede caer entre píxeles (más suave).
 		win.content_scale_mode = (
-			Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
-			if _canvas_items
-			else Window.CONTENT_SCALE_MODE_VIEWPORT
+			Window.CONTENT_SCALE_MODE_CANVAS_ITEMS if canvas else Window.CONTENT_SCALE_MODE_VIEWPORT
 		)
 		win.content_scale_size = _base
 		win.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
@@ -260,17 +264,39 @@ func _apply_display() -> void:
 			else Window.CONTENT_SCALE_STRETCH_FRACTIONAL
 		)
 		# Ajustar a píxel solo tiene sentido en el modo retro.
-		win.snap_2d_transforms_to_pixel = not _canvas_items
+		win.snap_2d_transforms_to_pixel = not canvas
 		if _scaling == Scaling.INTEGER:
 			factor = maxf(1.0, floorf(fit))
+	_set_sprite_smoothing(_world, modern, factor)
 	_update_label(factor)
+
+
+# Pone (o saca) el shader de suavizado en cada sprite y baldosa del mundo.
+func _set_sprite_smoothing(node: Node, on: bool, factor: float) -> void:
+	for child in node.get_children():
+		if child is Sprite2D or child is AnimatedSprite2D or child is TileMapLayer:
+			var item := child as CanvasItem
+			if on:
+				var mat := ShaderMaterial.new()
+				mat.shader = SHARP_SPRITE_SHADER
+				mat.set_shader_parameter("scale", factor)
+				item.material = mat
+				item.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			else:
+				item.material = null
+				item.texture_filter = CanvasItem.TEXTURE_FILTER_PARENT_NODE
+		_set_sprite_smoothing(child, on, factor)
 
 
 func _update_label(factor: float) -> void:
 	var mode := (
 		"(se dibuja a la resolución interna)"
 		if _scaling == Scaling.SHARP
-		else ("canvas_items (moderno)" if _canvas_items else "viewport (retro)")
+		else (
+			"canvas_items (moderno)"
+			if _canvas_items or _scaling == Scaling.SHARP_MODERN
+			else "viewport (retro)"
+		)
 	)
 	var elyon_px := roundi(45 * variants[_index].elyon_scale)
 	_label.text = (
@@ -305,6 +331,7 @@ func _autotest(out_dir: String) -> void:
 			[true, Scaling.INTEGER],
 			[true, Scaling.FRACTIONAL],
 			[false, Scaling.SHARP],
+			[true, Scaling.SHARP_MODERN],
 		]:
 			_canvas_items = combo[0]
 			_scaling = combo[1]
@@ -315,7 +342,7 @@ func _autotest(out_dir: String) -> void:
 				% [
 					variants[i].base_size.y,
 					"canvas" if _canvas_items else "viewport",
-					["entero", "fraccional", "suavizado"][_scaling],
+					["entero", "fraccional", "suavizado", "suavizado_moderno"][_scaling],
 				]
 			)
 			OS.execute("spectacle", ["-b", "-n", "-a", "-o", out_dir.path_join(shot + ".png")])
