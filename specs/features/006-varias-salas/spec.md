@@ -29,10 +29,10 @@ Para probarlo se arma un nivel de prueba con 3 salas en `game/levels/test/`.
 ## Fuera de alcance
 
 - Muerte, animación de muerte y checkpoint (F007). Caer al vacío mortal sigue haciendo lo de hoy: Elyon vuelve a la entrada de la sala actual, quieto.
-- El refugio y el final del nivel (ver "Preguntas abiertas" para la última salida).
+- El refugio y el final del nivel. Por ahora, la salida de la última sala lleva a la entrada de la sala 1 (AC02).
 - El mapa del nivel 1 y el arte de las salas: siguen en greybox.
 - Varios niveles, menú de niveles y guardar el avance.
-- Transiciones con efectos (fundidos, deslizamientos), salvo que se elija lo contrario en las preguntas abiertas.
+- Transiciones con efectos (fundidos, deslizamientos): el cambio de sala es de golpe.
 - Cámara con scroll: el juego sigue siendo de pantalla fija.
 
 ## Criterios de aceptación
@@ -44,7 +44,7 @@ Lógica del nivel:
   - salir por la entrada de la sala 3 → sala 2; de la 2 → sala 1.
 - F006-AC02 [unit] Bordes de la lista:
   - salir por la entrada de la sala 1 no cambia de sala: Elyon vuelve a la entrada de la sala 1;
-  - salir por la salida de la última sala hace lo que se decida en la pregunta abierta 1.
+  - salir por la salida de la última sala lleva a la entrada de la sala 1, quieto. Es provisorio hasta que exista el refugio.
 - F006-AC03 [unit] Qué borde cruzó. A partir del rectángulo de Elyon y la sala de 1280×720, se sabe si salió entero por la izquierda, por la derecha o por abajo, o si sigue adentro:
   - cuenta recién cuando ya no se ve nada de él;
   - asomar por arriba en un salto no cuenta como salir.
@@ -96,6 +96,8 @@ Cada sala marca su entrada y su salida con dos `Marker2D` (`Entrance` y `Exit`) 
 
 ## Preguntas abiertas
 
-1. **¿Qué pasa al salir por la salida de la última sala?** El refugio no entra en esta feature. Recomiendo que, por ahora, Elyon vuelva a la entrada de la sala 1: el nivel de prueba se puede recorrer en loop, y el refugio lo reemplaza más adelante. La alternativa es volver al menú principal.
-2. **¿Cambio de sala de golpe o con un fundido corto?** Recomiendo **de golpe**, como en *Flashback* y *Prince of Persia*: es lo que pide AC08 ("en el cuadro siguiente") y no corta el ritmo. Un fundido se puede sumar después si hace falta.
-3. **¿Entra la salida por abajo en esta feature?** La regla de salas lo permite (arriba y abajo) y el backlog habla de "la sala de abajo", así que la incluí (AC07 y AC10). Al entrar por arriba no se puede volver: Elyon no salta tan alto. Si preferís dejarla para más adelante, saco AC10 y la sala del medio sale por la derecha.
+Ninguna. El desarrollador eligió las recomendadas (2026-10-29, "Las recomendadas"):
+
+1. La salida de la última sala lleva a la entrada de la sala 1, provisoriamente, hasta que exista el refugio (AC02).
+2. El cambio de sala es de golpe, sin fundido (AC08).
+3. La salida por abajo entra en esta feature (AC07 y AC10). Desde una sala a la que se entró por arriba no se puede volver hacia arriba.
