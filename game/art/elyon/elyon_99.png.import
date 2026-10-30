@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkd6lnq7o65cy"
-path="res://.godot/imported/elyon_48.png-2475cc4fb4f8c9c02a587baa33b536b9.ctex"
+uid="uid://d0rgowfvcy8jw"
+path="res://.godot/imported/elyon_99.png-520aeeb5a4fbe4c24304524a5d646290.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/art/elyon/elyon_48.png"
-dest_files=["res://.godot/imported/elyon_48.png-2475cc4fb4f8c9c02a587baa33b536b9.ctex"]
+source_file="res://game/art/elyon/elyon_99.png"
+dest_files=["res://.godot/imported/elyon_99.png-520aeeb5a4fbe4c24304524a5d646290.ctex"]
 
 [params]
 

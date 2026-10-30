@@ -2,7 +2,7 @@
 ##
 ## Lógica pura: el nodo Player le pasa el estado del motor y la velocidad, y reproduce
 ## lo que esto devuelve en su AnimatedSprite2D. Los nombres son los de las animaciones
-## de game/art/elyon/elyon_48_frames.tres.
+## de game/art/elyon/elyon_99_frames.tres.
 ##
 ## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación
 ## y la recuperación duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.

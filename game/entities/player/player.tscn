@@ -2,10 +2,11 @@
 
 [ext_resource type="Script" uid="uid://x71hoghjq1vo" path="res://game/entities/player/player.gd" id="1_script"]
 [ext_resource type="Resource" uid="uid://cs8aim6cd61ir" path="res://game/data/player_movement.tres" id="2_config"]
-[ext_resource type="SpriteFrames" path="res://game/art/elyon/elyon_48_frames.tres" id="3_frames"]
+[ext_resource type="SpriteFrames" path="res://game/art/elyon/elyon_99_frames.tres" id="3_frames"]
+[ext_resource type="Material" path="res://game/art/shaders/sharp_pixel.tres" id="4_material"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
-size = Vector2(20, 48)
+size = Vector2(44, 106)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_script")
@@ -13,12 +14,14 @@ config = ExtResource("2_config")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
+texture_filter = 2
+material = ExtResource("4_material")
 sprite_frames = ExtResource("3_frames")
 animation = &"quieto"
 centered = false
-offset = Vector2(-32, -64)
+offset = Vector2(-72, -144)
 
 [node name="Shape" type="CollisionShape2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -24)
+position = Vector2(0, -53)
 shape = SubResource("RectangleShape2D_body")
