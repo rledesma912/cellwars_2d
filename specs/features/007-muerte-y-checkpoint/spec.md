@@ -1,7 +1,7 @@
 ---
 id: F007
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0005], spike: }
 updated: 2026-11-04
@@ -69,9 +69,3 @@ Se agregan a `PlayerMovementConfig`, como valores por defecto del script, sin to
 |---|---|---|---|
 | `death_time` | float (s) | 1,6 | 0,5 – 3,0 |
 | `void_restart_time` | float (s) | 0,4 | 0,0 – 1,5 |
-
-## Preguntas abiertas
-
-- ¿Se incluye la zona mortal? Sin algo que mate en pantalla, la animación `morir` nunca se vería, porque el vacío mata fuera de cuadro. Recomendación: sí, en gris rojizo y solo en las salas de prueba.
-- ¿Qué animación se usa? Recomendación: la que cae hacia adelante, de 9 cuadros, porque no mueve al personaje. La que vuela hacia atrás necesita retroceso de 80 px y conviene dejarla para golpes de enemigos.
-- ¿Caer al vacío espera 0,4 s o sigue siendo instantáneo? Recomendación: 0,4 s, para que se note que moriste. Con `void_restart_time` en 0 queda como hoy.
