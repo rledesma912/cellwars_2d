@@ -2,10 +2,10 @@
 ##
 ## Lógica pura: el nodo Player le pasa el estado del motor y la velocidad, y reproduce
 ## lo que esto devuelve en su AnimatedSprite2D. Los nombres son los de las animaciones
-## de game/art/elyon/elyon_99_frames.tres.
+## de game/art/elyon/elyon_frames.tres.
 ##
-## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación
-## y la recuperación duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.
+## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación,
+## la recuperación y rodar duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.
 class_name PlayerAnimation
 extends RefCounted
 
@@ -36,6 +36,8 @@ static func pick(
 			return &"subir" if velocity.y < 0.0 else &"caer"
 		PlayerMotor.State.LAND:
 			return &"aterrizar"
+		PlayerMotor.State.ROLL:
+			return &"rodar"
 		_:
 			return &"quieto"
 
@@ -49,6 +51,8 @@ static func duration_for(animation: StringName, config: PlayerMovementConfig) ->
 			return config.jump_prep_time
 		&"aterrizar":
 			return config.land_recovery_time
+		&"rodar":
+			return config.roll_time
 		_:
 			return 0.0
 
