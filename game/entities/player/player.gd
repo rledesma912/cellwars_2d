@@ -1,4 +1,4 @@
-## El protagonista: Elyon, el soldado (99 px, imágenes provisorias; D0004).
+## El protagonista: Elyon, el soldado (77 px; D0005).
 ##
 ## Nodo fino: lee las teclas, le pide a PlayerMotor la velocidad nueva y se mueve.
 ## Las reglas (cuánto corre, cómo cae, cuándo puede saltar) están en PlayerMotor, y
@@ -18,6 +18,7 @@ const STATE_NAMES := {
 	PlayerMotor.State.JUMP_PREP: "preparar salto",
 	PlayerMotor.State.AIR: "en el aire",
 	PlayerMotor.State.LAND: "recuperarse",
+	PlayerMotor.State.ROLL: "rodar",
 }
 
 ## Parámetros del movimiento. La escena usa game/data/player_movement.tres.
