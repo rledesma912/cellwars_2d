@@ -1,7 +1,7 @@
 ---
 id: D0005
 type: decision
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [], decisions: [D0003, D0004], spike: }
 updated: 2026-11-03
