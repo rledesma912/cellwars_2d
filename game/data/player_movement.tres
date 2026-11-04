@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_config")
-run_speed = 297.0
+run_speed = 215.0
 accel_time = 0.15
 decel_time = 0.12
 turn_time = 0.08

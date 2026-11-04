@@ -7,8 +7,8 @@ const DT := 1.0 / 60.0
 const RIGHT := 1.0
 const LEFT := -1.0
 const NONE := 0.0
-## Alto del cuerpo de colisión de Elyon (player.tscn, D0004).
-const BODY_HEIGHT := 106.0
+## Alto del cuerpo de colisión de Elyon (player.tscn, D0005).
+const BODY_HEIGHT := 82.0
 ## Aire de un piso en una sala de 3 pisos: 12 baldosas menos la del piso (D0004).
 const FLOOR_AIR := 220.0
 
@@ -149,13 +149,13 @@ func test_f004_ac05_jump_prep_keeps_momentum_and_ignores_input() -> void:
 	while _motor.state == PlayerMotor.State.JUMP_PREP and prep_steps < 60:
 		# Sigue en el piso, con la misma velocidad, aunque pida ir para el otro lado.
 		assert_float(_velocity.y).is_equal(0.0)
-		assert_float(_velocity.x).is_equal(speed)
+		assert_float(_velocity.x).is_equal_approx(speed, 0.001)
 		_velocity = _motor.step(_velocity, PlayerInput.new(LEFT, false, true), true, DT)
 		prep_steps += 1
 	# Al terminar la preparación despega (velocidad hacia arriba) y conserva el impulso.
 	assert_int(_motor.state).is_equal(PlayerMotor.State.AIR)
 	assert_float(_velocity.y).is_less(0.0)
-	assert_float(_velocity.x).is_equal(speed)
+	assert_float(_velocity.x).is_equal_approx(speed, 0.001)
 	assert_float(absf(prep_steps * DT - _config.jump_prep_time)).is_less_equal(DT + 0.0001)
 
 
@@ -298,6 +298,8 @@ func test_f004_ac15_soft_landing_responds_immediately() -> void:
 
 
 func test_f004_ac16_hard_landing_recovers_without_control() -> void:
+	# Cae con velocidad: sin esto rodaría (F009). Acá se prueba la recuperación.
+	_config.roll_time = 0.0
 	_fall_and_land(_config.hard_landing_height + 20.0, RIGHT)
 	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
 	var steps := 1
@@ -374,3 +376,112 @@ func test_reset_clears_state_and_timers() -> void:
 func test_f005_ac08_body_plus_jump_fits_floor() -> void:
 	# Con el salto más alto, la cabeza no pasa del techo del piso: 113,96 + 106 ≤ 220.
 	assert_float(_jump_height(-1) + BODY_HEIGHT).is_less_equal(FLOOR_AIR)
+
+
+# F009: rodar.
+
+
+# Toca el piso después de una caída alta, con la velocidad horizontal dada.
+func _land_hard_at(speed_x: float) -> void:
+	_motor.state = PlayerMotor.State.AIR
+	_motor._fall_distance = _config.hard_landing_height
+	_velocity = Vector2(speed_x, 400.0)
+	_step(NONE, false, false, true)
+
+
+func _roll_threshold() -> float:
+	return _config.roll_min_speed_fraction * _config.run_speed
+
+
+func test_f009_ac01_hard_landing_with_speed_rolls() -> void:
+	_land_hard_at(_roll_threshold() + 1.0)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+	# Mirando a la izquierda vale lo mismo con velocidad hacia la izquierda.
+	_motor.reset()
+	_motor.facing = -1
+	_land_hard_at(-_roll_threshold() - 1.0)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+
+
+func test_f009_ac01_rolls_only_from_threshold() -> void:
+	# Vector2 guarda floats de 32 bits: justo en el umbral puede redondear para abajo.
+	_land_hard_at(_roll_threshold() + 0.01)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+	_motor.reset()
+	_land_hard_at(_roll_threshold() - 0.01)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
+
+
+func test_f009_ac01_real_fall_while_running_rolls() -> void:
+	_run_right_to_full_speed()
+	_fall_and_land(_config.hard_landing_height + 20.0, RIGHT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+	# Una caída baja no alcanza.
+	_motor.reset()
+	_velocity = Vector2.ZERO
+	_run_right_to_full_speed()
+	_fall_and_land(_config.hard_landing_height / 2.0, RIGHT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.RUN)
+
+
+func test_f009_ac02_roll_keeps_speed_and_ignores_direction() -> void:
+	var speed := _roll_threshold() + 50.0
+	_land_hard_at(speed)
+	var steps := 1
+	while _motor.state == PlayerMotor.State.ROLL and steps < 120:
+		assert_float(_velocity.x).is_equal_approx(speed, 0.001)
+		assert_float(_velocity.y).is_equal(0.0)
+		assert_int(_motor.facing).is_equal(1)
+		_step(LEFT, false, false, true)
+		steps += 1
+	assert_float(absf(steps * DT - _config.roll_time)).is_less_equal(DT + 0.0001)
+
+
+func test_f009_ac03_slow_or_backward_landing_recovers() -> void:
+	# Más lento que el umbral: se recupera y frena.
+	_land_hard_at(_roll_threshold() - 1.0)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
+	assert_float(_velocity.x).is_less(_roll_threshold() - 1.0)
+	# Rápido, pero en sentido contrario a donde mira: tampoco rueda.
+	_motor.reset()
+	_land_hard_at(-_config.run_speed)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
+	assert_float(_velocity.x).is_greater(-_config.run_speed)
+
+
+func test_f009_ac03_roll_time_zero_never_rolls() -> void:
+	_config.roll_time = 0.0
+	_land_hard_at(_config.run_speed)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
+
+
+func test_f009_ac04_control_returns_after_roll() -> void:
+	_land_hard_at(_config.run_speed)
+	for i in 60:
+		if _motor.state != PlayerMotor.State.ROLL:
+			break
+		_step(RIGHT, false, false, true)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
+	_step(RIGHT, false, false, true)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.RUN)
+
+
+func test_roll_off_ledge_falls() -> void:
+	_land_hard_at(_config.run_speed)
+	_step(NONE, false, false, false)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.AIR)
+
+
+func test_jump_near_end_of_roll_fires_from_buffer() -> void:
+	_land_hard_at(_config.run_speed)
+	# Aprieta salto faltando menos que jump_buffer_time: al terminar, prepara el salto.
+	while _motor.get_state_timer() > _config.jump_buffer_time / 2.0:
+		_step(NONE, false, true, true)
+	_step(NONE, true, true, true)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+	for i in 10:
+		_step(NONE, false, true, true)
+		if _motor.state != PlayerMotor.State.ROLL:
+			break
+	_step(NONE, false, true, true)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.JUMP_PREP)

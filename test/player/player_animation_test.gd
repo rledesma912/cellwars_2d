@@ -1,4 +1,4 @@
-# Tests de PlayerAnimation (F004-AC18, AC19; F008-AC01 a AC03).
+# Tests de PlayerAnimation (F004-AC18, AC19; F008-AC01 a AC03; F009-AC05, AC06).
 extends GdUnitTestSuite
 
 const S := PlayerMotor.State
@@ -79,3 +79,29 @@ func test_f008_ac03_blocked_only_changes_run() -> void:
 	assert_str(_pick(S.AIR, Vector2(0.0, -10.0), true)).is_equal("subir")
 	assert_str(_pick(S.AIR, Vector2(0.0, 10.0), true)).is_equal("caer")
 	assert_str(_pick(S.LAND, Vector2.ZERO, true)).is_equal("aterrizar")
+
+
+func test_f009_ac05_roll_shows_rodar_for_roll_time() -> void:
+	assert_str(_pick(S.ROLL, Vector2(100.0, 0.0))).is_equal("rodar")
+	assert_str(_pick(S.ROLL, Vector2.ZERO)).is_equal("rodar")
+	var config := PlayerMovementConfig.new()
+	assert_float(PlayerAnimation.duration_for("rodar", config)).is_equal(config.roll_time)
+
+
+func test_f009_ac05_recovery_always_shows_aterrizar() -> void:
+	assert_str(_pick(S.LAND, Vector2.ZERO)).is_equal("aterrizar")
+	assert_str(_pick(S.LAND, Vector2(RUN_SPEED, 0.0))).is_equal("aterrizar")
+
+
+func test_f009_ac06_frames_have_every_animation() -> void:
+	var frames: SpriteFrames = load("res://game/art/elyon/elyon_frames.tres")
+	var velocities := [Vector2.ZERO, Vector2(RUN_SPEED, 0.0), Vector2(0.0, -10.0)]
+	for state: int in S.values():
+		for velocity: Vector2 in velocities:
+			for blocked: bool in [false, true]:
+				var anim := PlayerAnimation.pick(state, velocity, RUN_SPEED, blocked)
+				assert_bool(frames.has_animation(anim)).is_true()
+				for i in frames.get_frame_count(anim):
+					var size := frames.get_frame_texture(anim, i).get_size()
+					assert_vector(size).is_equal(Vector2(144.0, 144.0))
+	assert_int(frames.get_animation_names().size()).is_equal(10)
