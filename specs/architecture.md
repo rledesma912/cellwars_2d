@@ -97,7 +97,7 @@ D0004, aplicada en la F005.
 | Stretch | `canvas_items`, aspect `keep`, scale `fractional` | Vigente (D0004) |
 | Suavizado del pixel art | *sharp bilinear* por sprite y baldosa (ver abajo) | Vigente (D0004) |
 | `snap_2d_transforms_to_pixel` | `false`: el movimiento suave entre píxeles es parte del look | Vigente (D0004) |
-| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 por piso | Vigente (D0004) |
+| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 filas por piso: 1 de baldosa y 11 de aire. Pisos y paredes de borde tienen 1 baldosa de grosor | Vigente (D0004) |
 | Escala del tema de la interfaz | `gui/theme/default_theme_scale = 2` | Vigente: la interfaz se diseña al doble que a 640×360 |
 | Display driver Linux | Wayland (`display_server/driver.linuxbsd`) | Vigente: el entorno del agente no tiene X11 |
 
