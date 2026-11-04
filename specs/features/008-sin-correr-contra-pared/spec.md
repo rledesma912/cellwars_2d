@@ -1,7 +1,7 @@
 ---
 id: F008
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [], decisions: [D0003], spike: }
 updated: 2026-11-03
@@ -26,12 +26,12 @@ Contra una pared, Elyon se ve quieto, mirando hacia ella.
 
 ## Criterios de aceptación
 
-- F008-AC01 [unit] Con el motor en correr y bloqueado por una pared, la animación es `quieto`, a cualquier velocidad.
-- F008-AC02 [unit] Con el motor en correr y sin bloqueo, la animación sigue la regla de F004-AC18: `arrancar` por debajo del 70 % de `run_speed` y `correr` desde ahí.
-- F008-AC03 [unit] El bloqueo solo cambia la animación de correr: frenar, girar, preparar salto, en el aire y recuperarse muestran lo mismo con o sin bloqueo.
-- F008-AC04 [manual] En el piso, con la dirección apretada contra una pared, Elyon se ve quieto sin alternar con `arrancar` ni `correr`, a la derecha y a la izquierda.
-- F008-AC05 [manual] Al soltar la dirección sigue quieto. Al apretar la dirección contraria se da vuelta y corre, sin demora agregada.
-- F008-AC06 [manual] Apretado contra la pared, el salto sale igual que siempre, y en cuanto la pared deja de bloquear, por ejemplo al llegar arriba de un escalón, vuelve a correr.
+- ✅ F008-AC01 [unit] Con el motor en correr y bloqueado por una pared, la animación es `quieto`, a cualquier velocidad.
+- ✅ F008-AC02 [unit] Con el motor en correr y sin bloqueo, la animación sigue la regla de F004-AC18: `arrancar` por debajo del 70 % de `run_speed` y `correr` desde ahí.
+- ✅ F008-AC03 [unit] El bloqueo solo cambia la animación de correr: frenar, girar, preparar salto, en el aire y recuperarse muestran lo mismo con o sin bloqueo.
+- ✅ F008-AC04 [manual] En el piso, con la dirección apretada contra una pared, Elyon se ve quieto sin alternar con `arrancar` ni `correr`, a la derecha y a la izquierda.
+- ✅ F008-AC05 [manual] Al soltar la dirección sigue quieto. Al apretar la dirección contraria se da vuelta y corre, sin demora agregada.
+- ✅ F008-AC06 [manual] Apretado contra la pared, el salto sale igual que siempre, y en cuanto la pared deja de bloquear, por ejemplo al llegar arriba de un escalón, vuelve a correr.
 
 ## Casos límite
 
@@ -44,16 +44,8 @@ Contra una pared, Elyon se ve quieto, mirando hacia ella.
 
 Ninguno.
 
-## Preguntas abiertas
+## Notas finales
 
-Ninguna.
-
-## Plan y tasks
-
-`PlayerAnimation` (lógica pura) decide y `Player` (nodo fino) le pasa lo que Godot sabe de la pared. No se agrega un estado al motor: contra la pared valen las mismas acciones que al correr, solo cambia lo que se ve.
-
-- `PlayerAnimation.is_blocked(on_wall, wall_normal_x, direction)`: hay bloqueo si toca una pared y se aprieta hacia ella.
-- `PlayerAnimation.pick(...)` recibe `blocked` y, en correr, devuelve `quieto`.
-- `Player` calcula `blocked` después de `move_and_slide()`, porque `is_on_wall()` se actualiza ahí.
-
-- [x] T1: regla de animación y uso en `Player`, con sus tests (F008-AC01, F008-AC02, F008-AC03).
+- Implementado sin agregar un estado al motor: `PlayerAnimation.is_blocked` decide si hay bloqueo y `PlayerAnimation.pick` muestra `quieto` en correr. El motor sigue acelerando contra la pared, y así `is_on_wall()` no alterna.
+- El panel F3 sigue diciendo "correr" mientras Elyon se ve quieto contra la pared: el panel muestra el estado del motor, no la animación.
+- AC04 a AC06: el desarrollador los validó jugando en la laptop, con la copia de prueba `~/cw2d_prueba` y sus pruebas de arte. Las casillas del PR quedaron sin tildar; aceptó cerrar con su mensaje: "probé en la laptop, confirmado, cerrá y mergeá".
