@@ -11,7 +11,7 @@ updated: 2026-11-04
 
 - [x] T1 Config "Muerte" y estado `DEAD` del motor, con sus tests (cubre: F007-AC01, F007-AC02, F007-AC03, F007-AC04)
 - [x] T2 `LevelProgress.checkpoint()` y `apply(VOID)` sin reinicio, con sus tests (cubre: F007-AC06)
-- [ ] T3 Arte `morir` en `elyon.png` y `elyon_frames.tres`, regla en `PlayerAnimation`, con sus tests (cubre: F007-AC05)
+- [x] T3 Arte `morir` en `elyon.png` y `elyon_frames.tres`, regla en `PlayerAnimation`, con sus tests (cubre: F007-AC05)
 - [ ] T4 `Player`: `die`, `is_dead`, señal `death_finished`, último cuadro de `morir`, nombre en el overlay (cubre: F007-AC07, F007-AC08)
 - [ ] T5 Escena `MortalZone` (cubre: F007-AC07, F007-AC14)
 - [ ] T6 `World`: el vacío mata, ignora bordes mientras está muerto, vuelve al checkpoint (cubre: F007-AC09, F007-AC10, F007-AC11)

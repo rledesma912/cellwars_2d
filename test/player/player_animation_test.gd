@@ -1,4 +1,4 @@
-# Tests de PlayerAnimation (F004-AC18, AC19; F008-AC01 a AC03; F009-AC05, AC06).
+# Tests de PlayerAnimation (F004-AC18, AC19; F008-AC01 a AC03; F009-AC05, AC06; F007-AC05).
 extends GdUnitTestSuite
 
 const S := PlayerMotor.State
@@ -7,6 +7,10 @@ const RUN_SPEED := 100.0
 
 func _pick(state: PlayerMotor.State, velocity: Vector2, blocked := false) -> StringName:
 	return PlayerAnimation.pick(state, velocity, RUN_SPEED, blocked)
+
+
+func _frames() -> SpriteFrames:
+	return load("res://game/art/elyon/elyon_frames.tres")
 
 
 func test_f004_ac18_animation_for_each_state() -> void:
@@ -94,7 +98,7 @@ func test_f009_ac05_recovery_always_shows_aterrizar() -> void:
 
 
 func test_f009_ac06_frames_have_every_animation() -> void:
-	var frames: SpriteFrames = load("res://game/art/elyon/elyon_frames.tres")
+	var frames := _frames()
 	var velocities := [Vector2.ZERO, Vector2(RUN_SPEED, 0.0), Vector2(0.0, -10.0)]
 	for state: int in S.values():
 		for velocity: Vector2 in velocities:
@@ -104,4 +108,32 @@ func test_f009_ac06_frames_have_every_animation() -> void:
 				for i in frames.get_frame_count(anim):
 					var size := frames.get_frame_texture(anim, i).get_size()
 					assert_vector(size).is_equal(Vector2(144.0, 144.0))
-	assert_int(frames.get_animation_names().size()).is_equal(10)
+	assert_int(frames.get_animation_names().size()).is_equal(11)
+
+
+func test_f007_ac05_dead_shows_morir() -> void:
+	# En el piso, en el aire, subiendo o contra una pared: siempre la misma.
+	assert_str(_pick(S.DEAD, Vector2.ZERO)).is_equal("morir")
+	assert_str(_pick(S.DEAD, Vector2(RUN_SPEED, 0.0))).is_equal("morir")
+	assert_str(_pick(S.DEAD, Vector2(0.0, -10.0))).is_equal("morir")
+	assert_str(_pick(S.DEAD, Vector2(RUN_SPEED, 0.0), true)).is_equal("morir")
+
+
+func test_f007_ac05_morir_lasts_death_time() -> void:
+	var config := PlayerMovementConfig.new()
+	assert_float(PlayerAnimation.duration_for(&"morir", config)).is_equal(config.death_time)
+	# Pasa una sola vez: si se repitiera, volvería a pararse en medio de la muerte.
+	var frames := _frames()
+	assert_bool(frames.get_animation_loop(&"morir")).is_false()
+
+
+func test_f007_ac05_morir_durations_sum_frame_count() -> void:
+	# speed_for supone que las duraciones relativas suman la cantidad de cuadros. Si no
+	# sumaran eso, morir no duraría death_time.
+	var frames := _frames()
+	var count := frames.get_frame_count(&"morir")
+	assert_int(count).is_equal(9)
+	var total := 0.0
+	for i in count:
+		total += frames.get_frame_duration(&"morir", i)
+	assert_float(total).is_equal_approx(count, 0.001)
