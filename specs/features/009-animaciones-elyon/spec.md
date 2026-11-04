@@ -4,7 +4,7 @@ type: feature
 status: in-progress
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0004, D0005], spike: }
-updated: 2026-11-03
+updated: 2026-11-04
 ---
 
 # Feature 009: Animaciones de Elyon en el juego
