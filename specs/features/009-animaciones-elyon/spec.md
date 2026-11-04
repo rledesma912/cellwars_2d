@@ -1,7 +1,7 @@
 ---
 id: F009
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0004, D0005], spike: }
 updated: 2026-11-04
@@ -30,26 +30,26 @@ Elyon usa las animaciones `quieto`, `arrancar`, `correr`, `frenar`, `girar`, `pr
 
 **Regla de rodar**
 
-- F009-AC01 [unit] Al aterrizar de una caída igual o mayor a `hard_landing_height`, con velocidad horizontal de al menos `roll_min_speed_fraction` × `run_speed` hacia donde mira, el motor entra en el estado nuevo rodar.
-- F009-AC02 [unit] Mientras rueda, conserva la velocidad horizontal e ignora la dirección apretada, durante `roll_time`.
-- F009-AC03 [unit] Si la caída alta termina más lento que ese umbral o con velocidad contraria a donde mira, el motor entra en recuperarse y frena, como hasta ahora.
-- F009-AC04 [unit] Al terminar `roll_time` sale de rodar y responde otra vez a la dirección apretada.
-- F009-AC05 [unit] El estado rodar muestra la animación `rodar`, que dura `roll_time`. Recuperarse muestra siempre `aterrizar`.
+- ✅ F009-AC01 [unit] Al aterrizar de una caída igual o mayor a `hard_landing_height`, con velocidad horizontal de al menos `roll_min_speed_fraction` × `run_speed` hacia donde mira, el motor entra en el estado nuevo rodar.
+- ✅ F009-AC02 [unit] Mientras rueda, conserva la velocidad horizontal e ignora la dirección apretada, durante `roll_time`.
+- ✅ F009-AC03 [unit] Si la caída alta termina más lento que ese umbral o con velocidad contraria a donde mira, el motor entra en recuperarse y frena, como hasta ahora.
+- ✅ F009-AC04 [unit] Al terminar `roll_time` sale de rodar y responde otra vez a la dirección apretada.
+- ✅ F009-AC05 [unit] El estado rodar muestra la animación `rodar`, que dura `roll_time`. Recuperarse muestra siempre `aterrizar`.
 
 **Arte**
 
-- F009-AC06 [unit] `game/art/elyon/elyon_frames.tres` tiene todas las animaciones que puede pedir `PlayerAnimation.pick`, con cuadros de 144 × 144.
-- F009-AC07 [manual] Las 10 animaciones se ven en el juego, hacia los dos lados, con los pies apoyados en el piso y sin que Elyon cambie de tamaño entre ellas.
+- ✅ F009-AC06 [unit] `game/art/elyon/elyon_frames.tres` tiene todas las animaciones que puede pedir `PlayerAnimation.pick`, con cuadros de 144 × 144.
+- ✅ F009-AC07 [manual] Las 10 animaciones se ven en el juego, hacia los dos lados, con los pies apoyados en el piso y sin que Elyon cambie de tamaño entre ellas.
 
 **Tamaño y velocidad (D0005)**
 
-- F009-AC08 [manual] La colisión de 34 × 82 coincide con el dibujo: los pies se apoyan en el piso, y no choca con aire ni atraviesa paredes o techos.
-- F009-AC09 [manual] Con `run_speed` en 215 se recorren las 3 salas de prueba de punta a punta, incluido cruzar el agujero de 6 baldosas de la sala 1.
+- ✅ F009-AC08 [manual] La colisión de 34 × 82 coincide con el dibujo: los pies se apoyan en el piso, y no choca con aire ni atraviesa paredes o techos.
+- ✅ F009-AC09 [manual] Con `run_speed` en 215 se recorren las 3 salas de prueba de punta a punta, incluido cruzar el agujero de 6 baldosas de la sala 1.
 
 **Sensación**
 
-- F009-AC10 [feel] A 215 px/s, la carrera tiene el peso buscado y los pies no patinan.
-- F009-AC11 [feel] Rodar se siente como una continuación natural de la caída y no le quita control al jugador.
+- ✅ F009-AC10 [feel] A 215 px/s, la carrera tiene el peso buscado y los pies no patinan.
+- ✅ F009-AC11 [feel] Rodar se siente como una continuación natural de la caída y no le quita control al jugador.
 
 ## Casos límite
 
@@ -61,11 +61,11 @@ Elyon usa las animaciones `quieto`, `arrancar`, `correr`, `frenar`, `girar`, `pr
 
 ## Parámetros de tuning (Resource)
 
-Se agregan a `PlayerMovementConfig`. Los valores iniciales son los de la copia de prueba y quedan como valores por defecto del script, sin tocar `game/data/player_movement.tres`.
+`game/data/player_movement.tres`: `run_speed`, y por defecto del script `roll_min_speed_fraction` y `roll_time`.
 
-| Parámetro | Tipo | Valor inicial | Rango sugerido |
-|---|---|---|---|
-| `roll_min_speed_fraction` | float | 0,3 | 0,0 – 1,0 |
-| `roll_time` | float (s) | 0,38 | 0,0 – 0,6 |
+## Notas finales
 
-`run_speed` ya existe y pasa de 297 a 215 en `game/data/player_movement.tres`. Lo cambia el agente en esta feature, por pedido del desarrollador.
+- Rodar es un estado propio del motor porque cambia las reglas: conserva la velocidad. La animación ya no puede decidir distinto que el motor, como pasaba en la copia de prueba.
+- Al terminar de rodar, Elyon muestra `quieto` durante 1 paso de física antes de seguir, igual que al terminar el giro.
+- La imagen salió de la copia de prueba: `assets/final/` de `cw2d-art` sigue sin publicar.
+- AC07 a AC11: el desarrollador los validó jugando en la laptop, en las salas de `develop`, con pisos de 2 baldosas. Las casillas del PR quedaron sin tildar; aceptó cerrar con su mensaje: "probé en la laptop, confirmado".
