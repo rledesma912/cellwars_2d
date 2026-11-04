@@ -23,12 +23,14 @@ Las zonas mortales son los rectángulos gris rojizo:
 | Sala | Dónde | Cómo se esquiva |
 |---|---|---|
 | 1 | En el piso de abajo, cerca de la entrada, antes del hueco | Saltando por encima |
+| 1 | Abajo de todo, al pie del pozo del piso de arriba, cerca de la salida | Saltando el pozo |
 | 2 | Colgando sobre el hueco de la salida | Bajando al hueco sin saltar |
 | 3 | En el piso del medio, a la derecha del obstáculo | Saltando por encima |
 
 ## Checklist [manual]
 
 - F007-AC07: Caminá hacia la zona de la sala 1 → Elyon cae con `morir`, sin responder a los controles, y aparece quieto en la entrada de la sala (overlay: `estado` dice "morir" y `timer estado` baja desde 1,60 hasta 0; `sala` no cambia).
+- Caída desde lo alto: en la sala 1, subí al piso de arriba y dejate caer por el pozo antes de la salida → cae tres pisos y muere al llegar abajo. No es un criterio aparte: suma a AC07 y AC13.
 - F007-AC08: En la sala 2, saltá desde el borde del hueco hasta tocar la zona colgante → sigue cayendo muerto y termina igual, en la entrada de esa sala (overlay: `en el piso` dice "no" al morir).
 - F007-AC09: En la sala 1, caé por el hueco del piso de abajo → pasa una espera corta y aparece quieto en la entrada (overlay: `timer estado` baja desde 0,40). En la sala 2, caminá hasta caer por el hueco de la salida sin saltar → pasás a la sala 3 (overlay: `sala` dice "3 / 3").
 - F007-AC10: Repetí el salto de AC08 → el cuerpo cae por la salida ya muerto, y reaparece en la sala 2 (overlay: `sala` sigue en "2 / 3" todo el tiempo).

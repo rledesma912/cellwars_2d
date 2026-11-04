@@ -60,10 +60,11 @@ TestRoomN (Node2D, room.gd)
 | Sala | Dónde | Medida (baldosas) | Sirve para |
 |---|---|---|---|
 | 1 | Sobre el piso de abajo, columnas 14–17, antes del hueco | 4 × 1 | AC07: se salta por encima |
+| 1 | Abajo de todo, al pie de un pozo que baja desde el piso de arriba, columnas 55–62 | 8 × 1 | Caída de 480 px que termina en muerte. Queda fuera del recorrido, y el pozo se salta (6 baldosas, las mismas que el hueco de abajo) |
 | 2 | Colgando sobre la salida de abajo, columnas 50–55, filas 28–29 | 6 × 2 | AC08 y AC10: se camina al hueco por debajo; si se salta hasta tocarla, muere en el aire y cruza la salida muerto |
 | 3 | Sobre el piso del medio, columnas 36–39 | 4 × 1 | AC07: se salta por encima |
 
-Todas quedan lejos de las entradas. Las de las salas 1 y 3 también quedan lejos de las salidas; la de la sala 2 está sobre la salida a propósito. Su parte de abajo está 100 px sobre el nivel del piso y el cuerpo mide 82 px, así que Elyon pasa por debajo sin tocarla, también si aparece en la marca `Exit`. Las medidas se confirman jugando (AC12).
+Todas quedan lejos de las entradas. Las de las salas 1 y 3 también quedan lejos de las salidas; la del pozo de la sala 1 está debajo de la salida, pero 480 px más abajo, y el piso queda entero bajo la marca `Exit`. La de la sala 2 está sobre la salida a propósito. Su parte de abajo está 100 px sobre el nivel del piso y el cuerpo mide 82 px, así que Elyon pasa por debajo sin tocarla, también si aparece en la marca `Exit`. Las medidas se confirman jugando (AC12).
 
 ## Señales
 
