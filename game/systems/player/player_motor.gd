@@ -10,7 +10,9 @@
 class_name PlayerMotor
 extends RefCounted
 
-enum State { IDLE, RUN, BRAKE, TURN, JUMP_PREP, AIR, LAND, ROLL }
+enum State { IDLE, RUN, BRAKE, TURN, JUMP_PREP, AIR, LAND, ROLL, DEAD }
+## Por qué murió: decide cuánto dura la muerte.
+enum DeathCause { HAZARD, VOID }
 
 ## Estado actual. Solo lectura desde afuera.
 var state: State = State.IDLE
@@ -46,6 +48,29 @@ func reset() -> void:
 	_fall_distance = 0.0
 
 
+## Mata a Elyon: pierde el control hasta que algo llame a reset(). Morir estando ya
+## muerto no cambia nada, así tocar otra zona mortal no alarga la espera.
+func die(cause: DeathCause) -> void:
+	if state == State.DEAD:
+		return
+	state = State.DEAD
+	_state_timer = _config.death_time if cause == DeathCause.HAZARD else _config.void_restart_time
+	# Lo que estuviera en curso se corta: un salto apretado no sale al reaparecer.
+	_buffer = 0.0
+	_coyote = 0.0
+	_jumping = false
+
+
+## true desde que murió hasta que se reinicia.
+func is_dead() -> bool:
+	return state == State.DEAD
+
+
+## true cuando pasó el tiempo de la muerte: ya se puede volver a la entrada de la sala.
+func is_death_finished() -> bool:
+	return state == State.DEAD and _state_timer <= 0.0
+
+
 ## Segundos que le quedan al giro, la preparación, la recuperación o rodar.
 func get_state_timer() -> float:
 	return _state_timer
@@ -63,6 +88,13 @@ func get_buffer() -> float:
 
 ## En Godot el eje Y crece hacia abajo: velocidad Y negativa es subir.
 func step(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float) -> Vector2:
+	# Primero que nada: muerto no se mira el input, ni siquiera para el jump buffer.
+	if state == State.DEAD:
+		return _dead(velocity, on_floor, delta)
+	return _alive(velocity, input, on_floor, delta)
+
+
+func _alive(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float) -> Vector2:
 	# Jump buffer: un salto vale si se apretó ahora o hace menos de jump_buffer_time.
 	if input.jump_just_pressed:
 		_buffer = _config.jump_buffer_time
@@ -176,6 +208,18 @@ func _roll(v: Vector2, delta: float) -> Vector2:
 	if _state_timer <= 0.0:
 		_state_timer = 0.0
 		state = State.IDLE
+	return v
+
+
+func _dead(v: Vector2, on_floor: bool, delta: float) -> Vector2:
+	_state_timer = maxf(_state_timer - delta, 0.0)
+	if on_floor:
+		v.y = 0.0
+		v.x = move_toward(v.x, 0.0, _config.get_decel_rate() * delta)
+	else:
+		# Siempre la gravedad de caída, también si venía subiendo. La velocidad horizontal
+		# se mantiene: en el aire no hay rozamiento y sigue la trayectoria que traía.
+		v.y = minf(v.y + _config.get_fall_gravity() * delta, _config.max_fall_speed)
 	return v
 
 
