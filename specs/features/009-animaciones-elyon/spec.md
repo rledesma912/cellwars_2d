@@ -1,7 +1,7 @@
 ---
 id: F009
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0004, D0005], spike: }
 updated: 2026-11-03
@@ -68,8 +68,4 @@ Se agregan a `PlayerMovementConfig`. Los valores iniciales son los de la copia d
 | `roll_min_speed_fraction` | float | 0,3 | 0,0 – 1,0 |
 | `roll_time` | float (s) | 0,38 | 0,0 – 0,6 |
 
-`run_speed` ya existe y pasa de 297 a 215.
-
-## Preguntas abiertas
-
-- `run_speed` en `game/data/player_movement.tres` lo edita el desarrollador. ¿Lo cambia él o le pide al agente que lo haga en esta feature?
+`run_speed` ya existe y pasa de 297 a 215 en `game/data/player_movement.tres`. Lo cambia el agente en esta feature, por pedido del desarrollador.
