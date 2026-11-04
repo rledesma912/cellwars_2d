@@ -1,7 +1,7 @@
 ---
 id: F010
 type: feature
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0005], spike: }
 updated: 2026-11-04
@@ -40,6 +40,7 @@ Desde `long_fall_height`, Elyon muestra `caer_largo` en el aire: el jugador ve q
 - F010-AC02 [unit] Una caída apenas menor a `lethal_fall_height` sigue las reglas de hoy: rueda o se recupera (F004-AC16, F009-AC01 y F009-AC03).
 - F010-AC03 [unit] Morir por caída ignora dirección y salto hasta que se reinicie, y al terminar vuelve al checkpoint como las demás muertes (F007-AC01, F007-AC03 y F007-AC06).
 - F010-AC04 [unit] La altura se cuenta solo mientras baja: en un salto se mide desde el punto más alto, no desde donde despegó.
+- F010-AC17 [unit] Al entrar a otra sala, la altura vuelve a contarse desde 0: una caída no suma lo que bajó en la sala anterior.
 
 **Qué se ve**
 
@@ -56,6 +57,7 @@ Desde `long_fall_height`, Elyon muestra `caer_largo` en el aire: el jugador ve q
 - F010-AC12 [manual] Caer un piso (240 px) se sobrevive: rueda si viene corriendo y se recupera si cae en vertical, sin mostrar `caer_largo`.
 - F010-AC13 [manual] Tendido, todo el cuerpo toca el piso, hacia los dos lados, y el arma queda adelante, recortada por el piso.
 - F010-AC14 [manual] Al tocar una zona mortal en el piso, `morir` se desploma en el lugar: no se inclina hacia atrás antes de caer.
+- F010-AC18 [manual] Al caer de la sala 2 a la sala 3, la línea `caída` del overlay vuelve a 0 al entrar a la sala 3, y solo cuenta lo que baja en ella.
 
 **Sensación**
 
@@ -73,7 +75,8 @@ Tiempos simulados en pasos de 1/60 s, con la física actual de `player_movement.
 | 460 px: pozo de la sala 1 | 39 | 11 | Muere |
 | 480 px: dos pisos | 40 | 12 | Muere |
 
-- Salta y baja un piso: muestra `caer_largo` 6 pasos y sobrevive (ver "Preguntas abiertas").
+- Salta y baja un piso: muestra `caer_largo` 6 pasos y sobrevive. Se revisa en el playtest, y se ajusta con `long_fall_height`.
+- Cruza a otra sala mientras cae en `caer_largo`: vuelve a `caer` hasta superar de nuevo `long_fall_height` (F010-AC17).
 - Toca una zona mortal con menos de `lethal_fall_height`, en el aire: sigue F007-AC08, con `morir`.
 - Cae al vacío desde cualquier altura: sigue siendo muerte por el vacío, con `void_restart_time`. No hay nada que mostrar.
 - Muere por altura ya rodando o recuperándose: no puede pasar, porque esos estados solo empiezan si la caída no fue mortal.
@@ -102,8 +105,3 @@ Sale de `cw2d-art`, `specs/animaciones/elyon_caida_mortal.md` y `specs/character
 | `morir` (reemplaza) | `morir_final.png` | 9 | Sin cambios | Sin cambios |
 
 Se probaron en una copia local del juego con estos valores.
-
-## Preguntas abiertas
-
-1. **¿Una caída que cruza de sala sigue sumando altura?** Hoy, `_fall_distance` no se reinicia al pasar por una salida de abajo, así que Elyon podría morir al llegar a una sala que recién ve. Propuesta: reiniciarla al entrar a la sala nueva, porque es más justo. Como consecuencia, si venía en `caer_largo`, vuelve a `caer` por unos pasos.
-2. **¿`long_fall_height` queda en 260?** Es el valor probado en el pozo, pero saltar y bajar un piso muestra `caer_largo` durante 6 pasos y sobrevive, justo la pose que avisa que la caída es grave. Con 360 px serían 1 paso en ese salto y 6, no 11, en el pozo. Propuesta: dejar 260 y revisar en el playtest.
