@@ -485,3 +485,144 @@ func test_jump_near_end_of_roll_fires_from_buffer() -> void:
 			break
 	_step(NONE, false, true, true)
 	assert_int(_motor.state).is_equal(PlayerMotor.State.JUMP_PREP)
+
+
+# Lleva al motor a un estado cualquiera, por el camino que usa el juego.
+func _reach_state(target: PlayerMotor.State) -> void:
+	match target:
+		PlayerMotor.State.RUN:
+			_ground_step(RIGHT)
+		PlayerMotor.State.BRAKE:
+			_run_right_to_full_speed()
+			_ground_step(NONE)
+		PlayerMotor.State.TURN:
+			_ground_step(LEFT)
+		PlayerMotor.State.JUMP_PREP:
+			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, true, true), true, DT)
+		PlayerMotor.State.AIR:
+			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
+		PlayerMotor.State.LAND:
+			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
+			_velocity = Vector2(0.0, _config.max_fall_speed)
+			for i in 30:
+				_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
+			_velocity.x = 0.0
+			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), true, DT)
+		PlayerMotor.State.ROLL:
+			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
+			_velocity = Vector2(_config.run_speed, _config.max_fall_speed)
+			for i in 30:
+				_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, false), false, DT)
+			_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, false), true, DT)
+
+
+# Cuenta los pasos hasta que la muerte termina (con tope, para no colgarse).
+func _steps_until_death_finished() -> int:
+	var steps := 0
+	while not _motor.is_death_finished() and steps < 1000:
+		_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), true, DT)
+		steps += 1
+	return steps
+
+
+func test_f007_ac01_dies_from_every_state() -> void:
+	for state: int in PlayerMotor.State.values():
+		if state == PlayerMotor.State.DEAD:
+			continue
+		before_test()
+		_reach_state(state)
+		assert_int(_motor.state).is_equal(state)
+		_motor.die(PlayerMotor.DeathCause.HAZARD)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+		assert_bool(_motor.is_dead()).is_true()
+
+
+func test_f007_ac01_ignores_input_until_reset() -> void:
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	# Muerto no acelera ni salta, tampoco si se apretó el salto antes de morir.
+	for i in 30:
+		_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, true, true), true, DT)
+		assert_vector(_velocity).is_equal(Vector2.ZERO)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+	assert_float(_motor.get_buffer()).is_equal(0.0)
+	# Sigue muerto aunque el tiempo ya haya pasado: solo reset() lo saca.
+	_steps_until_death_finished()
+	_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, true, true), true, DT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+	_motor.reset()
+	assert_bool(_motor.is_dead()).is_false()
+	assert_bool(_motor.is_death_finished()).is_false()
+	_ground_step(RIGHT)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.RUN)
+
+
+func test_f007_ac01_buffered_jump_does_not_survive_death() -> void:
+	# El salto apretado justo antes de morir no sale al reaparecer.
+	_velocity = _motor.step(_velocity, PlayerInput.new(NONE, true, true), false, DT)
+	assert_float(_motor.get_buffer()).is_greater(0.0)
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	assert_float(_motor.get_buffer()).is_equal(0.0)
+
+
+func test_f007_ac02_brakes_on_floor() -> void:
+	_run_right_to_full_speed()
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	var travelled := 0.0
+	var steps := 0
+	while _velocity.x > 0.0 and steps < 60:
+		_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, false), true, DT)
+		travelled += _velocity.x * DT
+		steps += 1
+	# Tarda lo mismo que un frenado normal: decel_time, con margen de un paso.
+	assert_float(steps * DT).is_equal_approx(_config.decel_time, DT)
+	# Frena de forma pareja: la distancia es velocidad × tiempo / 2, con margen de un
+	# paso porque el motor avanza de a pasos. Con los valores del .tres, unos 13 px.
+	var expected := _config.run_speed * _config.decel_time / 2.0
+	assert_float(travelled).is_equal_approx(expected, _config.run_speed * DT)
+	assert_float(_velocity.y).is_equal(0.0)
+
+
+func test_f007_ac02_falls_in_air_up_to_max() -> void:
+	_velocity = Vector2(50.0, -100.0)
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	_velocity = _motor.step(_velocity, PlayerInput.new(LEFT, false), false, DT)
+	# Usa la gravedad de caída también si venía subiendo, y no responde a la dirección.
+	var expected := -100.0 + _config.get_fall_gravity() * DT
+	assert_float(_velocity.y).is_equal_approx(expected, 0.01)
+	assert_float(_velocity.x).is_equal(50.0)
+	for i in 300:
+		_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
+	assert_float(_velocity.y).is_equal_approx(_config.max_fall_speed, 0.01)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+
+
+func test_f007_ac03_hazard_lasts_death_time() -> void:
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	assert_bool(_motor.is_death_finished()).is_false()
+	assert_float(_motor.get_state_timer()).is_equal(_config.death_time)
+	var seconds := _steps_until_death_finished() * DT
+	assert_float(seconds).is_equal_approx(_config.death_time, DT)
+
+
+func test_f007_ac03_void_lasts_void_restart_time() -> void:
+	_motor.die(PlayerMotor.DeathCause.VOID)
+	var seconds := _steps_until_death_finished() * DT
+	assert_float(seconds).is_equal_approx(_config.void_restart_time, DT)
+
+
+func test_f007_ac03_zero_time_finishes_on_first_step() -> void:
+	# void_restart_time en 0 queda como antes de F007: vuelve enseguida.
+	_config.void_restart_time = 0.0
+	_motor.die(PlayerMotor.DeathCause.VOID)
+	assert_int(_steps_until_death_finished()).is_less_equal(1)
+
+
+func test_f007_ac04_dying_again_keeps_remaining_time() -> void:
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	for i in 10:
+		_ground_step(NONE)
+	var remaining := _motor.get_state_timer()
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	assert_float(_motor.get_state_timer()).is_equal(remaining)
+	_motor.die(PlayerMotor.DeathCause.VOID)
+	assert_float(_motor.get_state_timer()).is_equal(remaining)

@@ -1,4 +1,4 @@
-# Tests de LevelProgress (F006-AC01, AC02 y AC05).
+# Tests de LevelProgress (F006-AC01, AC02 y AC05; F007-AC06).
 extends GdUnitTestSuite
 
 
@@ -47,11 +47,38 @@ func test_f006_ac02_list_edges() -> void:
 
 
 func test_f006_ac05_change_keeps_motion() -> void:
-	# Pasar a otra sala conserva el movimiento; el vacío lo devuelve quieto a la
-	# entrada de la sala actual; sin borde no hay cambio.
+	# Pasar a otra sala conserva el movimiento; sin borde no hay cambio. El vacío
+	# tampoco cambia de sala por sí solo: mata, y al terminar la muerte se vuelve con
+	# checkpoint() (F007).
 	var progress := LevelProgress.new(3)
 	progress.index = 1
-	_assert_change(progress, LevelProgress.Outcome.VOID, 1, LevelProgress.Arrival.ENTRANCE, false)
+	assert_object(progress.apply(LevelProgress.Outcome.VOID)).is_null()
+	assert_int(progress.index).is_equal(1)
 	assert_object(progress.apply(LevelProgress.Outcome.NONE)).is_null()
 	assert_int(progress.index).is_equal(1)
 	_assert_change(progress, LevelProgress.Outcome.NEXT, 2, LevelProgress.Arrival.ENTRANCE, true)
+
+
+# Comprueba que el checkpoint es la entrada de esa sala, sin movimiento.
+func _assert_checkpoint(progress: LevelProgress, room: int) -> void:
+	var change := progress.checkpoint()
+	assert_int(change.room_index).is_equal(room)
+	assert_int(change.arrival).is_equal(LevelProgress.Arrival.ENTRANCE)
+	assert_bool(change.keep_motion).is_false()
+	assert_int(progress.index).is_equal(room)
+
+
+func test_f007_ac06_checkpoint_is_current_room_entrance() -> void:
+	var progress := LevelProgress.new(3)
+	_assert_checkpoint(progress, 0)
+	progress.apply(LevelProgress.Outcome.NEXT)
+	_assert_checkpoint(progress, 1)
+
+
+func test_f007_ac06_checkpoint_after_coming_back() -> void:
+	# Volvió desde la siguiente: llegó por la salida, pero reaparece en la entrada.
+	var progress := LevelProgress.new(3)
+	progress.apply(LevelProgress.Outcome.NEXT)
+	progress.apply(LevelProgress.Outcome.NEXT)
+	progress.apply(LevelProgress.Outcome.PREVIOUS)
+	_assert_checkpoint(progress, 1)

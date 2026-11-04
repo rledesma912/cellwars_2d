@@ -5,7 +5,8 @@
 ## de game/art/elyon/elyon_frames.tres.
 ##
 ## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación,
-## la recuperación y rodar duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.
+## la recuperación, rodar y morir duran lo que dice el .tres, tenga el dibujo los
+## cuadros que tenga.
 class_name PlayerAnimation
 extends RefCounted
 
@@ -38,6 +39,8 @@ static func pick(
 			return &"aterrizar"
 		PlayerMotor.State.ROLL:
 			return &"rodar"
+		PlayerMotor.State.DEAD:
+			return &"morir"
 		_:
 			return &"quieto"
 
@@ -53,6 +56,8 @@ static func duration_for(animation: StringName, config: PlayerMovementConfig) ->
 			return config.land_recovery_time
 		&"rodar":
 			return config.roll_time
+		&"morir":
+			return config.death_time
 		_:
 			return 0.0
 

@@ -9,6 +9,9 @@
 class_name Player
 extends CharacterBody2D
 
+## Terminó el tiempo de la muerte: ya se puede volver a la entrada de la sala.
+signal death_finished
+
 ## Nombres del estado del motor para el overlay de debug.
 const STATE_NAMES := {
 	PlayerMotor.State.IDLE: "quieto",
@@ -19,6 +22,7 @@ const STATE_NAMES := {
 	PlayerMotor.State.AIR: "en el aire",
 	PlayerMotor.State.LAND: "recuperarse",
 	PlayerMotor.State.ROLL: "rodar",
+	PlayerMotor.State.DEAD: "morir",
 }
 
 ## Parámetros del movimiento. La escena usa game/data/player_movement.tres.
@@ -56,6 +60,9 @@ func _physics_process(delta: float) -> void:
 	# is_on_floor() para el próximo paso.
 	move_and_slide()
 	_animate(input.direction)
+	# Se emite una sola vez: quien la recibe llama a reset_to y deja de estar muerto.
+	if _motor.is_death_finished():
+		death_finished.emit()
 
 
 ## Lo pone quieto en un punto (por ejemplo, el inicio de la sala).
@@ -64,6 +71,15 @@ func reset_to(feet_position: Vector2) -> void:
 	velocity = Vector2.ZERO
 	_motor.reset()
 	_animate(0.0)
+
+
+## Lo mata. Morir estando ya muerto no cambia nada.
+func die(cause: PlayerMotor.DeathCause) -> void:
+	_motor.die(cause)
+
+
+func is_dead() -> bool:
+	return _motor.is_dead()
 
 
 ## Rectángulo que ocupa el personaje, en coordenadas de la sala.
@@ -95,8 +111,9 @@ func _animate(direction: float) -> void:
 	var blocked := PlayerAnimation.is_blocked(is_on_wall(), get_wall_normal().x, direction)
 	var anim := PlayerAnimation.pick(_motor.state, velocity, config.run_speed, blocked)
 	# Si ya está pasando esa animación, se deja seguir: reiniciarla en cada paso la
-	# congelaría en el primer cuadro.
-	if _sprite.animation == anim and _sprite.is_playing():
+	# congelaría en el primer cuadro. "morir" tampoco se reinicia al terminar: se queda
+	# en el último cuadro, Elyon en el piso, hasta volver a la entrada.
+	if _sprite.animation == anim and (_sprite.is_playing() or anim == &"morir"):
 		return
 	var frames := _sprite.sprite_frames
 	var speed := (

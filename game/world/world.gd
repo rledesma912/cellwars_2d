@@ -28,6 +28,7 @@ func _ready() -> void:
 	_progress = LevelProgress.new(level.rooms.size())
 	_show_room(0)
 	_player.reset_to(_room.entrance_position())
+	_player.death_finished.connect(_on_player_death_finished)
 	_debug_overlay.track(_player)
 	_debug_overlay.track(self)
 
@@ -35,15 +36,20 @@ func _ready() -> void:
 # El padre corre su _physics_process antes que sus hijos: acá se mira dónde quedó
 # Elyon en el paso anterior, antes de que se mueva en este.
 func _physics_process(_delta: float) -> void:
+	# Muerto no cruza nada: sigue en esta sala aunque el cuerpo salga de la pantalla.
+	if _player.is_dead():
+		return
 	var edge := RoomGeometry.crossed_edge(_player.get_bounds())
 	var outcome := RoomExits.resolve(edge, _room.entrance_side, _room.exit_side)
+	if outcome == LevelProgress.Outcome.VOID:
+		_player.die(PlayerMotor.DeathCause.VOID)
+		return
 	var change := _progress.apply(outcome)
 	if change == null:
 		return
 	if not change.keep_motion:
-		# Vacío o bordes de la lista: vuelve quieto a una entrada.
-		_show_room(change.room_index)
-		_player.reset_to(_room.entrance_position())
+		# Bordes de la lista: la salida de la última sala o la entrada de la primera.
+		_restart(change)
 		return
 	# Pasa a una sala vecina. Solo cambia la posición: velocidad, estado del motor y
 	# hacia dónde mira siguen igual, así un salto o una carrera siguen del otro lado.
@@ -81,6 +87,16 @@ func get_debug_info() -> Dictionary:
 		"sala": "%d / %d" % [_progress.index + 1, _progress.count],
 		"escala pixel art": "×%.2f" % pixel_scale,
 	}
+
+
+func _on_player_death_finished() -> void:
+	_restart(_progress.checkpoint())
+
+
+# Vuelve quieto a la entrada de la sala que dice el cambio.
+func _restart(change: LevelProgress.RoomChange) -> void:
+	_show_room(change.room_index)
+	_player.reset_to(_room.entrance_position())
 
 
 # Pone en pantalla la sala index y deja precargadas sus vecinas.

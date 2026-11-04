@@ -134,6 +134,42 @@ region = Rect2(4464, 0, 144, 144)
 atlas = ExtResource("1_sheet")
 region = Rect2(4608, 0, 144, 144)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_33"]
+atlas = ExtResource("1_sheet")
+region = Rect2(4752, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_34"]
+atlas = ExtResource("1_sheet")
+region = Rect2(4896, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_35"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5040, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_36"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5184, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5328, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5472, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_39"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5616, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_40"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5760, 0, 144, 144)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_41"]
+atlas = ExtResource("1_sheet")
+region = Rect2(5904, 0, 144, 144)
+
 [resource]
 animations = [{
 "frames": [{
@@ -284,4 +320,36 @@ animations = [{
 "loop": false,
 "name": &"rodar",
 "speed": 18.0
+}, {
+"frames": [{
+"duration": 0.391,
+"texture": SubResource("AtlasTexture_33")
+}, {
+"duration": 0.783,
+"texture": SubResource("AtlasTexture_34")
+}, {
+"duration": 0.391,
+"texture": SubResource("AtlasTexture_35")
+}, {
+"duration": 0.391,
+"texture": SubResource("AtlasTexture_36")
+}, {
+"duration": 0.894,
+"texture": SubResource("AtlasTexture_37")
+}, {
+"duration": 0.391,
+"texture": SubResource("AtlasTexture_38")
+}, {
+"duration": 0.335,
+"texture": SubResource("AtlasTexture_39")
+}, {
+"duration": 0.391,
+"texture": SubResource("AtlasTexture_40")
+}, {
+"duration": 5.033,
+"texture": SubResource("AtlasTexture_41")
+}],
+"loop": false,
+"name": &"morir",
+"speed": 5.59
 }]

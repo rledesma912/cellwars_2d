@@ -4,7 +4,7 @@ type: architecture
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [D0003, D0004], spike: }
-updated: 2026-10-30
+updated: 2026-11-04
 ---
 
 # Arquitectura
@@ -60,13 +60,14 @@ func _physics_process(delta: float) -> void:
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
 - Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y la raíz con el script `Room` (`game/world/room.gd`): dice de qué lado están la entrada y la salida (`entrance_side`, `exit_side`) y las marca con los `Marker2D` `Entrance` y `Exit`, un poco hacia adentro del borde. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados distintos; la salida nunca está arriba y la entrada nunca abajo.
 - Niveles (F006): un nivel es un `LevelData` (`.tres` en `game/levels/`) con la lista ordenada de salas. `World` tiene una sola sala en el árbol y deja la anterior y la siguiente instanciadas fuera de él. En cada paso de física, `RoomGeometry.crossed_edge` dice qué borde cruzó Elyon, `RoomExits.resolve` qué significa en esa sala y `LevelProgress` a qué sala va. El cambio es sacar un nodo y poner otro, y Elyon solo cambia de `position`, así conserva el movimiento. Cruzar por arriba nunca cuenta; abajo es la sala siguiente si la salida está abajo y, si no, el vacío.
+- Muerte (F007): el vacío y la zona mortal (`game/entities/mortal_zone/`, un `Area2D` que se coloca en la sala) llaman a `Player.die(causa)`, y la duración depende de la causa. Mientras está muerto, `World` ignora los bordes. Al terminar, `Player` emite `death_finished` y `World` vuelve a la entrada con `LevelProgress.checkpoint()`. `body_entered` avisa solo al entrar: ninguna entrada de sala puede quedar dentro de una zona.
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
 
-- **Movimiento híbrido**: un motor de lógica pura con estados (enum: quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse, rodar) decide qué acciones valen en cada momento. Arranque y frenado cortos, preparación corta del salto, salto variable, coyote time y jump buffer, control reducido en el aire sin darse vuelta, recuperación al caer de alto, o rodar si llega con velocidad hacia donde mira. Máquina de estados con enum y no con nodos: pocos estados con poca lógica de entrada/salida, y así sigue siendo testeable sin escenas.
+- **Movimiento híbrido**: un motor de lógica pura con estados (enum: quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse, rodar, morir) decide qué acciones valen en cada momento. Arranque y frenado cortos, preparación corta del salto, salto variable, coyote time y jump buffer, control reducido en el aire sin darse vuelta, recuperación al caer de alto, o rodar si llega con velocidad hacia donde mira. Máquina de estados con enum y no con nodos: pocos estados con poca lógica de entrada/salida, y así sigue siendo testeable sin escenas.
 - **Tamaño** (D0005): el soldado mide 77 px de alto visible (cuerpo de colisión 34 × 82), corre a 215 px/s y salta unos 114 px (D0004). Cuerpo + salto entran en los 220 px de aire de un piso en una sala de 3 pisos. Las salas usan escalones de hasta 4 baldosas. Los valores del movimiento son los de D0003 con distancias y velocidades × 2,2 y los mismos tiempos.
-- **El motor manda los tiempos y la animación se adapta**: cada tiempo de acción (preparación, giro, recuperación) vive en el `.tres` del movimiento, y la animación correspondiente se estira o acorta para durarlo.
+- **El motor manda los tiempos y la animación se adapta**: cada tiempo de acción (preparación, giro, recuperación, muerte) vive en el `.tres` del movimiento, y la animación correspondiente se estira o acorta para durarlo.
 - **Animación**: `AnimatedSprite2D` cuya animación elige el estado del motor; dentro de correr también influyen la velocidad y el bloqueo contra una pared, sin estados aparte. Cuadros de 144 × 144 px, pies abajo al centro (72, 143), mirando a la derecha; la izquierda se obtiene espejando. Toda acción nueva sigue la misma filosofía (anticipación y recuperación cortas) y su sensación se prueba en su propia feature.
 - Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
 

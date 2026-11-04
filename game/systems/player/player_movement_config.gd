@@ -52,6 +52,12 @@ extends Resource
 ## Si se aprieta salto este tiempo antes de tocar el piso, salta igual al tocarlo.
 @export_range(0.0, 0.3, 0.01, "suffix:s") var jump_buffer_time: float = 0.1
 
+@export_group("Muerte")
+## Cuánto dura morir al tocar una zona mortal, hasta volver a la entrada de la sala.
+@export_range(0.5, 3.0, 0.01, "suffix:s") var death_time: float = 1.6
+## Espera al caer al vacío, con Elyon ya fuera de la pantalla. 0 = vuelve enseguida.
+@export_range(0.0, 1.5, 0.01, "suffix:s") var void_restart_time: float = 0.4
+
 # La gravedad y las velocidades no se ajustan a mano: salen de alturas y tiempos,
 # que son más fáciles de pensar ("salta 114 px en 0,36 s").
 # Son las fórmulas del tiro vertical: h = v·t / 2, v = g·t y v² = 2·g·h.
