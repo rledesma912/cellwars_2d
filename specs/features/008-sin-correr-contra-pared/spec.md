@@ -1,7 +1,7 @@
 ---
 id: F008
 type: feature
-status: draft
+status: in-progress
 superseded_by:
 links: { gdd: [], decisions: [D0003], spike: }
 updated: 2026-11-03
@@ -47,3 +47,13 @@ Ninguno.
 ## Preguntas abiertas
 
 Ninguna.
+
+## Plan y tasks
+
+`PlayerAnimation` (lógica pura) decide y `Player` (nodo fino) le pasa lo que Godot sabe de la pared. No se agrega un estado al motor: contra la pared valen las mismas acciones que al correr, solo cambia lo que se ve.
+
+- `PlayerAnimation.is_blocked(on_wall, wall_normal_x, direction)`: hay bloqueo si toca una pared y se aprieta hacia ella.
+- `PlayerAnimation.pick(...)` recibe `blocked` y, en correr, devuelve `quieto`.
+- `Player` calcula `blocked` después de `move_and_slide()`, porque `is_on_wall()` se actualiza ahí.
+
+- [x] T1: regla de animación y uso en `Player`, con sus tests (F008-AC01, F008-AC02, F008-AC03).

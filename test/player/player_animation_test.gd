@@ -1,12 +1,12 @@
-# Tests de PlayerAnimation (F004-AC18, AC19).
+# Tests de PlayerAnimation (F004-AC18, AC19; F008-AC01 a AC03).
 extends GdUnitTestSuite
 
 const S := PlayerMotor.State
 const RUN_SPEED := 100.0
 
 
-func _pick(state: PlayerMotor.State, velocity: Vector2) -> StringName:
-	return PlayerAnimation.pick(state, velocity, RUN_SPEED)
+func _pick(state: PlayerMotor.State, velocity: Vector2, blocked := false) -> StringName:
+	return PlayerAnimation.pick(state, velocity, RUN_SPEED, blocked)
 
 
 func test_f004_ac18_animation_for_each_state() -> void:
@@ -44,3 +44,38 @@ func test_f004_ac19_timed_animations_use_config_times() -> void:
 	)
 	# Las demás se reproducen a su velocidad natural.
 	assert_float(PlayerAnimation.duration_for("correr", config)).is_equal(0.0)
+
+
+func test_f008_ac01_blocked_run_shows_idle_at_any_speed() -> void:
+	assert_str(_pick(S.RUN, Vector2.ZERO, true)).is_equal("quieto")
+	assert_str(_pick(S.RUN, Vector2(69.0, 0.0), true)).is_equal("quieto")
+	assert_str(_pick(S.RUN, Vector2(-100.0, 0.0), true)).is_equal("quieto")
+
+
+func test_f008_ac01_blocked_only_when_pressing_toward_the_wall() -> void:
+	# La normal de la pared apunta hacia afuera: una pared a la derecha tiene normal X −1.
+	assert_bool(PlayerAnimation.is_blocked(true, -1.0, 1.0)).is_true()
+	assert_bool(PlayerAnimation.is_blocked(true, 1.0, -1.0)).is_true()
+	# Stick a medias: cuenta igual que la tecla.
+	assert_bool(PlayerAnimation.is_blocked(true, -1.0, 0.3)).is_true()
+	# Pared del lado contrario a la dirección apretada, o sin dirección: no bloquea.
+	assert_bool(PlayerAnimation.is_blocked(true, -1.0, -1.0)).is_false()
+	assert_bool(PlayerAnimation.is_blocked(true, -1.0, 0.0)).is_false()
+	# Sin pared: no bloquea.
+	assert_bool(PlayerAnimation.is_blocked(false, 0.0, 1.0)).is_false()
+
+
+func test_f008_ac02_unblocked_run_keeps_speed_rule() -> void:
+	assert_str(_pick(S.RUN, Vector2(69.0, 0.0), false)).is_equal("arrancar")
+	assert_str(_pick(S.RUN, Vector2(70.0, 0.0), false)).is_equal("correr")
+	assert_str(_pick(S.RUN, Vector2(-69.0, 0.0), false)).is_equal("arrancar")
+	assert_str(_pick(S.RUN, Vector2(-100.0, 0.0), false)).is_equal("correr")
+
+
+func test_f008_ac03_blocked_only_changes_run() -> void:
+	assert_str(_pick(S.BRAKE, Vector2(50.0, 0.0), true)).is_equal("frenar")
+	assert_str(_pick(S.TURN, Vector2.ZERO, true)).is_equal("girar")
+	assert_str(_pick(S.JUMP_PREP, Vector2(80.0, 0.0), true)).is_equal("preparar")
+	assert_str(_pick(S.AIR, Vector2(0.0, -10.0), true)).is_equal("subir")
+	assert_str(_pick(S.AIR, Vector2(0.0, 10.0), true)).is_equal("caer")
+	assert_str(_pick(S.LAND, Vector2.ZERO, true)).is_equal("aterrizar")
