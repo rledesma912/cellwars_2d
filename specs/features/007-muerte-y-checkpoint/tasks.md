@@ -10,7 +10,7 @@ updated: 2026-11-04
 # Tasks: feature 007
 
 - [x] T1 Config "Muerte" y estado `DEAD` del motor, con sus tests (cubre: F007-AC01, F007-AC02, F007-AC03, F007-AC04)
-- [ ] T2 `LevelProgress.checkpoint()` y `apply(VOID)` sin reinicio, con sus tests (cubre: F007-AC06)
+- [x] T2 `LevelProgress.checkpoint()` y `apply(VOID)` sin reinicio, con sus tests (cubre: F007-AC06)
 - [ ] T3 Arte `morir` en `elyon.png` y `elyon_frames.tres`, regla en `PlayerAnimation`, con sus tests (cubre: F007-AC05)
 - [ ] T4 `Player`: `die`, `is_dead`, señal `death_finished`, último cuadro de `morir`, nombre en el overlay (cubre: F007-AC07, F007-AC08)
 - [ ] T5 Escena `MortalZone` (cubre: F007-AC07, F007-AC14)

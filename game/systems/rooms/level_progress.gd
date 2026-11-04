@@ -33,7 +33,7 @@ func _init(p_count: int) -> void:
 	count = p_count
 
 
-## Aplica lo que pasó en el borde y devuelve el cambio, o null si no cambia nada.
+## Aplica lo que pasó en el borde y devuelve el cambio, o null si no cambia de sala.
 func apply(outcome: Outcome) -> RoomChange:
 	match outcome:
 		Outcome.NEXT:
@@ -48,9 +48,13 @@ func apply(outcome: Outcome) -> RoomChange:
 				return RoomChange.new(index, Arrival.EXIT, true)
 			# Entrada de la sala 1: no hay sala anterior.
 			return _restart_at(0)
-		Outcome.VOID:
-			return _restart_at(index)
+	# El vacío no cambia de sala acá: mata, y al terminar la muerte vuelve con checkpoint().
 	return null
+
+
+## Adónde vuelve después de morir: la entrada de la sala actual, quieto.
+func checkpoint() -> RoomChange:
+	return _restart_at(index)
 
 
 # Vuelve quieto a la entrada de una sala.
