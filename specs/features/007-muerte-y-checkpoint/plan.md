@@ -63,7 +63,7 @@ TestRoomN (Node2D, room.gd)
 | 2 | Colgando sobre la salida de abajo, columnas 50–55, filas 28–29 | 6 × 2 | AC08 y AC10: se camina al hueco por debajo; si se salta hasta tocarla, muere en el aire y cruza la salida muerto |
 | 3 | Sobre el piso del medio, columnas 36–39 | 4 × 1 | AC07: se salta por encima |
 
-Quedan lejos de todas las entradas y salidas. En la sala 2, la parte de abajo de la zona está 120 px sobre el piso y el cuerpo mide 82 px: pasa caminando sin tocarla. Las medidas se confirman jugando (AC12).
+Todas quedan lejos de las entradas. Las de las salas 1 y 3 también quedan lejos de las salidas; la de la sala 2 está sobre la salida a propósito. Su parte de abajo está 100 px sobre el nivel del piso y el cuerpo mide 82 px, así que Elyon pasa por debajo sin tocarla, también si aparece en la marca `Exit`. Las medidas se confirman jugando (AC12).
 
 ## Señales
 
