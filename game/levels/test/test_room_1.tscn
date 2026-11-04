@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://game/world/room.gd" id="1_room"]
 [ext_resource type="Material" path="res://game/art/shaders/sharp_pixel.tres" id="1_72p6n"]
 [ext_resource type="TileSet" uid="uid://whs3ikxhh8j0" path="res://game/levels/tilesets/greybox.tres" id="1_ec84p"]
+[ext_resource type="PackedScene" path="res://game/entities/mortal_zone/mortal_zone.tscn" id="9_zone"]
 
 [node name="TestRoom1" type="Node2D" unique_id=189880268]
 script = ExtResource("1_room")
@@ -24,3 +25,7 @@ position = Vector2(30, 700)
 
 [node name="Exit" type="Marker2D" parent="." unique_id=1526043130]
 position = Vector2(1250, 220)
+
+[node name="MortalZone" parent="." instance=ExtResource("9_zone")]
+position = Vector2(280, 680)
+size = Vector2(80, 20)
