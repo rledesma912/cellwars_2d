@@ -16,6 +16,8 @@
 
 - Sala de prueba greybox de 3 pisos con escaleras, precipicio, entrada y salida. Panel de debug con F3. [F003](features/003-personaje-simple/spec.md)
 - Elyon, el soldado (99 px, animado con imágenes provisorias), corre y frena con peso, se da vuelta, se prepara antes de saltar, tiene salto variable, coyote time y jump buffer, corrige poco en el aire sin darse vuelta y se recupera al caer de más de un piso. Todo ajustable en `player_movement.tres`. [F004](features/004-movimiento-del-soldado/spec.md)
+- Contra una pared, Elyon se ve quieto en lugar de intentar correr, y puede saltar o darse vuelta como siempre. [F008](features/008-sin-correr-contra-pared/spec.md)
+- Animaciones nuevas de Elyon a 77 px, carrera a 215 px/s, y al caer de alto con velocidad rueda sin frenar. [F009](features/009-animaciones-elyon/spec.md)
 
 ## Niveles
 

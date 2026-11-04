@@ -10,7 +10,7 @@
 class_name PlayerMotor
 extends RefCounted
 
-enum State { IDLE, RUN, BRAKE, TURN, JUMP_PREP, AIR, LAND }
+enum State { IDLE, RUN, BRAKE, TURN, JUMP_PREP, AIR, LAND, ROLL }
 
 ## Estado actual. Solo lectura desde afuera.
 var state: State = State.IDLE
@@ -18,7 +18,7 @@ var state: State = State.IDLE
 var facing: int = 1
 
 var _config: PlayerMovementConfig
-# Tiempo restante del estado actual (giro, preparación o recuperación).
+# Tiempo restante del estado actual (giro, preparación, recuperación o rodar).
 var _state_timer: float = 0.0
 # Tiempo que queda para saltar después de pisar el vacío (coyote time).
 var _coyote: float = 0.0
@@ -46,7 +46,7 @@ func reset() -> void:
 	_fall_distance = 0.0
 
 
-## Segundos que le quedan al giro, la preparación o la recuperación.
+## Segundos que le quedan al giro, la preparación, la recuperación o rodar.
 func get_state_timer() -> float:
 	return _state_timer
 
@@ -72,7 +72,7 @@ func step(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float) -
 	if on_floor:
 		_coyote = _config.coyote_time
 		if state == State.AIR:
-			_land()
+			_land(velocity)
 	elif state != State.AIR:
 		# Se fue del piso sin saltar (caminó al vacío, o el impulso lo sacó del borde
 		# durante la preparación): cae sin saltar. El coyote time sigue corriendo.
@@ -87,6 +87,8 @@ func step(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float) -
 			return _prep(velocity, input, delta)
 		State.LAND:
 			return _recover(velocity, delta)
+		State.ROLL:
+			return _roll(velocity, delta)
 		_:
 			return _air(velocity, input, wants_jump, delta)
 
@@ -167,6 +169,16 @@ func _recover(v: Vector2, delta: float) -> Vector2:
 	return v
 
 
+func _roll(v: Vector2, delta: float) -> Vector2:
+	# Sin control, como la recuperación, pero conserva la velocidad en vez de frenar.
+	v.y = 0.0
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_state_timer = 0.0
+		state = State.IDLE
+	return v
+
+
 func _air(v: Vector2, input: PlayerInput, wants_jump: bool, delta: float) -> Vector2:
 	# Coyote time: pisó el vacío hace un instante, todavía puede saltar (sin preparación).
 	if wants_jump and _coyote > 0.0 and not _jumping:
@@ -216,11 +228,23 @@ func _enter_air(jumped: bool) -> void:
 	_fall_distance = 0.0
 
 
-func _land() -> void:
+func _land(v: Vector2) -> void:
 	_jumping = false
-	if _config.land_recovery_time > 0.0 and _fall_distance >= _config.hard_landing_height:
-		# El timer arranca entero: _recover lo descuenta en este mismo paso.
+	if _fall_distance < _config.hard_landing_height:
+		state = State.IDLE
+	elif _can_roll(v):
+		# Los timers arrancan enteros: _roll y _recover los descuentan en este mismo paso.
+		state = State.ROLL
+		_state_timer = _config.roll_time
+	elif _config.land_recovery_time > 0.0:
 		state = State.LAND
 		_state_timer = _config.land_recovery_time
 	else:
 		state = State.IDLE
+
+
+# Rueda si llega con velocidad suficiente y hacia donde mira.
+func _can_roll(v: Vector2) -> bool:
+	if _config.roll_time <= 0.0 or int(signf(v.x)) != facing:
+		return false
+	return absf(v.x) >= _config.roll_min_speed_fraction * _config.run_speed

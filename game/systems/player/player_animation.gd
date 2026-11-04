@@ -2,10 +2,10 @@
 ##
 ## Lógica pura: el nodo Player le pasa el estado del motor y la velocidad, y reproduce
 ## lo que esto devuelve en su AnimatedSprite2D. Los nombres son los de las animaciones
-## de game/art/elyon/elyon_99_frames.tres.
+## de game/art/elyon/elyon_frames.tres.
 ##
-## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación
-## y la recuperación duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.
+## Regla "el motor manda los tiempos y la animación se adapta": el giro, la preparación,
+## la recuperación y rodar duran lo que dice el .tres, tenga el dibujo los cuadros que tenga.
 class_name PlayerAnimation
 extends RefCounted
 
@@ -13,10 +13,15 @@ extends RefCounted
 const FULL_RUN_FRACTION := 0.7
 
 
-## Animación para el estado del motor y la velocidad actual.
-static func pick(state: PlayerMotor.State, velocity: Vector2, run_speed: float) -> StringName:
+## Animación para el estado del motor y la velocidad actual. "blocked" es el resultado
+## de is_blocked: contra una pared, correr se ve quieto (el motor no se entera).
+static func pick(
+	state: PlayerMotor.State, velocity: Vector2, run_speed: float, blocked: bool
+) -> StringName:
 	match state:
 		PlayerMotor.State.RUN:
+			if blocked:
+				return &"quieto"
 			if absf(velocity.x) < run_speed * FULL_RUN_FRACTION:
 				return &"arrancar"
 			return &"correr"
@@ -31,6 +36,8 @@ static func pick(state: PlayerMotor.State, velocity: Vector2, run_speed: float) 
 			return &"subir" if velocity.y < 0.0 else &"caer"
 		PlayerMotor.State.LAND:
 			return &"aterrizar"
+		PlayerMotor.State.ROLL:
+			return &"rodar"
 		_:
 			return &"quieto"
 
@@ -44,8 +51,16 @@ static func duration_for(animation: StringName, config: PlayerMovementConfig) ->
 			return config.jump_prep_time
 		&"aterrizar":
 			return config.land_recovery_time
+		&"rodar":
+			return config.roll_time
 		_:
 			return 0.0
+
+
+## true si toca una pared y la dirección apretada apunta hacia ella. La normal de una
+## pared apunta hacia afuera: dirección y normal de signo contrario es "hacia la pared".
+static func is_blocked(on_wall: bool, wall_normal_x: float, direction: float) -> bool:
+	return on_wall and direction * wall_normal_x < 0.0
 
 
 ## Velocidad de reproducción para que "frame_count" cuadros a "fps" duren "duration" s.

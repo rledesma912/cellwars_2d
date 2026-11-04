@@ -41,6 +41,10 @@ extends Resource
 @export_range(0.0, 400.0, 1.0, "suffix:px") var hard_landing_height: float = 220.0
 ## Tiempo sin control al aterrizar de alto. 0 = sin recuperación.
 @export_range(0.0, 1.0, 0.01, "suffix:s") var land_recovery_time: float = 0.15
+## Velocidad mínima para rodar al aterrizar de alto, como fracción de run_speed.
+@export_range(0.0, 1.0, 0.01) var roll_min_speed_fraction: float = 0.3
+## Duración de rodar, sin control y conservando la velocidad. 0 = nunca rueda.
+@export_range(0.0, 1.0, 0.01, "suffix:s") var roll_time: float = 0.38
 
 @export_group("Ayudas")
 ## Tiempo para poder saltar después de pisar el vacío.

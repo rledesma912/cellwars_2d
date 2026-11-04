@@ -64,10 +64,10 @@ func _physics_process(delta: float) -> void:
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
 
-- **Movimiento híbrido**: un motor de lógica pura con estados (enum: quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse) decide qué acciones valen en cada momento. Arranque y frenado cortos, preparación corta del salto, salto variable, coyote time y jump buffer, control reducido en el aire sin darse vuelta, recuperación al caer de alto. Máquina de estados con enum y no con nodos: pocos estados con poca lógica de entrada/salida, y así sigue siendo testeable sin escenas.
+- **Movimiento híbrido**: un motor de lógica pura con estados (enum: quieto, correr, frenar, girar, preparar salto, en el aire, recuperarse, rodar) decide qué acciones valen en cada momento. Arranque y frenado cortos, preparación corta del salto, salto variable, coyote time y jump buffer, control reducido en el aire sin darse vuelta, recuperación al caer de alto, o rodar si llega con velocidad hacia donde mira. Máquina de estados con enum y no con nodos: pocos estados con poca lógica de entrada/salida, y así sigue siendo testeable sin escenas.
 - **Tamaño** (D0005): el soldado mide 77 px de alto visible (cuerpo de colisión 34 × 82), corre a 215 px/s y salta unos 114 px (D0004). Cuerpo + salto entran en los 220 px de aire de un piso en una sala de 3 pisos. Las salas usan escalones de hasta 4 baldosas. Los valores del movimiento son los de D0003 con distancias y velocidades × 2,2 y los mismos tiempos.
 - **El motor manda los tiempos y la animación se adapta**: cada tiempo de acción (preparación, giro, recuperación) vive en el `.tres` del movimiento, y la animación correspondiente se estira o acorta para durarlo.
-- **Animación**: `AnimatedSprite2D` cuya animación elige el estado del motor. Cuadros de 144 × 144 px, pies abajo al centro (72, 143), mirando a la derecha; la izquierda se obtiene espejando. Toda acción nueva sigue la misma filosofía (anticipación y recuperación cortas) y su sensación se prueba en su propia feature.
+- **Animación**: `AnimatedSprite2D` cuya animación elige el estado del motor; dentro de correr también influyen la velocidad y el bloqueo contra una pared, sin estados aparte. Cuadros de 144 × 144 px, pies abajo al centro (72, 143), mirando a la derecha; la izquierda se obtiene espejando. Toda acción nueva sigue la misma filosofía (anticipación y recuperación cortas) y su sensación se prueba en su propia feature.
 - Pausa: `get_tree().paused`. `Main` corre en `PROCESS_MODE_ALWAYS`; `World` declara `PROCESS_MODE_PAUSABLE` explícitamente (si no, heredaría `ALWAYS`).
 
 ## Textos e idiomas
@@ -97,7 +97,7 @@ D0004, aplicada en la F005.
 | Stretch | `canvas_items`, aspect `keep`, scale `fractional` | Vigente (D0004) |
 | Suavizado del pixel art | *sharp bilinear* por sprite y baldosa (ver abajo) | Vigente (D0004) |
 | `snap_2d_transforms_to_pixel` | `false`: el movimiento suave entre píxeles es parte del look | Vigente (D0004) |
-| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 por piso | Vigente (D0004) |
+| Tile | 20 px; una sala = una pantalla = 64 × 36 tiles, 12 filas por piso: 1 de baldosa y 11 de aire. Pisos y paredes de borde tienen 1 baldosa de grosor | Vigente (D0004) |
 | Escala del tema de la interfaz | `gui/theme/default_theme_scale = 2` | Vigente: la interfaz se diseña al doble que a 640×360 |
 | Display driver Linux | Wayland (`display_server/driver.linuxbsd`) | Vigente: el entorno del agente no tiene X11 |
 

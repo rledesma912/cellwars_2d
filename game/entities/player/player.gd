@@ -1,4 +1,4 @@
-## El protagonista: Elyon, el soldado (99 px, imágenes provisorias; D0004).
+## El protagonista: Elyon, el soldado (77 px; D0005).
 ##
 ## Nodo fino: lee las teclas, le pide a PlayerMotor la velocidad nueva y se mueve.
 ## Las reglas (cuánto corre, cómo cae, cuándo puede saltar) están en PlayerMotor, y
@@ -18,6 +18,7 @@ const STATE_NAMES := {
 	PlayerMotor.State.JUMP_PREP: "preparar salto",
 	PlayerMotor.State.AIR: "en el aire",
 	PlayerMotor.State.LAND: "recuperarse",
+	PlayerMotor.State.ROLL: "rodar",
 }
 
 ## Parámetros del movimiento. La escena usa game/data/player_movement.tres.
@@ -54,7 +55,7 @@ func _physics_process(delta: float) -> void:
 	# move_and_slide() mueve según velocity, frena contra paredes y pisos y actualiza
 	# is_on_floor() para el próximo paso.
 	move_and_slide()
-	_animate()
+	_animate(input.direction)
 
 
 ## Lo pone quieto en un punto (por ejemplo, el inicio de la sala).
@@ -62,7 +63,7 @@ func reset_to(feet_position: Vector2) -> void:
 	position = feet_position
 	velocity = Vector2.ZERO
 	_motor.reset()
-	_animate()
+	_animate(0.0)
 
 
 ## Rectángulo que ocupa el personaje, en coordenadas de la sala.
@@ -85,10 +86,14 @@ func get_debug_info() -> Dictionary:
 	}
 
 
-func _animate() -> void:
+func _animate(direction: float) -> void:
 	# Los cuadros miran a la derecha; flip_h los espeja para mirar a la izquierda.
 	_sprite.flip_h = _motor.facing < 0
-	var anim := PlayerAnimation.pick(_motor.state, velocity, config.run_speed)
+	# is_on_wall() vale lo que midió el último move_and_slide(), y solo da true si el
+	# cuerpo intentó moverse contra la pared. Por eso el motor sigue acelerando contra
+	# ella: si lo frenáramos, en el paso siguiente no la detectaría y la animación alternaría.
+	var blocked := PlayerAnimation.is_blocked(is_on_wall(), get_wall_normal().x, direction)
+	var anim := PlayerAnimation.pick(_motor.state, velocity, config.run_speed, blocked)
 	# Si ya está pasando esa animación, se deja seguir: reiniciarla en cada paso la
 	# congelaría en el primer cuadro.
 	if _sprite.animation == anim and _sprite.is_playing():
