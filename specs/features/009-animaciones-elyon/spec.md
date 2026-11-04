@@ -1,7 +1,7 @@
 ---
 id: F009
 type: feature
-status: approved
+status: in-progress
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0004, D0005], spike: }
 updated: 2026-11-03
