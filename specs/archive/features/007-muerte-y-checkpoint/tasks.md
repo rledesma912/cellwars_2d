@@ -16,6 +16,6 @@ updated: 2026-11-04
 - [x] T5 Escena `MortalZone` (cubre: F007-AC07, F007-AC14)
 - [x] T6 `World`: el vacío mata, ignora bordes mientras está muerto, vuelve al checkpoint (cubre: F007-AC09, F007-AC10, F007-AC11)
 - [x] T7 Zonas en las tres salas de prueba (cubre: F007-AC12)
-- [ ] T8 Smoke run, copia de prueba y playtest (cubre: F007-AC07, F007-AC08, F007-AC09, F007-AC10, F007-AC11, F007-AC12, F007-AC13, F007-AC14)
+- [x] T8 Smoke run, copia de prueba y playtest (cubre: F007-AC07, F007-AC08, F007-AC09, F007-AC10, F007-AC11, F007-AC12, F007-AC13, F007-AC14)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f007_ac04_dying_again_keeps_remaining_time`.
