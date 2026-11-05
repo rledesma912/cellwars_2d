@@ -11,7 +11,7 @@ updated: 2026-11-04
 
 - [x] T1 `LevelProgress.finishes_level()`, y `apply()` deja de volver a la sala 1 desde la última salida (cubre: F011-AC01, F011-AC02)
 - [x] T2 Estado "nivel completado" en `ScreenFlow` (cubre: F011-AC03, F011-AC04)
-- [ ] T3 Cartel `LevelCompleteMenu` con sus textos, señal de `World` y conexión en `Main` (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08)
+- [x] T3 Cartel `LevelCompleteMenu` con sus textos, señal de `World` y conexión en `Main` (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08)
 - [ ] T4 Marca de la salida en la sala 3 (cubre: F011-AC09)
 - [ ] T5 Playtest entrando por el menú principal (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08, F011-AC09)
 

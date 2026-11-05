@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://by3tsttxjrveq" path="res://game/main.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://c0kbrrwj2f4t8" path="res://game/ui/pause_menu/pause_menu.tscn" id="2_pause"]
+[ext_resource type="PackedScene" path="res://game/ui/level_complete_menu/level_complete_menu.tscn" id="3_level_complete"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_script")
@@ -10,5 +11,9 @@ script = ExtResource("1_script")
 unique_name_in_owner = true
 
 [node name="PauseMenu" parent="." instance=ExtResource("2_pause")]
+unique_name_in_owner = true
+visible = false
+
+[node name="LevelCompleteMenu" parent="." instance=ExtResource("3_level_complete")]
 unique_name_in_owner = true
 visible = false

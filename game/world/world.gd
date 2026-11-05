@@ -6,6 +6,9 @@
 class_name World
 extends Node2D
 
+## Cruzó la salida de la última sala: llegó al refugio.
+signal level_completed
+
 ## El nivel que se juega: la lista ordenada de salas.
 @export var level: LevelData
 
@@ -46,11 +49,14 @@ func _physics_process(_delta: float) -> void:
 	if outcome == LevelProgress.Outcome.VOID:
 		_player.die(PlayerMotor.DeathCause.VOID)
 		return
+	if _progress.finishes_level(outcome):
+		level_completed.emit()
+		return
 	var change := _progress.apply(outcome, edge == RoomGeometry.Edge.BOTTOM)
 	if change == null:
 		return
 	if not change.keep_motion:
-		# Bordes de la lista: la salida de la última sala o la entrada de la primera.
+		# Borde de la lista: la entrada de la primera sala.
 		_restart(change)
 		return
 	# Pasa a una sala vecina. Solo cambia la posición: velocidad, estado del motor y

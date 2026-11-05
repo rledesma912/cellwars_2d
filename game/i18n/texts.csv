@@ -10,3 +10,5 @@ OPTIONS_FULLSCREEN,Pantalla completa,Fullscreen
 OPTIONS_VOLUME,Volumen,Volume
 OPTIONS_LANGUAGE,Idioma,Language
 OPTIONS_BACK,Volver,Back
+LEVEL_COMPLETE_TITLE,Refugio alcanzado,Refuge reached
+LEVEL_COMPLETE_TO_MENU,Volver al menú,Back to menu
