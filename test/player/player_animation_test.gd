@@ -108,7 +108,7 @@ func test_f009_ac06_frames_have_every_animation() -> void:
 				for i in frames.get_frame_count(anim):
 					var size := frames.get_frame_texture(anim, i).get_size()
 					assert_vector(size).is_equal(Vector2(144.0, 144.0))
-	assert_int(frames.get_animation_names().size()).is_equal(11)
+	assert_int(frames.get_animation_names().size()).is_equal(13)
 
 
 func test_f007_ac05_dead_shows_morir() -> void:
@@ -137,3 +137,17 @@ func test_f007_ac05_morir_durations_sum_frame_count() -> void:
 	for i in count:
 		total += frames.get_frame_duration(&"morir", i)
 	assert_float(total).is_equal_approx(count, 0.001)
+
+
+func test_f010_ac09_frames_have_new_animations() -> void:
+	var frames := _frames()
+	var counts := {&"caer_largo": 2, &"morir_caida": 4}
+	for anim: StringName in counts:
+		assert_bool(frames.has_animation(anim)).is_true()
+		assert_int(frames.get_frame_count(anim)).is_equal(counts[anim])
+		for i in frames.get_frame_count(anim):
+			var size := frames.get_frame_texture(anim, i).get_size()
+			assert_vector(size).is_equal(Vector2(144.0, 144.0))
+	# caer_largo se repite, como caer: Player reinicia lo que no repite.
+	assert_bool(frames.get_animation_loop(&"caer_largo")).is_true()
+	assert_bool(frames.get_animation_loop(&"morir_caida")).is_false()
