@@ -34,7 +34,7 @@ En `specs/features/NNN-<nombre>/spec.md`:
 - `specs/INDEX.md`: línea de la feature bajo su categoría, con enlace a la spec; quitala de "En curso".
 - `specs/gdd/`: reflejá el comportamiento real si difiere de lo diseñado (proponé el cambio; el GDD lo aprueba el desarrollador en el PR).
 - `specs/backlog.md`: quitá lo hecho; agregá lo que surgió.
-- `specs/architecture.md`: si se estableció algo transversal.
+- `specs/architecture.md`: si se estableció algo transversal. Si cambiaron escenas, scripts de `game/systems/` o señales, actualizá también su "Mapa del código".
 - Lo descartado durante la feature: una línea en `specs/discarded.md` y fuera de los vivos.
 
 ## 3. Archivar
