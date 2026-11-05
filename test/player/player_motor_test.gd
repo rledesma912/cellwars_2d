@@ -504,14 +504,16 @@ func _reach_state(target: PlayerMotor.State) -> void:
 		PlayerMotor.State.LAND:
 			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
 			_velocity = Vector2(0.0, _config.max_fall_speed)
-			for i in 30:
+			# 15 pasos al tope son 330 px: aterrizaje pesado, pero no mortal (F010).
+			for i in 15:
 				_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
 			_velocity.x = 0.0
 			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), true, DT)
 		PlayerMotor.State.ROLL:
 			_velocity = _motor.step(_velocity, PlayerInput.new(NONE, false), false, DT)
 			_velocity = Vector2(_config.run_speed, _config.max_fall_speed)
-			for i in 30:
+			# 15 pasos al tope son 330 px: aterrizaje pesado, pero no mortal (F010).
+			for i in 15:
 				_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, false), false, DT)
 			_velocity = _motor.step(_velocity, PlayerInput.new(RIGHT, false), true, DT)
 
@@ -626,3 +628,116 @@ func test_f007_ac04_dying_again_keeps_remaining_time() -> void:
 	assert_float(_motor.get_state_timer()).is_equal(remaining)
 	_motor.die(PlayerMotor.DeathCause.VOID)
 	assert_float(_motor.get_state_timer()).is_equal(remaining)
+
+
+# F010: caída mortal.
+
+
+# Toca el piso después de una caída de "distance" px, con la velocidad horizontal dada.
+func _land_from(distance: float, speed_x: float) -> void:
+	_motor.state = PlayerMotor.State.AIR
+	_motor._fall_distance = distance
+	_velocity = Vector2(speed_x, 400.0)
+	_step(NONE, false, false, true)
+
+
+func test_f010_ac01_lethal_landing_dies_with_death_time() -> void:
+	for speed: float in [0.0, _config.run_speed, -_config.run_speed]:
+		before_test()
+		_land_from(_config.lethal_fall_height, speed)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+		var seconds := (_steps_until_death_finished() + 1) * DT
+		assert_float(seconds).is_equal_approx(_config.death_time, DT)
+
+
+func test_f010_ac01_real_fall_kills_on_landing() -> void:
+	_fall_and_land(_config.lethal_fall_height + 20.0, NONE)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+
+
+func test_f010_ac02_just_below_lethal_rolls_or_recovers() -> void:
+	_land_from(_config.lethal_fall_height - 1.0, _config.run_speed)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.ROLL)
+	_motor.reset()
+	_land_from(_config.lethal_fall_height - 1.0, 0.0)
+	assert_int(_motor.state).is_equal(PlayerMotor.State.LAND)
+
+
+func test_f010_ac03_fall_death_ignores_input_and_finishes() -> void:
+	_land_from(_config.lethal_fall_height, 100.0)
+	var facing := _motor.facing
+	for i in 20:
+		_step(LEFT, true, true, true)
+		assert_int(_motor.state).is_equal(PlayerMotor.State.DEAD)
+		assert_int(_motor.facing).is_equal(facing)
+		assert_float(_velocity.y).is_equal(0.0)
+		assert_float(_velocity.x).is_greater_equal(0.0)
+	_steps_until_death_finished()
+	assert_bool(_motor.is_death_finished()).is_true()
+	_motor.reset()
+	assert_int(_motor.state).is_equal(PlayerMotor.State.IDLE)
+	# El salto apretado durante la muerte no sale al reaparecer.
+	_step(NONE, false, false, true)
+	assert_float(_velocity.y).is_equal(0.0)
+
+
+func test_f010_ac04_fall_counts_from_highest_point() -> void:
+	_config.jump_prep_time = 0.0
+	# Salta y baja un piso: se cuenta desde el punto más alto, no desde donde despegó.
+	var y := 0.0
+	var top := 0.0
+	_step(NONE, true, true, true)
+	assert_float(_motor.get_fall_distance()).is_equal(0.0)
+	y += _velocity.y * DT
+	for i in 300:
+		_step(NONE, false, true, false)
+		y += _velocity.y * DT
+		top = minf(top, y)
+		if _velocity.y < 0.0:
+			assert_float(_motor.get_fall_distance()).is_equal(0.0)
+		if y >= 240.0:
+			break
+	assert_float(_motor.get_fall_distance()).is_equal_approx(y - top, 1.0)
+	assert_float(_motor.get_fall_distance()).is_greater(240.0)
+
+
+func test_f010_ac05_severity_follows_heights() -> void:
+	_motor.state = PlayerMotor.State.AIR
+	_motor._fall_distance = _config.long_fall_height - 1.0
+	assert_int(_motor.get_fall_severity()).is_equal(PlayerMotor.FallSeverity.NORMAL)
+	_motor._fall_distance = _config.long_fall_height
+	assert_int(_motor.get_fall_severity()).is_equal(PlayerMotor.FallSeverity.LONG)
+	_motor._fall_distance = _config.lethal_fall_height - 1.0
+	assert_int(_motor.get_fall_severity()).is_equal(PlayerMotor.FallSeverity.LONG)
+	_motor._fall_distance = _config.lethal_fall_height
+	assert_int(_motor.get_fall_severity()).is_equal(PlayerMotor.FallSeverity.LETHAL)
+
+
+func test_f010_ac06_fall_distance_freezes_at_death() -> void:
+	# Muere en el aire por debajo del límite: sigue cayendo, pero la altura queda fija y
+	# la animación que empezó no cambia a mitad de camino.
+	_motor.state = PlayerMotor.State.AIR
+	_motor._fall_distance = 100.0
+	_motor.die(PlayerMotor.DeathCause.HAZARD)
+	for i in 60:
+		_step(NONE, false, false, false)
+	assert_float(_velocity.y).is_greater(0.0)
+	assert_float(_motor.get_fall_distance()).is_equal(100.0)
+
+
+func test_f010_ac19_grounded_only_after_landing_alive() -> void:
+	assert_bool(_motor.is_grounded()).is_true()
+	_motor.state = PlayerMotor.State.AIR
+	assert_bool(_motor.is_grounded()).is_false()
+	# Aterriza vivo.
+	_land_from(_config.hard_landing_height, 0.0)
+	assert_bool(_motor.is_grounded()).is_true()
+	# Aterriza con una caída mortal: nunca cuenta.
+	_land_from(_config.lethal_fall_height, 0.0)
+	assert_bool(_motor.is_grounded()).is_false()
+
+
+func test_f010_reset_clears_fall_distance() -> void:
+	_motor._fall_distance = 300.0
+	_motor.reset()
+	assert_float(_motor.get_fall_distance()).is_equal(0.0)

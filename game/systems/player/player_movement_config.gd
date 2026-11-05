@@ -45,6 +45,10 @@ extends Resource
 @export_range(0.0, 1.0, 0.01) var roll_min_speed_fraction: float = 0.3
 ## Duración de rodar, sin control y conservando la velocidad. 0 = nunca rueda.
 @export_range(0.0, 1.0, 0.01, "suffix:s") var roll_time: float = 0.38
+## Caída desde la que se muestra caer_largo en el aire: avisa que la caída es grave.
+@export_range(0.0, 800.0, 1.0, "suffix:px") var long_fall_height: float = 260.0
+## Caída desde la que aterrizar mata. Más de 354 px: saltar y bajar un piso no mata.
+@export_range(0.0, 800.0, 1.0, "suffix:px") var lethal_fall_height: float = 420.0
 
 @export_group("Ayudas")
 ## Tiempo para poder saltar después de pisar el vacío.

@@ -39,12 +39,14 @@ func _physics_process(_delta: float) -> void:
 	# Muerto no cruza nada: sigue en esta sala aunque el cuerpo salga de la pantalla.
 	if _player.is_dead():
 		return
+	if _player.is_grounded():
+		_progress.confirm_checkpoint()
 	var edge := RoomGeometry.crossed_edge(_player.get_bounds())
 	var outcome := RoomExits.resolve(edge, _room.entrance_side, _room.exit_side)
 	if outcome == LevelProgress.Outcome.VOID:
 		_player.die(PlayerMotor.DeathCause.VOID)
 		return
-	var change := _progress.apply(outcome)
+	var change := _progress.apply(outcome, edge == RoomGeometry.Edge.BOTTOM)
 	if change == null:
 		return
 	if not change.keep_motion:
@@ -85,6 +87,7 @@ func get_debug_info() -> Dictionary:
 	var pixel_scale := PixelScale.for_window(window.size, window.content_scale_size)
 	return {
 		"sala": "%d / %d" % [_progress.index + 1, _progress.count],
+		"checkpoint": "sala %d" % (_progress.checkpoint_index() + 1),
 		"escala pixel art": "×%.2f" % pixel_scale,
 	}
 

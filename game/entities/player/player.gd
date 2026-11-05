@@ -82,6 +82,10 @@ func is_dead() -> bool:
 	return _motor.is_dead()
 
 
+func is_grounded() -> bool:
+	return _motor.is_grounded()
+
+
 ## Rectángulo que ocupa el personaje, en coordenadas de la sala.
 func get_bounds() -> Rect2:
 	var size := (_shape.shape as RectangleShape2D).size
@@ -98,6 +102,7 @@ func get_debug_info() -> Dictionary:
 		"estado": STATE_NAMES[_motor.state],
 		"mira": "derecha" if _motor.facing > 0 else "izquierda",
 		"timer estado": "%.2f s" % _motor.get_state_timer(),
+		"caída": "%.0f px" % _motor.get_fall_distance(),
 		"coyote / buffer": "%.2f / %.2f s" % [_motor.get_coyote(), _motor.get_buffer()],
 	}
 
@@ -109,11 +114,22 @@ func _animate(direction: float) -> void:
 	# cuerpo intentó moverse contra la pared. Por eso el motor sigue acelerando contra
 	# ella: si lo frenáramos, en el paso siguiente no la detectaría y la animación alternaría.
 	var blocked := PlayerAnimation.is_blocked(is_on_wall(), get_wall_normal().x, direction)
-	var anim := PlayerAnimation.pick(_motor.state, velocity, config.run_speed, blocked)
+	var anim := (
+		PlayerAnimation
+		. pick(
+			_motor.state,
+			velocity,
+			config.run_speed,
+			blocked,
+			_motor.get_fall_severity(),
+			is_on_floor(),
+		)
+	)
 	# Si ya está pasando esa animación, se deja seguir: reiniciarla en cada paso la
-	# congelaría en el primer cuadro. "morir" tampoco se reinicia al terminar: se queda
-	# en el último cuadro, Elyon en el piso, hasta volver a la entrada.
-	if _sprite.animation == anim and (_sprite.is_playing() or anim == &"morir"):
+	# congelaría en el primer cuadro. Las muertes tampoco se reinician al terminar: se
+	# quedan en el último cuadro, Elyon en el piso, hasta volver a la entrada.
+	var keep := _sprite.is_playing() or PlayerAnimation.holds_last_frame(anim)
+	if _sprite.animation == anim and keep:
 		return
 	var frames := _sprite.sprite_frames
 	var speed := (

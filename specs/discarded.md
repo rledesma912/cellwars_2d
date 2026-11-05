@@ -15,3 +15,4 @@
 | 2026-10-29 | Escalado fraccional nítido (sin suavizar) | Unos píxeles quedan dobles y otros simples | `archive/spikes/002-resolucion.md`, D0004 |
 | 2026-10-29 | Suavizado *sharp bilinear* sobre la imagen terminada | Obliga a dibujar a la resolución interna: pierde la luz y el movimiento suaves de `canvas_items` | `archive/spikes/002-resolucion.md`, D0004 |
 | 2026-10-30 | Entrada y salida de cada sala en lados estrictamente opuestos | Obliga a que todo el nivel sea horizontal o todo vertical: no deja bajar en medio del recorrido. Reemplazada por "lados distintos, salida nunca arriba" (aprobado por el desarrollador) | `features/006-varias-salas/spec.md` |
+| 2026-11-04 | Reiniciar la altura de una caída al cambiar de sala | No queda lógico: una caída que cruza de sala sigue siendo una sola caída | `features/010-caida-mortal/spec.md` |

@@ -15,6 +15,9 @@ var index: int = 0
 ## Cantidad de salas del nivel.
 var count: int
 
+# Sala a la que se vuelve después de morir.
+var _checkpoint: int = 0
+
 
 ## Un cambio de sala: a qué sala va, a qué marcador llega y si sigue con el mismo
 ## movimiento (velocidad y dirección) o vuelve quieto.
@@ -34,17 +37,22 @@ func _init(p_count: int) -> void:
 
 
 ## Aplica lo que pasó en el borde y devuelve el cambio, o null si no cambia de sala.
-func apply(outcome: Outcome) -> RoomChange:
+## "falling": cruzó cayendo. El checkpoint no avanza hasta que confirm_checkpoint() diga
+## que aterrizó vivo: si la caída lo mata, vuelve a la sala donde empezó (F010).
+func apply(outcome: Outcome, falling := false) -> RoomChange:
 	match outcome:
 		Outcome.NEXT:
 			if index < count - 1:
 				index += 1
+				if not falling:
+					_checkpoint = index
 				return RoomChange.new(index, Arrival.ENTRANCE, true)
 			# Salida de la última sala: provisorio hasta que exista el refugio.
 			return _restart_at(0)
 		Outcome.PREVIOUS:
 			if index > 0:
 				index -= 1
+				_checkpoint = index
 				return RoomChange.new(index, Arrival.EXIT, true)
 			# Entrada de la sala 1: no hay sala anterior.
 			return _restart_at(0)
@@ -52,12 +60,23 @@ func apply(outcome: Outcome) -> RoomChange:
 	return null
 
 
-## Adónde vuelve después de morir: la entrada de la sala actual, quieto.
+## Elyon pisa el suelo en la sala actual: desde ahora es su checkpoint.
+func confirm_checkpoint() -> void:
+	_checkpoint = index
+
+
+## Adónde vuelve después de morir: la entrada de la sala del checkpoint, quieto.
 func checkpoint() -> RoomChange:
-	return _restart_at(index)
+	return _restart_at(_checkpoint)
+
+
+## Número de sala del checkpoint, para el overlay de debug.
+func checkpoint_index() -> int:
+	return _checkpoint
 
 
 # Vuelve quieto a la entrada de una sala.
 func _restart_at(room_index: int) -> RoomChange:
 	index = room_index
+	_checkpoint = room_index
 	return RoomChange.new(index, Arrival.ENTRANCE, false)
