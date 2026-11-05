@@ -28,5 +28,5 @@ position = Vector2(1060, 120)
 position = Vector2(1250, 700)
 
 [node name="MortalZone" parent="." instance=ExtResource("9_zone")]
-position = Vector2(600, 440)
+position = Vector2(680, 440)
 size = Vector2(80, 20)

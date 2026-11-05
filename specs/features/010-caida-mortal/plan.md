@@ -88,5 +88,5 @@ Una línea nueva, `caída`: la altura que lleva contada en píxeles, por ejemplo
 
 ## Salas de prueba
 
-- **Sala 3 (AC11):** hueco de 6 baldosas en el piso de arriba (x 800–920), que se cruza saltando, y el piso del medio termina en x 760. Debajo queda una caída de 480 px sobre piso común, a la que se llega desde los dos lados. El bloque del piso de abajo pasa a x 600–680, porque si no frenaría la caída a 400 px, y la zona mortal del piso del medio pasa a x 600, porque si no quedaría en el borde del hueco.
+- **Sala 3 (AC11):** hueco de 6 baldosas en el piso de arriba (x 800–920), que se cruza saltando, y el piso del medio termina en x 760. Debajo queda una caída de 480 px sobre piso común, a la que se llega desde los dos lados. El bloque del piso de abajo pasa a x 600–680, porque si no frenaría la caída a 400 px, y la zona mortal del piso del medio pasa a x 680, para que termine donde termina ese piso y se pueda saltar: con el techo a 58 px sobre el bloque, más cerca de él no se pasa.
 - **Sala 2 (AC18):** un segundo hueco de salida a la derecha del que ya existe (x 1120–1260), abierto en el piso del medio y en el de abajo. La zona colgante y el hueco original no cambian, porque los usa el playtest de F007. Desde el piso del medio se baja unos 340 px hasta cruzar y otros 100 en la sala 3: la suma supera el límite y Elyon muere al aterrizar.
