@@ -48,3 +48,11 @@ func test_f005_ac07_defaults_scaled() -> void:
 	assert_float(config.land_recovery_time).is_equal(0.15)
 	assert_float(config.coyote_time).is_equal(0.08)
 	assert_float(config.jump_buffer_time).is_equal(0.1)
+
+
+func test_f010_ac01_fall_height_defaults() -> void:
+	var config := PlayerMovementConfig.new()
+	assert_float(config.long_fall_height).is_equal(260.0)
+	assert_float(config.lethal_fall_height).is_equal(420.0)
+	# Saltar y bajar un piso (354 px) no puede matar.
+	assert_float(config.lethal_fall_height).is_greater(354.0)
