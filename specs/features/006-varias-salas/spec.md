@@ -4,7 +4,7 @@ type: feature
 status: done
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0004], spike: }
-updated: 2026-10-30
+updated: 2026-11-05
 ---
 
 # Feature 006: Varias salas y el paso entre ellas
@@ -44,7 +44,7 @@ Lógica del nivel:
   - salir por la entrada de la sala 3 → sala 2; de la 2 → sala 1.
 - F006-AC02 [unit] ✅ Bordes de la lista:
   - salir por la entrada de la sala 1 no cambia de sala: Elyon vuelve a la entrada de la sala 1;
-  - salir por la salida de la última sala lleva a la entrada de la sala 1, quieto. Es provisorio hasta que exista el refugio.
+  - salir por la salida de la última sala lleva a la entrada de la sala 1, quieto. Es provisorio hasta que exista el refugio. Reemplazado por [F011-AC01](../011-refugio/spec.md): esa salida ahora termina el nivel.
 - F006-AC03 [unit] ✅ Qué borde cruzó. A partir del rectángulo de Elyon y la sala de 1280×720, se sabe si salió entero por la izquierda, por la derecha o por abajo, o si sigue adentro:
   - cuenta recién cuando ya no se ve nada de él;
   - asomar por arriba en un salto no cuenta como salir.
