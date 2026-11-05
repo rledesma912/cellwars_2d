@@ -36,6 +36,11 @@ func _init(p_count: int) -> void:
 	count = p_count
 
 
+## true si ese borde termina el nivel: la salida de la última sala es el refugio.
+func finishes_level(outcome: Outcome) -> bool:
+	return outcome == Outcome.NEXT and index == count - 1
+
+
 ## Aplica lo que pasó en el borde y devuelve el cambio, o null si no cambia de sala.
 ## "falling": cruzó cayendo. El checkpoint no avanza hasta que confirm_checkpoint() diga
 ## que aterrizó vivo: si la caída lo mata, vuelve a la sala donde empezó (F010).
@@ -47,8 +52,8 @@ func apply(outcome: Outcome, falling := false) -> RoomChange:
 				if not falling:
 					_checkpoint = index
 				return RoomChange.new(index, Arrival.ENTRANCE, true)
-			# Salida de la última sala: provisorio hasta que exista el refugio.
-			return _restart_at(0)
+			# Salida de la última sala: no cambia de sala. Termina el nivel (finishes_level).
+			return null
 		Outcome.PREVIOUS:
 			if index > 0:
 				index -= 1

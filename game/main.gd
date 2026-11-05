@@ -24,6 +24,7 @@ var _current_screen: Node
 
 @onready var _screen: Node = %Screen
 @onready var _pause_menu: PauseMenu = %PauseMenu
+@onready var _level_complete_menu: LevelCompleteMenu = %LevelCompleteMenu
 
 
 func _ready() -> void:
@@ -45,6 +46,8 @@ func _ready() -> void:
 	_pause_menu.resume_requested.connect(_flow.send.bind(ScreenFlow.Event.RESUME))
 	_pause_menu.menu_requested.connect(_flow.send.bind(ScreenFlow.Event.TO_MENU))
 	_pause_menu.close()
+	_level_complete_menu.menu_requested.connect(_flow.send.bind(ScreenFlow.Event.TO_MENU))
+	_level_complete_menu.close()
 	_show_main_menu()
 
 
@@ -61,12 +64,13 @@ func _on_state_changed(from: ScreenFlow.State, to: ScreenFlow.State) -> void:
 		ScreenFlow.State.MENU:
 			get_tree().paused = false
 			_pause_menu.close()
+			_level_complete_menu.close()
 			_show_main_menu(from == ScreenFlow.State.OPTIONS)
 		ScreenFlow.State.OPTIONS:
 			_show_options()
 		ScreenFlow.State.PLAYING:
 			if from == ScreenFlow.State.MENU:
-				_show_screen(WORLD_SCENE.instantiate())
+				_start_game()
 			else:
 				_pause_menu.close()
 				get_tree().paused = false
@@ -74,6 +78,16 @@ func _on_state_changed(from: ScreenFlow.State, to: ScreenFlow.State) -> void:
 			# Pausa nativa de Godot: congela todos los nodos "pausables" (la partida).
 			get_tree().paused = true
 			_pause_menu.open()
+		ScreenFlow.State.LEVEL_COMPLETE:
+			# La misma pausa: la sala queda congelada detrás del cartel.
+			get_tree().paused = true
+			_level_complete_menu.open()
+
+
+func _start_game() -> void:
+	var world: World = WORLD_SCENE.instantiate()
+	world.level_completed.connect(_flow.send.bind(ScreenFlow.Event.LEVEL_COMPLETED))
+	_show_screen(world)
 
 
 ## focus_options: true al volver desde Opciones, para que el foco quede ahí.

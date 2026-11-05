@@ -1,4 +1,4 @@
-# Tests de LevelProgress (F006-AC01, AC02 y AC05; F007-AC06).
+# Tests de LevelProgress (F006-AC01, AC02 y AC05; F007-AC06; F010-AC19; F011-AC01, AC02).
 extends GdUnitTestSuite
 
 
@@ -37,12 +37,8 @@ func test_f006_ac02_list_edges() -> void:
 	_assert_change(
 		progress, LevelProgress.Outcome.PREVIOUS, 0, LevelProgress.Arrival.ENTRANCE, false
 	)
-	# Salida de la última: a la entrada de la sala 1, quieto (provisorio).
-	progress.index = 2
-	_assert_change(progress, LevelProgress.Outcome.NEXT, 0, LevelProgress.Arrival.ENTRANCE, false)
-	# Nivel de una sola sala: los dos bordes se comportan igual.
+	# Nivel de una sola sala: la entrada se comporta igual.
 	var single := LevelProgress.new(1)
-	_assert_change(single, LevelProgress.Outcome.NEXT, 0, LevelProgress.Arrival.ENTRANCE, false)
 	_assert_change(single, LevelProgress.Outcome.PREVIOUS, 0, LevelProgress.Arrival.ENTRANCE, false)
 
 
@@ -112,3 +108,31 @@ func test_f010_ac19_crossing_without_falling_moves_checkpoint() -> void:
 	var progress := LevelProgress.new(3)
 	progress.apply(LevelProgress.Outcome.NEXT)
 	_assert_checkpoint(progress, 1)
+
+
+func test_f011_ac01_last_exit_finishes_level_without_changing_room() -> void:
+	var progress := LevelProgress.new(3)
+	progress.index = 2
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.NEXT)).is_true()
+	assert_object(progress.apply(LevelProgress.Outcome.NEXT)).is_null()
+	assert_int(progress.index).is_equal(2)
+
+
+func test_f011_ac01_single_room_level_finishes() -> void:
+	var progress := LevelProgress.new(1)
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.NEXT)).is_true()
+	assert_object(progress.apply(LevelProgress.Outcome.NEXT)).is_null()
+	assert_int(progress.index).is_equal(0)
+
+
+func test_f011_ac02_other_borders_do_not_finish_level() -> void:
+	var progress := LevelProgress.new(3)
+	# La salida de una sala que no es la última.
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.NEXT)).is_false()
+	progress.index = 1
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.NEXT)).is_false()
+	# En la última, ningún otro borde termina el nivel.
+	progress.index = 2
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.PREVIOUS)).is_false()
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.VOID)).is_false()
+	assert_bool(progress.finishes_level(LevelProgress.Outcome.NONE)).is_false()
