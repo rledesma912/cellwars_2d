@@ -1,7 +1,7 @@
 ---
 id: F010
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [vision], decisions: [D0003, D0005], spike: }
 updated: 2026-11-04
@@ -36,33 +36,33 @@ Desde `long_fall_height`, Elyon muestra `caer_largo` en el aire: el jugador ve q
 
 **Regla de la altura**
 
-- F010-AC01 [unit] Al aterrizar de una caída igual o mayor a `lethal_fall_height`, el motor entra en morir, por caída, con el tiempo de `death_time`, tenga la velocidad que tenga.
-- F010-AC02 [unit] Una caída apenas menor a `lethal_fall_height` sigue las reglas de hoy: rueda o se recupera (F004-AC16, F009-AC01 y F009-AC03).
-- F010-AC03 [unit] Morir por caída ignora dirección y salto hasta que se reinicie, y al terminar vuelve al checkpoint como las demás muertes (F007-AC01, F007-AC03 y F007-AC06).
-- F010-AC04 [unit] La altura se cuenta solo mientras baja: en un salto se mide desde el punto más alto, no desde donde despegó.
-- F010-AC19 [unit] Una sala a la que se entra cayendo pasa a ser el checkpoint recién cuando Elyon aterriza vivo en ella. Si muere antes, vuelve a la entrada de la sala donde empezó la caída. Cruzar sin caer sigue moviendo el checkpoint al instante (F007-AC06).
+- ✅ F010-AC01 [unit] Al aterrizar de una caída igual o mayor a `lethal_fall_height`, el motor entra en morir, por caída, con el tiempo de `death_time`, tenga la velocidad que tenga.
+- ✅ F010-AC02 [unit] Una caída apenas menor a `lethal_fall_height` sigue las reglas de hoy: rueda o se recupera (F004-AC16, F009-AC01 y F009-AC03).
+- ✅ F010-AC03 [unit] Morir por caída ignora dirección y salto hasta que se reinicie, y al terminar vuelve al checkpoint como las demás muertes (F007-AC01, F007-AC03 y F007-AC06).
+- ✅ F010-AC04 [unit] La altura se cuenta solo mientras baja: en un salto se mide desde el punto más alto, no desde donde despegó.
+- ✅ F010-AC19 [unit] Una sala a la que se entra cayendo pasa a ser el checkpoint recién cuando Elyon aterriza vivo en ella. Si muere antes, vuelve a la entrada de la sala donde empezó la caída. Cruzar sin caer sigue moviendo el checkpoint al instante (F007-AC06).
 
 **Qué se ve**
 
-- F010-AC05 [unit] En el aire, bajando, con la caída igual o mayor a `long_fall_height`, la animación es `caer_largo`. Por debajo, `caer`. Subiendo, `subir`.
-- F010-AC06 [unit] Muerto, en el piso, con la caída igual o mayor a `lethal_fall_height`, la animación es `morir_caida`, sea por la altura o por una zona mortal. Por debajo de esa altura, `morir`.
-- F010-AC07 [unit] Muerto, en el aire, con la caída igual o mayor a `lethal_fall_height`, sigue mostrando `caer_largo` hasta tocar el piso. No hay `morir_caida` flotando.
-- F010-AC08 [unit] `morir_caida` no se estira con `death_time`: va a su ritmo propio (0,22 s hasta quedar tendido) y se queda en su último cuadro, sin reiniciarse, hasta volver a la entrada. `morir` sigue durando `death_time` (F007-AC05).
-- F010-AC09 [unit] `game/art/elyon/elyon_frames.tres` tiene `caer_largo` y `morir_caida`, con cuadros de 144 × 144.
+- ✅ F010-AC05 [unit] En el aire, bajando, con la caída igual o mayor a `long_fall_height`, la animación es `caer_largo`. Por debajo, `caer`. Subiendo, `subir`.
+- ✅ F010-AC06 [unit] Muerto, en el piso, con la caída igual o mayor a `lethal_fall_height`, la animación es `morir_caida`, sea por la altura o por una zona mortal. Por debajo de esa altura, `morir`.
+- ✅ F010-AC07 [unit] Muerto, en el aire, con la caída igual o mayor a `lethal_fall_height`, sigue mostrando `caer_largo` hasta tocar el piso. No hay `morir_caida` flotando.
+- ✅ F010-AC08 [unit] `morir_caida` no se estira con `death_time`: va a su ritmo propio (0,22 s hasta quedar tendido) y se queda en su último cuadro, sin reiniciarse, hasta volver a la entrada. `morir` sigue durando `death_time` (F007-AC05).
+- ✅ F010-AC09 [unit] `game/art/elyon/elyon_frames.tres` tiene `caer_largo` y `morir_caida`, con cuadros de 144 × 144.
 
 **Jugando**
 
-- F010-AC10 [manual] En el pozo de la sala 1 (460 px con zona mortal al fondo), Elyon cae, cambia a `caer_largo`, pasa a `morir_caida` sin ningún cuadro de pie y aparece quieto en la entrada (overlay: `estado`, `timer estado`).
-- F010-AC11 [manual] Una sala de prueba tiene una caída de dos pisos que termina en piso común, sin zona mortal, y Elyon muere al tocarlo, hacia los dos lados.
-- F010-AC12 [manual] Caer un piso (240 px) se sobrevive: rueda si viene corriendo y se recupera si cae en vertical, sin mostrar `caer_largo`.
-- F010-AC13 [manual] Tendido, todo el cuerpo toca el piso, hacia los dos lados, y el arma queda adelante, recortada por el piso.
-- F010-AC14 [manual] Al tocar una zona mortal en el piso, `morir` se desploma en el lugar: no se inclina hacia atrás antes de caer.
-- F010-AC18 [manual] Una caída que cruza de sala sigue sumando altura: al bajar de la sala 2 a la 3 con más de `lethal_fall_height` en total, Elyon muere al aterrizar en la sala 3 y reaparece en la entrada de la sala 2.
+- ✅ F010-AC10 [manual] En el pozo de la sala 1 (460 px con zona mortal al fondo), Elyon cae, cambia a `caer_largo`, pasa a `morir_caida` sin ningún cuadro de pie y aparece quieto en la entrada (overlay: `estado`, `timer estado`).
+- ✅ F010-AC11 [manual] Una sala de prueba tiene una caída de dos pisos que termina en piso común, sin zona mortal, y Elyon muere al tocarlo, hacia los dos lados.
+- ✅ F010-AC12 [manual] Caer un piso (240 px) se sobrevive: rueda si viene corriendo y se recupera si cae en vertical, sin mostrar `caer_largo`.
+- ✅ F010-AC13 [manual] Tendido, todo el cuerpo toca el piso, hacia los dos lados, y el arma queda adelante, recortada por el piso.
+- ✅ F010-AC14 [manual] Al tocar una zona mortal en el piso, `morir` se desploma en el lugar: no se inclina hacia atrás antes de caer.
+- ✅ F010-AC18 [manual] Una caída que cruza de sala sigue sumando altura: al bajar de la sala 2 a la 3 con más de `lethal_fall_height` en total, Elyon muere al aterrizar en la sala 3 y reaparece en la entrada de la sala 2.
 
 **Sensación**
 
-- F010-AC15 [feel] Antes de tocar el piso se entiende que la caída es grave.
-- F010-AC16 [feel] El golpe se siente seco y la muerte por altura se siente justa: se entiende por qué murió.
+- ✅ F010-AC15 [feel] Antes de tocar el piso se entiende que la caída es grave.
+- ✅ F010-AC16 [feel] El golpe se siente seco y la muerte por altura se siente justa: se entiende por qué murió.
 
 ## Casos límite
 
@@ -85,14 +85,7 @@ Tiempos simulados en pasos de 1/60 s, con la física actual de `player_movement.
 
 ## Parámetros de tuning (Resource)
 
-En `game/data/player_movement.tres`, grupo "Aterrizaje" de `PlayerMovementConfig`.
-
-| Parámetro | Tipo | Valor inicial | Rango sugerido |
-|---|---|---|---|
-| `long_fall_height` | float (px) | 260 | 240–400 |
-| `lethal_fall_height` | float (px) | 420 | 360–700 |
-
-`lethal_fall_height` tiene que quedar por encima de 354 px, para que saltar y bajar un piso no mate.
+En `game/data/player_movement.tres`, grupo "Aterrizaje" de `PlayerMovementConfig`: `long_fall_height` y `lethal_fall_height`. Hasta que se cambien en el inspector, usan el valor por defecto del script. `lethal_fall_height` tiene que quedar por encima de lo que cuenta saltar y bajar un piso, para que eso no mate.
 
 ## Arte
 
@@ -105,3 +98,13 @@ Sale de `cw2d-art`, `specs/animaciones/elyon_caida_mortal.md` y `specs/character
 | `morir` (reemplaza) | `morir_final.png` | 9 | Sin cambios | Sin cambios |
 
 Se probaron en una copia local del juego con estos valores.
+
+## Notas finales
+
+- **Altura entre salas.** El desarrollador probó reiniciar la altura al cambiar de sala y pidió revertirlo: "No queda lógico". El ID F010-AC17 quedó sin usar, y F010-AC18 pasó a comprobar que la altura suma. Está en `discarded.md`.
+- **Checkpoint en una caída entre salas (F010-AC19).** Surgió del playtest: morir al aterrizar en la sala 3 reaparecía en la sala 3, y el desarrollador pidió que no fuera así. Eligió que la sala nueva cuente como checkpoint recién al aterrizar vivo. Solo aplica a cruzar por abajo; por un costado, el checkpoint avanza al instante, como en F007.
+- **`is_grounded()` y no `is_on_floor()`.** `World` corre antes que `Player`. En el paso en que toca el piso, el motor todavía no decidió si el aterrizaje mata, y mirar `is_on_floor()` confirmaría el checkpoint un paso antes de morir.
+- **La altura contada da un 3 % más que la real.** El motor suma con la velocidad ya actualizada: 240 px se cuentan como unos 248 y 480 como unos 495. Por eso `lethal_fall_height` se compara con ese número, y hay que tenerlo en cuenta al ajustarlo.
+- **Salas de prueba.** La sala 3 tiene un hueco en el piso de arriba, el piso del medio más corto y el bloque de abajo más a la izquierda. La sala 2 tiene un segundo hueco de salida. La primera posición de la zona mortal de la sala 3 no se podía saltar, porque el techo corta el salto desde arriba del bloque; el playtest lo detectó y se corrió.
+- **Techos.** Los pisos siguen siendo sólidos desde abajo. El desarrollador lo preguntó en el playtest y se resolvió moviendo la zona, sin plataformas atravesables.
+- **Verificación con física real.** Además de los tests, se simularon las caídas y la reaparición en `World`, con scripts temporales que no quedaron en el repositorio.
