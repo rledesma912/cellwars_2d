@@ -82,6 +82,10 @@ func is_dead() -> bool:
 	return _motor.is_dead()
 
 
+func is_grounded() -> bool:
+	return _motor.is_grounded()
+
+
 ## Rectángulo que ocupa el personaje, en coordenadas de la sala.
 func get_bounds() -> Rect2:
 	var size := (_shape.shape as RectangleShape2D).size

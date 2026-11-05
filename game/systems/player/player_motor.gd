@@ -88,6 +88,12 @@ func get_fall_severity() -> FallSeverity:
 	return FallSeverity.NORMAL
 
 
+## true si está en el suelo y vivo. El paso en que toca el piso sigue en AIR, porque el
+## motor recién decide en el siguiente si el aterrizaje lo mató.
+func is_grounded() -> bool:
+	return state != State.AIR and state != State.DEAD
+
+
 ## Segundos que le quedan al giro, la preparación, la recuperación o rodar.
 func get_state_timer() -> float:
 	return _state_timer

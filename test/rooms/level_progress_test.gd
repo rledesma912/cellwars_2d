@@ -82,3 +82,33 @@ func test_f007_ac06_checkpoint_after_coming_back() -> void:
 	progress.apply(LevelProgress.Outcome.NEXT)
 	progress.apply(LevelProgress.Outcome.PREVIOUS)
 	_assert_checkpoint(progress, 1)
+
+
+func test_f010_ac19_fall_holds_checkpoint_until_landing() -> void:
+	var progress := LevelProgress.new(3)
+	progress.apply(LevelProgress.Outcome.NEXT)
+	# Cruza cayendo: cambia de sala, pero el checkpoint sigue en la que empezó.
+	progress.apply(LevelProgress.Outcome.NEXT, true)
+	assert_int(progress.index).is_equal(2)
+	_assert_checkpoint(progress, 1)
+
+
+func test_f010_ac19_landing_confirms_checkpoint() -> void:
+	var progress := LevelProgress.new(3)
+	progress.apply(LevelProgress.Outcome.NEXT, true)
+	progress.confirm_checkpoint()
+	_assert_checkpoint(progress, 1)
+
+
+func test_f010_ac19_chained_falls_return_to_first_room() -> void:
+	var progress := LevelProgress.new(3)
+	progress.apply(LevelProgress.Outcome.NEXT, true)
+	progress.apply(LevelProgress.Outcome.NEXT, true)
+	_assert_checkpoint(progress, 0)
+
+
+func test_f010_ac19_crossing_without_falling_moves_checkpoint() -> void:
+	# Sigue F007-AC06: cruzar sin caer ya cuenta, sin esperar a aterrizar.
+	var progress := LevelProgress.new(3)
+	progress.apply(LevelProgress.Outcome.NEXT)
+	_assert_checkpoint(progress, 1)

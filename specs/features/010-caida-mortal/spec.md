@@ -40,6 +40,7 @@ Desde `long_fall_height`, Elyon muestra `caer_largo` en el aire: el jugador ve q
 - F010-AC02 [unit] Una caída apenas menor a `lethal_fall_height` sigue las reglas de hoy: rueda o se recupera (F004-AC16, F009-AC01 y F009-AC03).
 - F010-AC03 [unit] Morir por caída ignora dirección y salto hasta que se reinicie, y al terminar vuelve al checkpoint como las demás muertes (F007-AC01, F007-AC03 y F007-AC06).
 - F010-AC04 [unit] La altura se cuenta solo mientras baja: en un salto se mide desde el punto más alto, no desde donde despegó.
+- F010-AC19 [unit] Una sala a la que se entra cayendo pasa a ser el checkpoint recién cuando Elyon aterriza vivo en ella. Si muere antes, vuelve a la entrada de la sala donde empezó la caída. Cruzar sin caer sigue moviendo el checkpoint al instante (F007-AC06).
 
 **Qué se ve**
 
@@ -56,7 +57,7 @@ Desde `long_fall_height`, Elyon muestra `caer_largo` en el aire: el jugador ve q
 - F010-AC12 [manual] Caer un piso (240 px) se sobrevive: rueda si viene corriendo y se recupera si cae en vertical, sin mostrar `caer_largo`.
 - F010-AC13 [manual] Tendido, todo el cuerpo toca el piso, hacia los dos lados, y el arma queda adelante, recortada por el piso.
 - F010-AC14 [manual] Al tocar una zona mortal en el piso, `morir` se desploma en el lugar: no se inclina hacia atrás antes de caer.
-- F010-AC18 [manual] Una caída que cruza de sala sigue sumando altura: al bajar de la sala 2 a la 3 con más de `lethal_fall_height` en total, Elyon muere al aterrizar en la sala 3 y reaparece en su entrada.
+- F010-AC18 [manual] Una caída que cruza de sala sigue sumando altura: al bajar de la sala 2 a la 3 con más de `lethal_fall_height` en total, Elyon muere al aterrizar en la sala 3 y reaparece en la entrada de la sala 2.
 
 **Sensación**
 
@@ -75,7 +76,7 @@ Tiempos simulados en pasos de 1/60 s, con la física actual de `player_movement.
 | 480 px: dos pisos | 40 | 12 | Muere |
 
 - Salta y baja un piso: muestra `caer_largo` 6 pasos y sobrevive. Se revisa en el playtest, y se ajusta con `long_fall_height`.
-- Cruza a otra sala mientras cae: la altura sigue sumando y la animación no cambia (F010-AC18). Puede morir al aterrizar en una sala que recién ve.
+- Cruza a otra sala mientras cae: la altura sigue sumando y la animación no cambia (F010-AC18). Puede morir al aterrizar en una sala que recién ve, y entonces vuelve a la sala donde empezó (F010-AC19).
 - Toca una zona mortal con menos de `lethal_fall_height`, en el aire: sigue F007-AC08, con `morir`.
 - Cae al vacío desde cualquier altura: sigue siendo muerte por el vacío, con `void_restart_time`. No hay nada que mostrar.
 - Muere por altura ya rodando o recuperándose: no puede pasar, porque esos estados solo empiezan si la caída no fue mortal.

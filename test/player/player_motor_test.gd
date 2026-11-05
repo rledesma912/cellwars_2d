@@ -725,6 +725,18 @@ func test_f010_ac06_fall_distance_freezes_at_death() -> void:
 	assert_float(_motor.get_fall_distance()).is_equal(100.0)
 
 
+func test_f010_ac19_grounded_only_after_landing_alive() -> void:
+	assert_bool(_motor.is_grounded()).is_true()
+	_motor.state = PlayerMotor.State.AIR
+	assert_bool(_motor.is_grounded()).is_false()
+	# Aterriza vivo.
+	_land_from(_config.hard_landing_height, 0.0)
+	assert_bool(_motor.is_grounded()).is_true()
+	# Aterriza con una caída mortal: nunca cuenta.
+	_land_from(_config.lethal_fall_height, 0.0)
+	assert_bool(_motor.is_grounded()).is_false()
+
+
 func test_f010_reset_clears_fall_distance() -> void:
 	_motor._fall_distance = 300.0
 	_motor.reset()

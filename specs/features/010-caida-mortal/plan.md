@@ -28,6 +28,8 @@ World (Node2D)
 | `game/systems/player/player_movement_config.gd` | Resource | Suma `long_fall_height` (260) y `lethal_fall_height` (420) al grupo "Aterrizaje" |
 | `game/systems/player/player_motor.gd` | Lógica pura | Decide la muerte por altura al aterrizar, clasifica la caída y deja de contarla al morir |
 | `game/systems/player/player_animation.gd` | Lógica pura | Elige `caer_largo` y `morir_caida`, y dice qué animaciones se quedan en su último cuadro |
+| `game/systems/rooms/level_progress.gd` | Lógica pura | Lleva el checkpoint aparte de la sala actual: no avanza al cruzar cayendo hasta `confirm_checkpoint()` |
+| `game/world/world.gd` | Nodo | Le dice a `LevelProgress` si cruzó cayendo y confirma el checkpoint cuando Elyon está en el suelo; suma la línea `checkpoint` |
 | `game/entities/player/player.gd` | Nodo | Le pasa a `pick` la gravedad de la caída y si está en el piso, y expone la línea `caída` |
 | `game/art/elyon/elyon.png`, `elyon_frames.tres` | Arte | Reemplaza los 9 cuadros de `morir` y suma los 6 cuadros nuevos: la tira pasa de 6048 a 6912 px de ancho |
 | `game/levels/test/` | Sala de prueba | Caída de dos pisos sobre piso común, a la que se llega desde los dos lados |
@@ -53,6 +55,9 @@ Hoy es una comparación con `&"morir"` dentro del nodo. Con dos animaciones así
 
 **La altura sigue sumando al cruzar de sala.** `World` solo cambia la `position` de Elyon y el motor no se entera, así que no hace falta código: una caída sigue siendo una sola caída.
 
+**El checkpoint vive en `LevelProgress`, y el motor solo dice `is_grounded()`.**
+Descarté que el motor recordara dónde empezó la caída: no sabe nada de salas. `is_grounded()` da false en `AIR` porque el paso en que toca el piso todavía no decidió si el aterrizaje mata; mirar `is_on_floor()` confirmaría el checkpoint un paso antes de morir. Solo cuenta como caída cruzar por abajo: cruzar por un costado sigue moviendo el checkpoint al instante, como en F007.
+
 **Sigue `AnimatedSprite2D` con `SpriteFrames`**, como fija `architecture.md`. No hace falta `AnimationPlayer` ni `AnimationTree`: son cuadros, sin mezclas ni otras propiedades que animar.
 
 ## Señales
@@ -72,12 +77,14 @@ Ninguna nueva. `death_finished` sigue llevando a Elyon al checkpoint, también e
 | AC07 | `test_f010_ac07_dead_in_air_lethal_keeps_caer_largo` | `player_animation_test.gd` |
 | AC08 | `test_f010_ac08_morir_caida_keeps_own_pace_and_last_frame` | `player_animation_test.gd` |
 | AC09 | `test_f010_ac09_frames_have_new_animations` | `player_animation_test.gd` |
+| AC19 | `test_f010_ac19_fall_holds_checkpoint_until_landing`, `..._landing_confirms_checkpoint`, `..._chained_falls_return_to_first_room`, `..._crossing_without_falling_moves_checkpoint` | `level_progress_test.gd` |
+| AC19 | `test_f010_ac19_grounded_only_after_landing_alive` | `player_motor_test.gd` |
 
 También se suman tests de los valores por defecto en `player_movement_config_test.gd`. `test_f009_ac06_frames_have_every_animation` pasa de esperar 11 animaciones a 13.
 
 ## Impacto en overlay debug
 
-Una línea nueva, `caída`: la altura que lleva contada en píxeles, por ejemplo `caída: 312 px`. Sirve para AC10, AC11, AC12, AC18 y para ajustar los dos límites jugando.
+Dos líneas nuevas. `caída`: la altura que lleva contada en píxeles, por ejemplo `caída: 312 px`, que sirve para AC10, AC11, AC12, AC18 y para ajustar los dos límites jugando. `checkpoint`: la sala a la que se vuelve al morir, por ejemplo `checkpoint: sala 2`, que sirve para AC18.
 
 ## Riesgos
 
