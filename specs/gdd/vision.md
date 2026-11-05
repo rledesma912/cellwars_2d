@@ -4,7 +4,7 @@ type: gdd
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [], spike: }
-updated: 2026-10-30
+updated: 2026-11-04
 ---
 
 # Visión: Cellwars 2D
@@ -21,7 +21,7 @@ Un soldado de un escuadrón de glóbulos blancos, equipado con un traje futurist
 
 **Combate cuerpo a cuerpo y a distancia**: El soldado puede golpear con su traje y disparar. El combate no es masivo: los encuentros son uno a uno o contra grupos pequeños, y la posición importa tanto como la velocidad de reacción. Se prioriza la lectura del enemigo sobre la ejecución frenética.
 
-**Mortalidad alta, checkpoints frecuentes**: El jugador muere fácilmente ante trampas y enemigos. Sin embargo, el castigo es mínimo: cada sala es un checkpoint, así que al morir se reinicia desde la entrada de la sala, sin repetir secciones largas. La dificultad viene del diseño de las salas, no de la distancia entre checkpoints.
+**Mortalidad alta, checkpoints frecuentes**: El jugador muere fácilmente ante trampas y enemigos. Sin embargo, el castigo es mínimo: cada sala es un checkpoint, así que al morir se reinicia desde la entrada de la sala, sin repetir secciones largas. Si una caída que cruza de sala mata, se vuelve a la sala donde empezó. La dificultad viene del diseño de las salas, no de la distancia entre checkpoints.
 
 ## Experiencia buscada
 
