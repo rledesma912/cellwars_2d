@@ -65,8 +65,6 @@ func _physics_process(_delta: float) -> void:
 		else _room.exit_position()
 	)
 	_player.position = RoomExits.arrival(edge, _player.position, crossed, target)
-	# La altura se cuenta por sala: no se muere al llegar a un lugar que recién se ve.
-	_player.reset_fall()
 
 
 # Al salir de la partida (volver al menú), las salas precargadas que no están en

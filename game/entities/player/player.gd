@@ -82,11 +82,6 @@ func is_dead() -> bool:
 	return _motor.is_dead()
 
 
-## Vuelve a contar la caída desde 0, sin cortar el movimiento (al entrar a otra sala).
-func reset_fall() -> void:
-	_motor.reset_fall()
-
-
 ## Rectángulo que ocupa el personaje, en coordenadas de la sala.
 func get_bounds() -> Rect2:
 	var size := (_shape.shape as RectangleShape2D).size

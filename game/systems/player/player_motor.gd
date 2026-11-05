@@ -88,12 +88,6 @@ func get_fall_severity() -> FallSeverity:
 	return FallSeverity.NORMAL
 
 
-## Vuelve a contar la caída desde 0, sin tocar nada más: al entrar a otra sala, una caída
-## no suma lo que bajó en la anterior, porque moriría al llegar a un lugar que recién ve.
-func reset_fall() -> void:
-	_fall_distance = 0.0
-
-
 ## Segundos que le quedan al giro, la preparación, la recuperación o rodar.
 func get_state_timer() -> float:
 	return _state_timer

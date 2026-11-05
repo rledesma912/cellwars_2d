@@ -725,23 +725,6 @@ func test_f010_ac06_fall_distance_freezes_at_death() -> void:
 	assert_float(_motor.get_fall_distance()).is_equal(100.0)
 
 
-func test_f010_ac17_reset_fall_starts_count_from_zero() -> void:
-	_motor.state = PlayerMotor.State.AIR
-	_motor._fall_distance = _config.lethal_fall_height + 100.0
-	_velocity = Vector2(50.0, 400.0)
-	_motor.reset_fall()
-	assert_float(_motor.get_fall_distance()).is_equal(0.0)
-	assert_int(_motor.get_fall_severity()).is_equal(PlayerMotor.FallSeverity.NORMAL)
-	# El resto del movimiento sigue igual: solo cambia la cuenta.
-	assert_int(_motor.state).is_equal(PlayerMotor.State.AIR)
-	_step(NONE, false, false, false)
-	assert_float(_motor.get_fall_distance()).is_greater(0.0)
-	assert_float(_velocity.y).is_greater(400.0)
-	# Aterriza con lo que bajó después del cruce: no muere.
-	_step(NONE, false, false, true)
-	assert_int(_motor.state).is_not_equal(PlayerMotor.State.DEAD)
-
-
 func test_f010_reset_clears_fall_distance() -> void:
 	_motor._fall_distance = 300.0
 	_motor.reset()
