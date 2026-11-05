@@ -53,6 +53,90 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 ```
 
+## Mapa del código
+
+Tres vistas del mismo juego. Se actualizan al cerrar una feature que cambie escenas, scripts de `game/systems/` o señales.
+
+### Qué nodos hay en pantalla
+
+`Main` siempre está cargado, y dentro de `Screen` hay una sola pantalla a la vez.
+
+```mermaid
+flowchart TD
+    Main["Main<br/>game/main.tscn"] --> Screen["Screen"]
+    Main --> PauseMenu["PauseMenu<br/>menú de pausa"]
+    Screen -.->|"una a la vez"| MainMenu["MainMenu<br/>menú principal"]
+    Screen -.->|"una a la vez"| OptionsMenu["OptionsMenu<br/>opciones"]
+    Screen -.->|"una a la vez"| World["World<br/>partida en curso"]
+    World --> Room["Room<br/>una sala de game/levels/"]
+    World --> Player["Player<br/>Elyon"]
+    World --> DebugOverlay["DebugOverlay<br/>panel F3"]
+    Room --> Tiles["TileMapLayer<br/>pisos y paredes"]
+    Room --> Markers["Entrance y Exit<br/>marcadores"]
+    Room --> MortalZone["MortalZone<br/>zona mortal"]
+    Player --> Sprite["Sprite<br/>animaciones"]
+    Player --> Shape["Shape<br/>colisión"]
+```
+
+### Quién decide qué
+
+Los nodos leen lo que pasa y aplican el resultado; las reglas están en la lógica pura, que es lo único con unit tests; y los valores ajustables están en Resources. Cada flecha significa "usa".
+
+```mermaid
+flowchart LR
+    subgraph Nodos["Nodos: aplican"]
+        MainN["Main"]
+        WorldN["World"]
+        RoomN["Room"]
+        PlayerN["Player"]
+    end
+    subgraph Logica["Lógica pura: decide"]
+        Flow["ScreenFlow<br/>qué pantalla sigue"]
+        Store["SettingsStore y PlayerSettings<br/>opciones del jugador"]
+        Scale["PixelScale<br/>escala del pixel art"]
+        Geometry["RoomGeometry<br/>qué borde cruzó"]
+        Exits["RoomExits<br/>qué significa ese borde"]
+        Progress["LevelProgress<br/>sala actual y checkpoint"]
+        Motor["PlayerMotor<br/>movimiento, caída y muerte"]
+        Anim["PlayerAnimation<br/>qué animación mostrar"]
+        Input["PlayerInput<br/>teclas ya leídas"]
+    end
+    subgraph Datos["Resources: valores"]
+        Config["PlayerMovementConfig<br/>game/data/player_movement.tres"]
+        Level["LevelData<br/>game/levels/test/test_level.tres"]
+    end
+    MainN --> Flow
+    MainN --> Store
+    MainN --> Scale
+    WorldN --> Geometry
+    WorldN --> Exits
+    WorldN --> Progress
+    WorldN --> Level
+    RoomN --> Geometry
+    PlayerN --> Motor
+    PlayerN --> Anim
+    PlayerN --> Input
+    PlayerN --> Config
+    Motor --> Config
+```
+
+### Cómo se avisan
+
+Las líneas continuas son señales: el que emite no sabe quién escucha. Las punteadas son llamadas directas.
+
+```mermaid
+flowchart LR
+    MainMenuS["MainMenu"] -->|"play_requested<br/>options_requested<br/>quit_requested"| MainS["Main"]
+    OptionsS["OptionsMenu"] -->|"fullscreen_toggled<br/>volume_changed<br/>language_selected<br/>back_requested"| MainS
+    PauseS["PauseMenu"] -->|"resume_requested<br/>menu_requested"| MainS
+    MainS -.->|"send(evento)"| FlowS["ScreenFlow"]
+    FlowS -->|"state_changed"| MainS
+    PlayerS["Player"] -->|"death_finished"| WorldS["World"]
+    ZoneS["MortalZone"] -.->|"die(causa)"| PlayerS
+    WorldS -.->|"die(causa)<br/>reset_to(posición)"| PlayerS
+    WorldS -.->|"track(nodo)"| DebugS["DebugOverlay"]
+```
+
 ## Escenas
 
 - `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
