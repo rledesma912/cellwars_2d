@@ -4,7 +4,7 @@ type: architecture
 status: approved
 superseded_by:
 links: { gdd: [], decisions: [D0003, D0004], spike: }
-updated: 2026-11-04
+updated: 2026-11-05
 ---
 
 # Arquitectura
@@ -65,6 +65,7 @@ Tres vistas del mismo juego. Se actualizan al cerrar una feature que cambie esce
 flowchart TD
     Main["Main<br/>game/main.tscn"] --> Screen["Screen"]
     Main --> PauseMenu["PauseMenu<br/>menú de pausa"]
+    Main --> LevelCompleteMenu["LevelCompleteMenu<br/>cartel de refugio"]
     Screen -.->|"una a la vez"| MainMenu["MainMenu<br/>menú principal"]
     Screen -.->|"una a la vez"| OptionsMenu["OptionsMenu<br/>opciones"]
     Screen -.->|"una a la vez"| World["World<br/>partida en curso"]
@@ -129,6 +130,8 @@ flowchart LR
     MainMenuS["MainMenu"] -->|"play_requested<br/>options_requested<br/>quit_requested"| MainS["Main"]
     OptionsS["OptionsMenu"] -->|"fullscreen_toggled<br/>volume_changed<br/>language_selected<br/>back_requested"| MainS
     PauseS["PauseMenu"] -->|"resume_requested<br/>menu_requested"| MainS
+    CompleteS["LevelCompleteMenu"] -->|"menu_requested"| MainS
+    WorldS -->|"level_completed"| MainS
     MainS -.->|"send(evento)"| FlowS["ScreenFlow"]
     FlowS -->|"state_changed"| MainS
     PlayerS["Player"] -->|"death_finished"| WorldS["World"]
@@ -139,13 +142,14 @@ flowchart LR
 
 ## Escenas
 
-- `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
+- `game/main.tscn` (`Main`): raíz persistente. Instancia la pantalla actual (menú o `World`) y tiene el menú de pausa y el cartel de nivel completado. No se usa `change_scene_to_file()`, para que el flujo de pantallas no necesite un autoload.
 - `game/ui/`: menús (principal, pausa). Nodos `Control`; los overlays van en un `CanvasLayer`.
 - `game/world/`: la escena activa mientras se juega. Arma la partida: carga salas de `game/levels/` y pone entidades de `game/entities/`.
 - Salas: una escena por sala en `game/levels/` (las de prueba en `game/levels/test/`), con un `TileMapLayer` que usa un `TileSet` compartido de `game/levels/tilesets/` (cada baldosa trae su colisión) y la raíz con el script `Room` (`game/world/room.gd`): dice de qué lado están la entrada y la salida (`entrance_side`, `exit_side`) y las marca con los `Marker2D` `Entrance` y `Exit`, un poco hacia adentro del borde. Las medidas (D0004) viven en `RoomGeometry` (`game/systems/rooms/`). Toda sala tiene entrada y salida en lados distintos; la salida nunca está arriba y la entrada nunca abajo.
 - Niveles (F006): un nivel es un `LevelData` (`.tres` en `game/levels/`) con la lista ordenada de salas. `World` tiene una sola sala en el árbol y deja la anterior y la siguiente instanciadas fuera de él. En cada paso de física, `RoomGeometry.crossed_edge` dice qué borde cruzó Elyon, `RoomExits.resolve` qué significa en esa sala y `LevelProgress` a qué sala va. El cambio es sacar un nodo y poner otro, y Elyon solo cambia de `position`, así conserva el movimiento. Cruzar por arriba nunca cuenta; abajo es la sala siguiente si la salida está abajo y, si no, el vacío.
 - Muerte (F007): el vacío y la zona mortal (`game/entities/mortal_zone/`, un `Area2D` que se coloca en la sala) llaman a `Player.die(causa)`, y la duración depende de la causa. Mientras está muerto, `World` ignora los bordes. Al terminar, `Player` emite `death_finished` y `World` vuelve a la entrada con `LevelProgress.checkpoint()`. `body_entered` avisa solo al entrar: ninguna entrada de sala puede quedar dentro de una zona.
 - Altura y checkpoint (F010): aterrizar desde `lethal_fall_height` o más mata. La altura no se reinicia al cruzar de sala y se congela al morir. `LevelProgress` lleva el checkpoint aparte de la sala actual: al cruzar por abajo no avanza hasta que `World` lo confirma con `Player.is_grounded()`, y por eso morir en esa caída vuelve a la sala donde empezó. Por un costado avanza al instante. Una salida de abajo tiene que contar lo que se cae antes y después de cruzar.
+- Refugio (F011): `LevelProgress.finishes_level()` dice si un borde cruzado es la salida de la última sala. En ese caso `World` emite `level_completed` en lugar de cambiar de sala, y `Main` pausa con `get_tree().paused` y muestra `LevelCompleteMenu`, que tiene `PROCESS_MODE_ALWAYS` para responder durante la pausa. La marca de la salida es un `ColorRect` sin comportamiento: lo que termina el nivel es cruzar el borde.
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
