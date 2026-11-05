@@ -77,6 +77,8 @@ flowchart LR
 
 Así las reglas se prueban sin abrir el juego, y los valores se ajustan sin tocar código.
 
+Para ver cómo se conectan las piezas del juego (nodos, reglas y señales), está el [mapa del código](specs/architecture.md#mapa-del-código).
+
 ## Cómo se trabaja
 
 ```mermaid
