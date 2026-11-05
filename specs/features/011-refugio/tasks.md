@@ -9,7 +9,7 @@ updated: 2026-11-04
 
 # Tasks: feature 011
 
-- [ ] T1 `LevelProgress.finishes_level()`, y `apply()` deja de volver a la sala 1 desde la última salida (cubre: F011-AC01, F011-AC02)
+- [x] T1 `LevelProgress.finishes_level()`, y `apply()` deja de volver a la sala 1 desde la última salida (cubre: F011-AC01, F011-AC02)
 - [ ] T2 Estado "nivel completado" en `ScreenFlow` (cubre: F011-AC03, F011-AC04)
 - [ ] T3 Cartel `LevelCompleteMenu` con sus textos, señal de `World` y conexión en `Main` (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08)
 - [ ] T4 Marca de la salida en la sala 3 (cubre: F011-AC09)
