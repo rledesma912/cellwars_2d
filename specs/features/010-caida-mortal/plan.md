@@ -44,7 +44,7 @@ Descarté que `Player` mirara la altura y llamara a `die()`: sería una regla de
 Descarté pasarle a `pick` la distancia y los dos límites, porque las reglas de altura quedarían repartidas entre dos clases. Los parámetros nuevos de `pick` tienen valores por defecto, así que los tests actuales siguen valiendo.
 
 **La altura se congela al morir.** `_dead()` no suma distancia.
-La alternativa era seguir contando, pero Elyon podría morir por una zona con menos de 420 px, empezar `morir` en el aire y saltar a `caer_largo` al pasar los 420, cortando la animación. Congelada, la animación queda definida en el momento de morir, como pide el caso límite de la spec. En el pozo no cambia nada: los pies tocan la zona a los 440 px y la muerte ya cuenta como `LETHAL`.
+La alternativa era seguir contando, pero Elyon podría morir por una zona con menos de 420 px, empezar `morir` en el aire y saltar a `caer_largo` al pasar los 420, cortando la animación. Congelada, la animación queda definida en el momento de morir, como pide el caso límite de la spec. En el pozo no cambia nada: los pies tocan la zona a los 460 px y la muerte ya cuenta como `LETHAL`.
 
 **`pick` necesita saber si está en el piso solo para `morir_caida`.**
 En el paso en que toca el piso, el estado todavía es `AIR` y sigue `caer_largo`. En el siguiente ya es `DEAD`, y pasa directo a `morir_caida`, sin ningún cuadro de pie (AC10).
@@ -85,6 +85,11 @@ Una línea nueva, `caída`: la altura que lleva contada en píxeles, por ejemplo
 ## Riesgos
 
 - **El arte vive en otro repositorio.** Se copia desde `build/blender/elyon_v9/` de `cw2d-art`, que no está publicado en `assets/final/`. La tira de `elyon.png` queda como copia en este repositorio, igual que las animaciones anteriores.
-- **Margen del pozo.** Los pies tocan la zona a los 440 px, 20 px por encima de `lethal_fall_height`. Si se sube ese límite a más de 440, la muerte en el pozo se ve con `morir`. El rango sugerido llega a 700, así que conviene tenerlo presente al ajustar.
+- **Margen del pozo.** Los pies tocan la zona a los 460 px, 40 px por encima de `lethal_fall_height`. Si se sube ese límite a más de 460, la muerte en el pozo se ve con `morir`. El rango sugerido llega a 700, así que conviene tenerlo presente al ajustar.
 - **Sala nueva con altura propia.** Si la llegada a la sala 3 deja más de 420 px hasta el piso, Elyon igual muere por lo que cae en esa sala. Es lo que pide la regla, pero se revisa en AC18 para que esa sala no resulte injusta.
-- **Salas binarias.** Las baldosas de las salas se guardan como un bloque de bytes. La caída de AC11 se arma con un script que usa `TileMapLayer`, sin editar esos bytes a mano, y se verifica midiendo la caída.
+- **Salas binarias.** Las baldosas de las salas se guardan como un bloque de bytes. Los cambios se hacen decodificando y volviendo a codificar ese bloque, para que el resto de la escena no cambie, y se verifican con una simulación de física que mide las caídas.
+
+## Salas de prueba
+
+- **Sala 3 (AC11):** hueco de 6 baldosas en el piso de arriba (x 800–920), que se cruza saltando, y el piso del medio termina en x 760. Debajo queda una caída de 480 px sobre piso común, a la que se llega desde los dos lados. El bloque del piso de abajo pasa a x 600–680, porque si no frenaría la caída a 400 px, y la zona mortal del piso del medio pasa a x 600, porque si no quedaría en el borde del hueco.
+- **Sala 2 (AC18):** un segundo hueco de salida a la derecha del que ya existe (x 1120–1260), abierto en el piso del medio y en el de abajo. La zona colgante y el hueco original no cambian, porque los usa el playtest de F007. Desde el piso del medio se baja unos 340 px hasta cruzar y otros 100 en la sala 3: sin el reinicio de la altura, Elyon moriría al aterrizar.
