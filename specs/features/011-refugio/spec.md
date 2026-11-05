@@ -1,10 +1,10 @@
 ---
 id: F011
 type: feature
-status: in-progress
+status: done
 superseded_by:
 links: { gdd: [G001], decisions: [], spike: }
-updated: 2026-11-04
+updated: 2026-11-05
 ---
 
 # Feature 011: Refugio al final del nivel
@@ -28,18 +28,18 @@ Hoy un nivel no termina: la salida de la última sala lleva a la entrada de la s
 
 **Reglas**
 
-- F011-AC01 [unit] Salir por la salida de la última sala da "nivel terminado", sin cambiar de sala. Vale también para un nivel de una sola sala. Reemplaza el comportamiento provisorio de F006-AC02.
-- F011-AC02 [unit] Lo demás no cambia: la salida de otra sala lleva a la siguiente, y la entrada de la sala 1 vuelve a su entrada (F006-AC01 y F006-AC02).
-- F011-AC03 [unit] En `ScreenFlow`, terminar el nivel pasa de jugando a "nivel completado", y volver al menú pasa de "nivel completado" al menú.
-- F011-AC04 [unit] En "nivel completado" se ignoran pausar, continuar y jugar. Terminar el nivel solo tiene efecto mientras se está jugando.
+- F011-AC01 [unit] ✅ Salir por la salida de la última sala da "nivel terminado", sin cambiar de sala. Vale también para un nivel de una sola sala. Reemplaza el comportamiento provisorio de F006-AC02.
+- F011-AC02 [unit] ✅ Lo demás no cambia: la salida de otra sala lleva a la siguiente, y la entrada de la sala 1 vuelve a su entrada (F006-AC01 y F006-AC02).
+- F011-AC03 [unit] ✅ En `ScreenFlow`, terminar el nivel pasa de jugando a "nivel completado", y volver al menú pasa de "nivel completado" al menú.
+- F011-AC04 [unit] ✅ En "nivel completado" se ignoran pausar, continuar y jugar. Terminar el nivel solo tiene efecto mientras se está jugando.
 
 **Jugando**
 
-- F011-AC05 [manual] Al cruzar la salida de la sala 3, Elyon deja de moverse, la sala queda congelada y aparece el cartel "Refugio alcanzado", con "Volver al menú" como único botón.
-- F011-AC06 [manual] Con el cartel abierto, Esc o Start no abren la pausa, y el botón responde con teclado, gamepad y mouse.
-- F011-AC07 [manual] Al volver al menú y elegir Jugar, la partida empieza de cero: entrada de la sala 1, quieto (overlay: `sala` dice "1 / 3" y `checkpoint` dice "sala 1").
-- F011-AC08 [manual] El título y el botón del cartel están traducidos al cambiar entre español e inglés.
-- F011-AC09 [manual] La salida de la sala 3 se distingue con un rectángulo gris verdoso, sin colisión, que Elyon atraviesa.
+- F011-AC05 [manual] ✅ Al cruzar la salida de la sala 3, Elyon deja de moverse, la sala queda congelada y aparece el cartel "Refugio alcanzado", con "Volver al menú" como único botón.
+- F011-AC06 [manual] ✅ Con el cartel abierto, Esc o Start no abren la pausa, y el botón responde con teclado, gamepad y mouse.
+- F011-AC07 [manual] ✅ Al volver al menú y elegir Jugar, la partida empieza de cero: entrada de la sala 1, quieto (overlay: `sala` dice "1 / 3" y `checkpoint` dice "sala 1").
+- F011-AC08 [manual] ✅ El título y el botón del cartel están traducidos al cambiar entre español e inglés.
+- F011-AC09 [manual] ✅ La salida de la sala 3 se distingue con un rectángulo gris verdoso, sin colisión, que Elyon atraviesa.
 
 ## Casos límite
 
@@ -52,3 +52,11 @@ Hoy un nivel no termina: la salida de la última sala lleva a la entrada de la s
 ## Parámetros de tuning (Resource)
 
 Sin tuning nuevo.
+
+## Notas finales
+
+- **Sin desviaciones.** Los cinco criterios `[manual]` quedaron tildados por el desarrollador en el PR #28, y los `[unit]` pasan en gdUnit4.
+- **Se prueba entrando por el menú.** `probar_en_laptop.sh` abre la partida sin `Main`: así no aparece el cartel y Elyon sigue de largo fuera de la pantalla.
+- **Elyon asoma detrás del cartel.** El nivel termina cuando su cuerpo sale de la pantalla, y el dibujo es más ancho que el cuerpo, así que un pedacito queda visible en el borde derecho. No se tocó.
+- **Script de prueba colgado.** El script temporal del recorrido, que no quedó en el repositorio, no terminó en dos corridas con ventana y después terminó bien en todas. No se encontró la causa ni se pudo repetir, y no se sabe si tiene relación con el juego.
+- **Test de F006 ajustado.** `test_f006_ac02_list_edges` ya no espera volver a la sala 1 desde la última salida, porque F011-AC01 reemplazó ese comportamiento.

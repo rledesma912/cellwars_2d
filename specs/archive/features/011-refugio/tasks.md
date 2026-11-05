@@ -13,6 +13,6 @@ updated: 2026-11-04
 - [x] T2 Estado "nivel completado" en `ScreenFlow` (cubre: F011-AC03, F011-AC04)
 - [x] T3 Cartel `LevelCompleteMenu` con sus textos, señal de `World` y conexión en `Main` (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08)
 - [x] T4 Marca de la salida en la sala 3 (cubre: F011-AC09)
-- [ ] T5 Playtest entrando por el menú principal (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08, F011-AC09)
+- [x] T5 Playtest entrando por el menú principal (cubre: F011-AC05, F011-AC06, F011-AC07, F011-AC08, F011-AC09)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f011_ac01_last_exit_finishes_level_without_changing_room`.

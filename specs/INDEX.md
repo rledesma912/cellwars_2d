@@ -21,9 +21,10 @@
 
 ## Niveles
 
-- Un nivel es una lista ordenada de salas: al salir por la salida se pasa a la siguiente y por la entrada a la anterior, al instante y sin cortar el movimiento; también se baja a la sala de abajo. Nivel de prueba de 3 salas; la salida de la última vuelve por ahora a la sala 1. [F006](features/006-varias-salas/spec.md)
+- Un nivel es una lista ordenada de salas: al salir por la salida se pasa a la siguiente y por la entrada a la anterior, al instante y sin cortar el movimiento; también se baja a la sala de abajo. Nivel de prueba de 3 salas. [F006](features/006-varias-salas/spec.md)
 - Elyon puede morir: al tocar una zona mortal cae sin control y vuelve a la entrada de la sala actual, y caer al vacío también mata, con una espera corta. Cada sala es un checkpoint. Las salas de prueba tienen zonas mortales en gris rojizo. [F007](features/007-muerte-y-checkpoint/spec.md)
 - La altura mata: un piso se sobrevive y dos no. Desde cierta altura se ve `caer_largo` en el aire, y el golpe muestra `morir_caida`, sin cuadros de pie. Una caída que cruza de sala sigue sumando, y si mata, vuelve a la sala donde empezó. `morir` tiene arte nuevo, que se desploma en el lugar. [F010](features/010-caida-mortal/spec.md)
+- La salida de la última sala es el refugio y termina el nivel: la partida se congela y aparece el cartel "Refugio alcanzado", con un botón para volver al menú. La salida de la sala 3 se marca con un rectángulo gris verdoso. [F011](features/011-refugio/spec.md)
 
 ## En curso
 
