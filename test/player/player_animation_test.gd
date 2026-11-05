@@ -2,6 +2,7 @@
 extends GdUnitTestSuite
 
 const S := PlayerMotor.State
+const F := PlayerMotor.FallSeverity
 const RUN_SPEED := 100.0
 
 
@@ -151,3 +152,56 @@ func test_f010_ac09_frames_have_new_animations() -> void:
 	# caer_largo se repite, como caer: Player reinicia lo que no repite.
 	assert_bool(frames.get_animation_loop(&"caer_largo")).is_true()
 	assert_bool(frames.get_animation_loop(&"morir_caida")).is_false()
+
+
+func _pick_fall(
+	state: PlayerMotor.State, velocity: Vector2, severity: PlayerMotor.FallSeverity, on_floor: bool
+) -> StringName:
+	return PlayerAnimation.pick(state, velocity, RUN_SPEED, false, severity, on_floor)
+
+
+func test_f010_ac05_air_animation_by_severity() -> void:
+	var down := Vector2(0.0, 10.0)
+	assert_str(_pick_fall(S.AIR, down, F.NORMAL, false)).is_equal("caer")
+	assert_str(_pick_fall(S.AIR, down, F.LONG, false)).is_equal("caer_largo")
+	assert_str(_pick_fall(S.AIR, down, F.LETHAL, false)).is_equal("caer_largo")
+	# Subiendo siempre es subir.
+	assert_str(_pick_fall(S.AIR, Vector2(0.0, -10.0), F.LONG, false)).is_equal("subir")
+	# El paso en que toca el piso sigue en el aire para el motor, con velocidad Y en 0:
+	# sigue caer_largo, sin ningún cuadro de otra animación antes de morir_caida.
+	assert_str(_pick_fall(S.AIR, Vector2.ZERO, F.LETHAL, true)).is_equal("caer_largo")
+
+
+func test_f010_ac06_dead_on_floor_by_severity() -> void:
+	assert_str(_pick_fall(S.DEAD, Vector2.ZERO, F.LETHAL, true)).is_equal("morir_caida")
+	assert_str(_pick_fall(S.DEAD, Vector2.ZERO, F.LONG, true)).is_equal("morir")
+	assert_str(_pick_fall(S.DEAD, Vector2.ZERO, F.NORMAL, true)).is_equal("morir")
+
+
+func test_f010_ac07_dead_in_air_lethal_keeps_caer_largo() -> void:
+	var down := Vector2(0.0, 500.0)
+	assert_str(_pick_fall(S.DEAD, down, F.LETHAL, false)).is_equal("caer_largo")
+	# Por debajo del límite, en el aire: morir, como en F007-AC08.
+	assert_str(_pick_fall(S.DEAD, down, F.LONG, false)).is_equal("morir")
+	assert_str(_pick_fall(S.DEAD, down, F.NORMAL, false)).is_equal("morir")
+
+
+func test_f010_ac08_morir_caida_keeps_own_pace_and_last_frame() -> void:
+	var config := PlayerMovementConfig.new()
+	# No se estira con death_time: 0 es "a su ritmo natural".
+	assert_float(PlayerAnimation.duration_for(&"morir_caida", config)).is_equal(0.0)
+	assert_float(PlayerAnimation.duration_for(&"caer_largo", config)).is_equal(0.0)
+	# Tarda 0,22 s hasta el último cuadro, que es el de quedar tendido.
+	var frames := _frames()
+	var until_lying := 0.0
+	for i in frames.get_frame_count(&"morir_caida") - 1:
+		until_lying += frames.get_frame_duration(&"morir_caida", i)
+	until_lying /= frames.get_animation_speed(&"morir_caida")
+	assert_float(until_lying).is_equal_approx(0.22, 0.001)
+	# Las dos muertes se quedan en su último cuadro; lo demás se reinicia si terminó.
+	assert_bool(PlayerAnimation.holds_last_frame(&"morir_caida")).is_true()
+	assert_bool(PlayerAnimation.holds_last_frame(&"morir")).is_true()
+	assert_bool(PlayerAnimation.holds_last_frame(&"caer_largo")).is_false()
+	assert_bool(PlayerAnimation.holds_last_frame(&"aterrizar")).is_false()
+	# morir sigue durando death_time.
+	assert_float(PlayerAnimation.duration_for(&"morir", config)).is_equal(config.death_time)
