@@ -35,7 +35,7 @@ Hoy un nivel no termina: la salida de la última sala lleva a la entrada de la s
 
 **Jugando**
 
-- F011-AC05 [manual] Al cruzar la salida de la sala 3, Elyon deja de moverse, la sala queda congelada y aparece el cartel "Refugio alcanzado" con el botón "Volver al menú".
+- F011-AC05 [manual] Al cruzar la salida de la sala 3, Elyon deja de moverse, la sala queda congelada y aparece el cartel "Refugio alcanzado", con "Volver al menú" como único botón.
 - F011-AC06 [manual] Con el cartel abierto, Esc o Start no abren la pausa, y el botón responde con teclado, gamepad y mouse.
 - F011-AC07 [manual] Al volver al menú y elegir Jugar, la partida empieza de cero: entrada de la sala 1, quieto (overlay: `sala` dice "1 / 3" y `checkpoint` dice "sala 1").
 - F011-AC08 [manual] El título y el botón del cartel están traducidos al cambiar entre español e inglés.
@@ -52,8 +52,3 @@ Hoy un nivel no termina: la salida de la última sala lleva a la entrada de la s
 ## Parámetros de tuning (Resource)
 
 Sin tuning nuevo.
-
-## Preguntas abiertas
-
-1. **¿Adónde lleva el cartel?** Propuesta: al menú principal, porque es un final claro y deja listo el lugar para el nivel siguiente. La alternativa es un segundo botón, "Jugar de nuevo", que vuelva a la sala 1, como hace hoy la salida.
-2. **¿La salida se marca?** Propuesta: sí, con el rectángulo gris verdoso de F011-AC09, que es greybox hasta que haya arte. Sin marca, se llega al final sin saber que esa salida termina el nivel. La alternativa es no marcarla y quitar ese criterio.
