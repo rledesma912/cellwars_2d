@@ -12,7 +12,7 @@ Precondiciones (si alguna falla, detenete y reportá): estás en la branch `feat
 ## 1. Diseño
 
 1. Leé la spec, `specs/architecture.md` y el código existente de los sistemas que toca.
-2. Para cada sistema de Godot involucrado, invocá la skill `godot-prompter:*` del dominio (salvo que el patrón ya esté fijado en `architecture.md` o en una decisión y sus supuestos no hayan cambiado). Si su recomendación contradice `architecture.md` o una decisión aprobada, señalá el conflicto y pedí una decisión; no cambies la arquitectura. En el plan, por cada elección no obvia (tipo de nodo, FSM enum vs nodos, señal vs llamada directa), escribí el patrón elegido, la alternativa descartada y el porqué. El desarrollador está aprendiendo Godot: explicalo breve.
+2. Para cada sistema de Godot involucrado, invocá la skill `godot-prompter:*` del dominio si tu agente la tiene (salvo que el patrón ya esté fijado en `architecture.md` o en una decisión y sus supuestos no hayan cambiado). Si su recomendación contradice `architecture.md` o una decisión aprobada, señalá el conflicto y pedí una decisión; no cambies la arquitectura. En el plan, por cada elección no obvia (tipo de nodo, FSM enum vs nodos, señal vs llamada directa), escribí el patrón elegido, la alternativa descartada y el porqué. Los directores están aprendiendo Godot: explicalo breve.
 3. Completá `plan.md` (mismo frontmatter que la spec, `status: draft`):
    - **Árbol de escenas**: bloque con la jerarquía de nodos y su tipo.
    - **Scripts y responsabilidades**: tabla; cada archivo clasificado como lógica pura / nodo / Resource. Ninguna regla de juego en nodos.
@@ -30,4 +30,4 @@ Precondiciones (si alguna falla, detenete y reportá): estás en la branch `feat
 
 Commit `docs: plan y tasks FNNN` y push.
 
-Mostrá plan y tasks y pedí revisión explícita antes de implementar. Siguiente paso: `implement-task`.
+Explicá en el chat, en lenguaje llano, qué se va a construir y en qué orden, y pedí la aprobación explícita del director de la feature antes de implementar. Siguiente paso: `implement-task`.

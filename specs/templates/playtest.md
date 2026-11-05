@@ -9,7 +9,7 @@ updated: YYYY-MM-DD
 
 # Playtest: feature NNN
 
-> Guía de pasos. Se tilda en el checklist del PR, que es la fuente de verdad: este archivo no lleva casillas.
+> Guía de pasos y registro del playtest. El agente explica los pasos en el chat y anota en "Resultados" lo que dice el director: es la fuente de verdad que lee `close-feature`.
 
 ## Preparación (escena, overlay F3)
 
@@ -19,8 +19,12 @@ updated: YYYY-MM-DD
 
 ## Checklist [feel]
 
-<!-- Solo lo marca el desarrollador. -->
+<!-- Solo lo decide el director: el agente anota sus palabras, nunca deduce. -->
 
 - FNNN-ACnn: ¿...? (qué parámetros del `.tres` mueven esa sensación)
+
+## Resultados
+
+<!-- Uno por criterio: - FNNN-ACnn: ✅ cumplido | ❌ no cumplido — "<palabras del director>" (YYYY-MM-DD) -->
 
 ## Notas del playtest

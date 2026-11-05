@@ -24,7 +24,7 @@ export_credentials.cfg
 /reports/
 
 # --- Claude Code ------------------------------------------------------------
-# Settings personales (permisos locales); settings.json sí se commitea.
+# Settings personales (permisos y el hook de formato); settings.json sí se commitea.
 .claude/settings.local.json
 
 # --- Python (gdtoolkit) -----------------------------------------------------
@@ -42,5 +42,8 @@ Thumbs.db
 .directory
 *.swp
 *~
-.vscode/
+.vscode/*
+# Configuración compartida para Copilot (D0006): sí se commitea.
+!.vscode/mcp.json
+!.vscode/settings.json
 .idea/

@@ -11,7 +11,7 @@ Precondiciones: spec `approved` o `in-progress`; estás en la branch `feat/NNN-<
 
 ## Pasos
 
-1. **Leé** la task, los criterios que cubre y la sección del plan correspondiente. Invocá la skill `godot-prompter:*` del dominio y reportá el patrón elegido antes de construir, si no está ya decidido en el plan.
+1. **Leé** la task, los criterios que cubre y la sección del plan correspondiente. Si el patrón no está ya decidido en el plan, reportá el patrón elegido y el descartado antes de construir (con la skill `godot-prompter:*` del dominio si tu agente la tiene; ver `godot-conventions`).
 2. **Tests primero** (si la task cubre criterios `[unit]`):
    - En `test/` espejo de `game/systems/`, un test por criterio: `test_fnnn_acnn_<comportamiento>`.
    - Corré la suite y confirmá que los nuevos fallan por la razón esperada (no por error de parseo).
@@ -20,7 +20,7 @@ Precondiciones: spec `approved` o `in-progress`; estás en la branch `feat/NNN-<
    - No edites `game/levels/` salvo que la task lo pida explícitamente.
    - Si un sistema nuevo tiene estado visible, agregá sus líneas al overlay F3.
 4. **Verificación**:
-   - Hook de formato/lint sin errores.
+   - `gdformat` y después `gdlint` sobre los `.gd` que tocaste, sin errores.
    - `godot --headless --import` si creaste `.gd`/`.tscn` (genera `.uid`).
    - Suite completa: `godot --headless -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test -c` → exit 0.
    - Smoke run vía MCP (`run_project`, `get_debug_output`, `stop_project`): consola sin errores.

@@ -1,6 +1,6 @@
 ---
 name: spec-feature
-description: Redacta la spec de una feature de cellwars_2d - evalúa si necesita spike, elige vía completa o liviana y escribe spec.md con criterios identificados y etiquetados [unit]/[manual]/[feel]. Usala cuando el desarrollador pida especificar una feature nueva.
+description: Redacta la spec de una feature de cellwars_2d - evalúa si necesita spike, elige vía completa o liviana y escribe spec.md con criterios identificados y etiquetados [unit]/[manual]/[feel]. Usala cuando el director pida especificar una feature nueva.
 ---
 
 # Spec feature
@@ -9,11 +9,13 @@ Plantilla: `specs/templates/spec.md`.
 
 ## 1. Contexto
 
+- **Un solo trabajo abierto** (ver "Directores" en `AGENTS.md`): `git fetch` y verificá que no exista ninguna branch `feat/*` ni `spike/*` (`git branch -a --list '*feat/*' '*spike/*'`) ni archivos en `specs/spikes/` (salvo `.gitkeep`). Si hay uno, decile al director quién lo tiene (línea `Director:` de su documento) y qué falta para cerrarlo, y detenete.
+
 Leé `specs/INDEX.md`, el GDD relevante, las decisiones vigentes en `specs/decisions/`, `specs/architecture.md` y `specs/discarded.md`. Si la feature (o parte) está descartada, decilo y no sigas sin un motivo nuevo explícito.
 
 ## 2. ¿Necesita spike?
 
-Aplicá los criterios del principio 1 de `CLAUDE.md`. Si alguno se cumple, recomendá un spike (skill `spike`) explicando qué incertidumbre resolvería, y detenete hasta que el desarrollador decida. Si no aplica ninguno, decilo en una línea y seguí.
+Aplicá los criterios del principio 1 de `AGENTS.md`. Si alguno se cumple, recomendá un spike (skill `spike`) explicando qué incertidumbre resolvería, y detenete hasta que el director decida. Si no aplica ninguno, decilo en una línea y seguí.
 
 ## 3. Vía
 
@@ -24,20 +26,20 @@ Aplicá los criterios del principio 1 de `CLAUDE.md`. Si alguno se cumple, recom
 
 1. Número `NNN`: siguiente libre en `specs/features/`, `specs/archive/features/` y las branches `feat/*` (`git fetch` y `git branch -a --list '*feat/*'`).
 2. **Branch** (igual en ambas vías): con working tree limpio y `develop` al día con `origin/develop`, creá `feat/NNN-<nombre>` desde `develop`. La spec, el plan, el código y el playtest viajan juntos en esta branch y en un único PR.
-3. Carpeta `specs/features/NNN-<nombre>/spec.md`, id `FNNN`, `status: draft`, `links` completos (GDD, decisiones, spike). Commit `docs: spec FNNN (draft)`.
+3. Carpeta `specs/features/NNN-<nombre>/spec.md`, id `FNNN`, `status: draft`, línea `- Director: <nombre>` (quien la pidió), `links` completos (GDD, decisiones, spike). Commit `docs: spec FNNN (draft)`.
 4. Criterios de aceptación con ID `FNNN-ACnn` y **una** etiqueta cada uno:
    - `[unit]`: comportamiento de lógica pura verificable con gdUnit4 (timers, cálculos, transiciones). Redactalo como entrada → salida.
    - `[manual]`: resultado objetivo jugando ("sube a una plataforma de 3 tiles").
-   - `[feel]`: subjetivo; siempre lo cierra el desarrollador.
+   - `[feel]`: subjetivo; siempre lo cierra el director.
    Cada criterio es verificable por sí solo. Preferí `[unit]` cuando la regla se puede aislar.
 5. Parámetros de tuning: tabla con tipo, valor inicial y rango. Si vienen de un spike, usá los valores que funcionaron.
    - **Verificá los números antes de pedir aprobación.** Si un criterio o parámetro depende de una fórmula (alturas, tiempos, distancias), calculá el caso concreto con un script rápido (`godot --headless -s` con un `extends SceneTree` en el scratchpad), simulando la física en pasos de 1/60 s como la corre Godot, y con los extremos del rango sugerido. Si el resultado no cumple el criterio, corregilo en el borrador.
 6. Casos límite y Fuera de alcance explícitos.
-7. Preguntas abiertas: solo las reales; cada una debe resolverse antes de aprobar o quedar como decisión del desarrollador.
+7. Preguntas abiertas: solo las reales; cada una debe resolverse antes de aprobar o quedar como decisión del director.
 
 ## 5. Aprobación
 
-Mostrá la spec y **pedí aprobación explícita**. Al aprobarse: `status: approved`, commit `docs: spec FNNN aprobada` y push. Desde ese momento no cambiás criterios: si algo resulta incorrecto o inviable, detenete y proponé el cambio.
+Explicá la spec en el chat en lenguaje llano (objetivo, qué queda afuera y cada criterio en palabras simples) y **pedí la aprobación explícita** de su director. Al aprobarse: `status: approved`, commit `docs: spec FNNN aprobada` y push. Desde ese momento no cambiás criterios: si algo resulta incorrecto o inviable, detenete y proponé el cambio.
 
 Siguiente paso (siempre en `feat/NNN-<nombre>`):
 - Vía completa → `plan-feature`.

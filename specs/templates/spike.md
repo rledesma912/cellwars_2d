@@ -12,12 +12,13 @@ updated: YYYY-MM-DD
 - Branch: `spike/NNN-<nombre>`
 - Tipo: gameplay | técnico | viabilidad | integración
 - Origen: GDD <archivo §> / feature NNN
+- Director: <quién lo pidió; aprueba la definición y la decisión>
 
 ## Definición (se aprueba antes de empezar)
 
 - Pregunta: <qué incertidumbre resuelve, en una frase>
 - Motivo: <por qué importa resolverla antes de seguir>
-- Alcance: <qué entra y qué no> (sin límite de tiempo; cierra cuando se cumplen los criterios de salida y el desarrollador lo decide)
+- Alcance: <qué entra y qué no> (sin límite de tiempo; cierra cuando se cumplen los criterios de salida y su director lo decide)
 - Criterios de salida: <qué evidencia alcanza para decidir>
 - Alternativas a evaluar: <si aplica>
 - Destino del código: descartar (por defecto) | reutilizar tras revisión

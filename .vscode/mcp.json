@@ -1,0 +1,19 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "godot-path",
+      "description": "Ruta completa al ejecutable de Godot 4.7, por ejemplo C:\\Godot\\godot.exe"
+    }
+  ],
+  "servers": {
+    "godot": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@coding-solo/godot-mcp@0.1.1"],
+      "env": {
+        "GODOT_PATH": "${input:godot-path}"
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ updated: YYYY-MM-DD
 
 - Origen: GDD <archivo §> / decisión NNNN
 - Vía: completa | liviana
+- Director: <quién la pidió; aprueba, prueba y cierra>
 
 ## Objetivo
 
@@ -33,5 +34,5 @@ updated: YYYY-MM-DD
 
 ## Preguntas abiertas
 
-<!-- Vía liviana: agregar al final una sección "Plan y tasks" de pocas líneas; el playtest va directo en el PR. -->
+<!-- Vía liviana: agregar al final una sección "Plan y tasks" de pocas líneas; el playtest va en playtest.md, como en la vía completa. -->
 <!-- As-built (close-feature): sin preguntas abiertas; agregar sección corta "Notas finales". -->

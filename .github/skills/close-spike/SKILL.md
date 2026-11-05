@@ -1,11 +1,11 @@
 ---
 name: close-spike
-description: Cierra un spike de cellwars_2d una vez aprobada su decisión - consolida las consecuencias en los documentos vivos, archiva el informe, registra lo descartado, lleva los docs a develop por PR y archiva la branch con un tag. Usala cuando el desarrollador apruebe la decisión de un spike.
+description: Cierra un spike de cellwars_2d una vez aprobada su decisión - consolida las consecuencias en los documentos vivos, archiva el informe, registra lo descartado, lleva los docs a develop por PR y archiva la branch con un tag. Usala cuando el director apruebe la decisión de un spike.
 ---
 
 # Close spike
 
-Precondición: el spike `SNNN` tiene `status: done` y su decisión `DNNNN` fue aprobada por el desarrollador con un mensaje explícito (citalo; si no hay aprobación explícita, detenete). Hasta que esta skill termine, el spike cuenta como abierto.
+Precondición: el spike `SNNN` tiene `status: done` y su decisión `DNNNN` fue aprobada por el director del spike (línea `Director:`) con un mensaje explícito en el chat (citalo; si no hay aprobación explícita, detenete). Hasta que esta skill termine, el spike cuenta como abierto.
 
 ## 1. Branch de cierre
 
@@ -34,12 +34,12 @@ git diff --cached --stat   # debe listar solo esos dos archivos de specs/
 
 ## 3. PR
 
-Commit `docs: cierre de spike SNNN y decisión DNNNN`, push y PR a `develop` con: resumen de la decisión, lista de documentos tocados, líneas agregadas a `discarded.md`. El desarrollador mergea.
+Commit `docs: cierre de spike SNNN y decisión DNNNN`, push y PR a `develop` con: resumen de la decisión, lista de documentos tocados, líneas agregadas a `discarded.md`. Contale al director en el chat qué cambia y, con su OK, verificá el head y mergeá (ver "Cuidados con git y GitHub" en `AGENTS.md`).
 
 ## 4. Archivar la branch (después del merge)
 
 1. `git tag archive/spike-NNN spike/NNN-<nombre>` y `git push origin archive/spike-NNN`.
-2. **Pedí confirmación** y recién entonces borrá la branch local y remota (`git branch -D`, `git push origin --delete`).
+2. **Pedí confirmación** y recién entonces borrá la branch local y remota (`git branch -D`, `git push origin --delete`). Acá sí va `-D`: la branch no se mergea, y sus commits quedan guardados en el tag.
 
 ## 5. Verificar y reportar
 

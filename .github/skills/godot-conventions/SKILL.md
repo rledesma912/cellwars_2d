@@ -7,10 +7,10 @@ description: Convenciones de código y de estructura de cellwars_2d (lógica pur
 
 Fuente de verdad vigente: `specs/architecture.md`. Esta skill la baja a reglas operativas. Si chocan, manda `architecture.md`.
 
-Antes de implementar un sistema de Godot, invocá además la skill `godot-prompter:*` del dominio (p. ej. `player-controller`, `resource-pattern`, `state-machine`) y reportá el patrón elegido y el descartado.
+Antes de implementar un sistema de Godot, si tu agente tiene GodotPrompter (Claude Code), invocá además la skill `godot-prompter:*` del dominio (p. ej. `player-controller`, `resource-pattern`, `state-machine`). Si no lo tiene, apoyate en `architecture.md`, el plan y la documentación oficial de Godot 4.7. En los dos casos, reportá el patrón elegido y el descartado.
 
 - Si el patrón ya está fijado en `architecture.md`, en una decisión aprobada o en el `plan.md` de la feature, y sus supuestos no cambiaron, no vuelvas a consultarla: seguí lo documentado.
-- Si una recomendación de GodotPrompter contradice `architecture.md` o una decisión aprobada, **señalá el conflicto y pedí una decisión**. No cambies la arquitectura por tu cuenta.
+- Si una recomendación (de GodotPrompter o de la documentación) contradice `architecture.md` o una decisión aprobada, **señalá el conflicto y pedí una decisión**. No cambies la arquitectura por tu cuenta.
 
 ## Dónde va cada cosa
 
@@ -19,7 +19,7 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 | Reglas de juego (motor de movimiento, daño, timers) | `game/systems/<sistema>/` | `RefCounted` con `class_name`, sin acceso al árbol |
 | Escenas y scripts de nodos | `game/entities/<entidad>/` | Nodo fino: lee input, llama a la lógica, aplica el resultado |
 | Definición de parámetros | `game/systems/<sistema>/<x>_config.gd` | `Resource` con `class_name` y `@export` tipados |
-| Valores de tuning | `game/data/<x>.tres` | Instancia del Resource. **La crea el agente una vez con valores iniciales; después la edita solo el desarrollador** |
+| Valores de tuning | `game/data/<x>.tres` | Instancia del Resource. **La crea el agente una vez con valores iniciales; después la edita solo el director** |
 | Partida en curso | `game/world/` | Escena que arma la partida: carga salas de `levels/` y pone entidades. Nodo fino, como `entities/` |
 | Menús e interfaz | `game/ui/<pantalla>/` | Nodos `Control`; emiten señales (`play_requested`) y no deciden el flujo |
 | Traducciones | `game/i18n/texts.csv` | Una etiqueta por texto visible (`MENU_PLAY`), columnas `es` y `en`. Nunca escribir textos directo en escenas ni scripts |
@@ -37,7 +37,7 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 4. **Física en `_physics_process`** (60 ticks). Nada de movimiento en `_process`.
 5. **Señales para comunicar sistemas.** Evitar `get_node()` con rutas largas; preferir `@export var x: NodeType` o `%NombreUnico`. Autoloads: como máximo un bus de eventos y el estado global.
 6. **Tipado estático siempre**: parámetros, retornos y variables (`var speed: float`, `:=` cuando el tipo es obvio).
-7. **Comentarios didácticos**: el desarrollador está aprendiendo GDScript. Toda decisión de Godot no obvia lleva un comentario breve explicando el porqué (no el qué).
+7. **Comentarios didácticos**: los directores están aprendiendo GDScript. Toda decisión de Godot no obvia lleva un comentario breve explicando el porqué (no el qué).
 
 ## Nombres
 
@@ -49,7 +49,7 @@ Antes de implementar un sistema de Godot, invocá además la skill `godot-prompt
 
 ## Verificación
 
-- Formato y lint los aplica el hook en cada Write/Edit de `.gd`. Si el hook devuelve errores de `gdlint`, corregilos antes de seguir.
+- Formato y lint: antes de cada commit, `gdformat <archivos .gd que tocaste>` y después `gdlint <los mismos archivos>`. Si `gdlint` da errores, corregilos antes de seguir. En Claude Code, además, un hook local lo corre en cada edición.
 - Unit tests: `godot --headless -s res://addons/gdUnit4/bin/GdUnitCmdTool.gd --ignoreHeadlessMode -a res://test -c` (exit 0 = todo pasó).
 - Smoke run: MCP `godot` → `run_project`, `get_debug_output`, `stop_project`. Consola sin `ERROR`/`SCRIPT ERROR`.
 - Archivos nuevos `.gd`/`.tscn`: después de crearlos, `godot --headless --import` genera sus `.uid`, que **se commitean**.
