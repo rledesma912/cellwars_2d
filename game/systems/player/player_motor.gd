@@ -12,7 +12,9 @@ extends RefCounted
 
 enum State { IDLE, RUN, BRAKE, TURN, JUMP_PREP, AIR, LAND, ROLL, DEAD }
 ## Por qué murió: decide cuánto dura la muerte.
-enum DeathCause { HAZARD, VOID }
+enum DeathCause { HAZARD, VOID, FALL }
+## Qué tan grave es la caída contada: decide la animación y si aterrizar mata.
+enum FallSeverity { NORMAL, LONG, LETHAL }
 
 ## Estado actual. Solo lectura desde afuera.
 var state: State = State.IDLE
@@ -54,7 +56,7 @@ func die(cause: DeathCause) -> void:
 	if state == State.DEAD:
 		return
 	state = State.DEAD
-	_state_timer = _config.death_time if cause == DeathCause.HAZARD else _config.void_restart_time
+	_state_timer = _config.void_restart_time if cause == DeathCause.VOID else _config.death_time
 	# Lo que estuviera en curso se corta: un salto apretado no sale al reaparecer.
 	_buffer = 0.0
 	_coyote = 0.0
@@ -69,6 +71,27 @@ func is_dead() -> bool:
 ## true cuando pasó el tiempo de la muerte: ya se puede volver a la entrada de la sala.
 func is_death_finished() -> bool:
 	return state == State.DEAD and _state_timer <= 0.0
+
+
+## Píxeles que bajó desde el punto más alto. Después de aterrizar conserva la última
+## caída hasta volver al aire: el overlay la muestra y sirve para medir.
+func get_fall_distance() -> float:
+	return _fall_distance
+
+
+## Gravedad de la caída contada. Si un límite se ajusta por encima del otro, manda el mortal.
+func get_fall_severity() -> FallSeverity:
+	if _fall_distance >= _config.lethal_fall_height:
+		return FallSeverity.LETHAL
+	if _fall_distance >= _config.long_fall_height:
+		return FallSeverity.LONG
+	return FallSeverity.NORMAL
+
+
+## Vuelve a contar la caída desde 0, sin tocar nada más: al entrar a otra sala, una caída
+## no suma lo que bajó en la anterior, porque moriría al llegar a un lugar que recién ve.
+func reset_fall() -> void:
+	_fall_distance = 0.0
 
 
 ## Segundos que le quedan al giro, la preparación, la recuperación o rodar.
@@ -110,6 +133,13 @@ func _alive(velocity: Vector2, input: PlayerInput, on_floor: bool, delta: float)
 		# durante la preparación): cae sin saltar. El coyote time sigue corriendo.
 		_enter_air(false)
 
+	# Aterrizar pudo matarlo: desde este mismo paso ya no se mira el input.
+	if state == State.DEAD:
+		return _dead(velocity, on_floor, delta)
+	return _act(velocity, input, wants_jump, delta)
+
+
+func _act(velocity: Vector2, input: PlayerInput, wants_jump: bool, delta: float) -> Vector2:
 	match state:
 		State.IDLE, State.RUN, State.BRAKE:
 			return _ground(velocity, input, wants_jump, delta)
@@ -211,6 +241,8 @@ func _roll(v: Vector2, delta: float) -> Vector2:
 	return v
 
 
+# La altura no se sigue contando: queda la del momento de morir. Si no, una muerte por
+# zona mortal en el aire cambiaría de animación a mitad de camino al pasar el límite.
 func _dead(v: Vector2, on_floor: bool, delta: float) -> Vector2:
 	_state_timer = maxf(_state_timer - delta, 0.0)
 	if on_floor:
@@ -274,7 +306,9 @@ func _enter_air(jumped: bool) -> void:
 
 func _land(v: Vector2) -> void:
 	_jumping = false
-	if _fall_distance < _config.hard_landing_height:
+	if get_fall_severity() == FallSeverity.LETHAL:
+		die(DeathCause.FALL)
+	elif _fall_distance < _config.hard_landing_height:
 		state = State.IDLE
 	elif _can_roll(v):
 		# Los timers arrancan enteros: _roll y _recover los descuentan en este mismo paso.
