@@ -15,8 +15,8 @@ const STANCE_NAMES := {
 }
 const AIM_NAMES := {
 	ShootLogic.Aim.FORWARD: "adelante",
-	ShootLogic.Aim.UP: "45° arriba",
-	ShootLogic.Aim.DOWN: "45° abajo",
+	ShootLogic.Aim.UP: "arriba",
+	ShootLogic.Aim.DOWN: "abajo",
 }
 ## Largo de la línea de ayuda que marca hacia dónde apunta.
 const GUN_LENGTH := 22.0
@@ -90,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	_update_gun()
 	if r.fire:
 		_shots += 1
-		shot_fired.emit(global_position + _muzzle(), ShootLogic.direction(_aim, _motor.facing))
+		shot_fired.emit(global_position + _muzzle(), _direction())
 	if _motor.is_death_finished():
 		death_finished.emit()
 
@@ -107,6 +107,9 @@ func get_debug_info() -> Dictionary:
 	)
 	info["corriendo"] = ShootConfig.RunRule.keys()[shoot_config.run_rule]
 	info["apunta"] = AIM_NAMES[_aim]
+	info["ángulos arriba / abajo"] = (
+		"%.0f° / %.0f°" % [shoot_config.aim_up_angle, shoot_config.aim_down_angle]
+	)
 	info["situación"] = STANCE_NAMES[_stance]
 	info["próximo tiro en"] = "%.2f s" % _shoot.get_cooldown()
 	info["plantado"] = "%.2f s" % _shoot.get_recovery()
@@ -169,8 +172,14 @@ func _is_shot_anim(anim: StringName) -> bool:
 	return SHOT_ANIMS.values().has(anim)
 
 
+func _direction() -> Vector2:
+	return ShootLogic.direction(
+		_aim, _motor.facing, shoot_config.aim_up_angle, shoot_config.aim_down_angle
+	)
+
+
 func _update_gun() -> void:
 	_gun.visible = shoot_config.show_aim_line and _stance != ShootLogic.Stance.BUSY
 	var tip := _muzzle()
-	var dir := ShootLogic.direction(_aim, _motor.facing)
+	var dir := _direction()
 	_gun.points = PackedVector2Array([tip - dir * GUN_LENGTH, tip])

@@ -54,6 +54,13 @@ enum RunRule {
 ## Solo rayo: cuánto se ve el destello.
 @export_range(0.01, 0.5, 0.01, "suffix:s") var ray_flash_time := 0.06
 
+@export_group("Ángulos")
+## Ángulo del tiro hacia arriba, medido desde la horizontal. La tecla 4 alterna 45/50/55
+## en los dos ángulos a la vez.
+@export_range(10.0, 80.0, 1.0, "suffix:°") var aim_up_angle := 45.0
+## Ángulo del tiro hacia abajo, medido desde la horizontal.
+@export_range(10.0, 80.0, 1.0, "suffix:°") var aim_down_angle := 45.0
+
 @export_group("Pose")
 ## Cuánto sigue en pose de tiro (apuntando) después del último disparo antes de
 ## volver a quieto. Mantener apretado disparar también la sostiene.

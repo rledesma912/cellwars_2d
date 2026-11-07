@@ -45,14 +45,17 @@ static func aim_from(up: bool, down: bool) -> Aim:
 	return Aim.UP if up else Aim.DOWN
 
 
-## Dirección del disparo. facing: 1 derecha, −1 izquierda. El eje y de Godot crece
-## hacia abajo, por eso "arriba" es y negativo.
-static func direction(aim: Aim, facing: int) -> Vector2:
+## Dirección del disparo (largo 1). facing: 1 derecha, −1 izquierda. Los ángulos van
+## en grados desde la horizontal. El eje y de Godot crece hacia abajo, por eso
+## "arriba" es y negativo.
+static func direction(aim: Aim, facing: int, up_deg: float, down_deg: float) -> Vector2:
 	match aim:
 		Aim.UP:
-			return Vector2(facing, -1).normalized()
+			var up := deg_to_rad(up_deg)
+			return Vector2(cos(up) * facing, -sin(up))
 		Aim.DOWN:
-			return Vector2(facing, 1).normalized()
+			var down := deg_to_rad(down_deg)
+			return Vector2(cos(down) * facing, sin(down))
 		_:
 			return Vector2(facing, 0)
 

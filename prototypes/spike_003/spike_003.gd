@@ -5,7 +5,8 @@
 ## proyectil según el .tres.
 ##
 ## Teclas del prototipo: J / X / botón X del gamepad disparar, W/S (o ↑/↓) apuntar,
-## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, R vuelve al inicio, F3 datos.
+## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 el ángulo (45/50/55),
+## R vuelve al inicio, F3 datos.
 extends Node2D
 
 const PROJECTILE := preload("res://prototypes/spike_003/projectile.gd")
@@ -57,6 +58,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			config.run_rule = (
 				wrapi(config.run_rule + 1, 0, ShootConfig.RunRule.size()) as ShootConfig.RunRule
 			)
+		KEY_4:
+			# 45 → 50 → 55 → 45, los dos ángulos juntos.
+			var next := 45.0 if config.aim_up_angle >= 55.0 else config.aim_up_angle + 5.0
+			config.aim_up_angle = next
+			config.aim_down_angle = next
 		KEY_R:
 			_player.reset_to(START)
 		_:
@@ -116,10 +122,15 @@ func _flash(from: Vector2, to: Vector2, duration: float) -> void:
 func _update_help() -> void:
 	var c: ShootConfig = _player.shoot_config
 	_help.text = (
-		"J/X disparar · W/S apuntar · 1 modo: %s · 2 sale: %s · 3 corriendo: %s · R reiniciar · F3 datos"
+		(
+			"J/X disparar · W/S apuntar · 1 modo: %s · 2 sale: %s · 3 corriendo: %s"
+			+ " · 4 ángulo: %.0f°/%.0f° · R · F3"
+		)
 		% [
 			ShootConfig.Mode.keys()[c.mode],
 			ShootConfig.Delivery.keys()[c.delivery],
 			ShootConfig.RunRule.keys()[c.run_rule],
+			c.aim_up_angle,
+			c.aim_down_angle,
 		]
 	)
