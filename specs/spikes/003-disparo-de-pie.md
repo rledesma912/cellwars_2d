@@ -1,7 +1,7 @@
 ---
 id: S003
 type: spike
-status: draft           # draft (definición) → approved (en curso) → done (informe listo) → archivado por close-spike
+status: approved         # draft (definición) → approved (en curso) → done (informe listo) → archivado por close-spike
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0005], spike: }
 updated: 2026-11-07
