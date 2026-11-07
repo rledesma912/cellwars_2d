@@ -18,8 +18,17 @@ const AIM_NAMES := {
 	ShootLogic.Aim.UP: "45° arriba",
 	ShootLogic.Aim.DOWN: "45° abajo",
 }
-## Largo del caño greybox que marca hacia dónde apunta.
+## Largo de la línea de ayuda que marca hacia dónde apunta.
 const GUN_LENGTH := 22.0
+## Animaciones de disparo (de cw2d-art): impact, recovery y hold, sin loop.
+const SHOT_ANIMS := {
+	ShootLogic.Aim.FORWARD: &"disparar_adelante",
+	ShootLogic.Aim.UP: &"disparar_arriba",
+	ShootLogic.Aim.DOWN: &"disparar_abajo",
+}
+## Copia de los cuadros de Elyon con las tres animaciones de disparo sumadas. Vive en
+## el prototipo para no tocar game/art en el spike.
+const SHOOT_FRAMES := preload("res://prototypes/spike_003/art/elyon_disparo_frames.tres")
 
 @export var shoot_config: ShootConfig
 
@@ -27,7 +36,9 @@ var _shoot: ShootLogic
 var _aim := ShootLogic.Aim.FORWARD
 var _stance := ShootLogic.Stance.READY
 var _shots := 0
-## Línea greybox que hace de arma hasta tener el arte (CLAUDE.md: greybox hasta el [feel]).
+## Tiempo que le queda a la pose de tiro (0 = animaciones normales).
+var _pose_timer := 0.0
+## Línea de ayuda sobre el caño (show_aim_line en el .tres).
 var _gun: Line2D
 
 
@@ -35,6 +46,7 @@ func _ready() -> void:
 	# super() llama al _ready de Player: sin esto no se crearía el motor.
 	super()
 	_shoot = ShootLogic.new(shoot_config)
+	_sprite.sprite_frames = SHOOT_FRAMES
 	_gun = Line2D.new()
 	_gun.width = 5.0
 	_gun.default_color = Color(0.35, 0.95, 1.0)
@@ -70,7 +82,11 @@ func _physics_process(delta: float) -> void:
 	)
 	velocity = _motor.step(velocity, input, is_on_floor(), delta)
 	move_and_slide()
-	_animate(input.direction)
+	_stance = _stance_from(_motor.state)
+	# Mientras está en pose de tiro no se llama a _animate: si no, cada paso volvería a
+	# poner "quieto" y la animación de disparo arrancaría de cero todo el tiempo.
+	if not _update_pose(r.fire, delta):
+		_animate(input.direction)
 	_update_gun()
 	if r.fire:
 		_shots += 1
@@ -97,6 +113,7 @@ func get_debug_info() -> Dictionary:
 	info["ráfaga restante / en espera"] = (
 		"%d / %s" % [_shoot.get_burst_left(), "sí" if _shoot.is_pending() else "no"]
 	)
+	info["pose de tiro"] = "%.2f s" % _pose_timer
 	info["disparos"] = str(_shots)
 	return info
 
@@ -122,9 +139,38 @@ func _muzzle() -> Vector2:
 	return Vector2(m.x * _motor.facing, m.y)
 
 
+## Pone la animación de disparo si corresponde. Devuelve true si está en pose de tiro.
+func _update_pose(fired: bool, delta: float) -> bool:
+	if _stance != ShootLogic.Stance.READY:
+		_pose_timer = 0.0
+		return false
+	if fired or Input.is_action_pressed("shoot"):
+		_pose_timer = shoot_config.aim_pose_time
+	else:
+		_pose_timer = maxf(_pose_timer - delta, 0.0)
+	if _pose_timer <= 0.0:
+		return false
+	_sprite.flip_h = _motor.facing < 0
+	var anim: StringName = SHOT_ANIMS[_aim]
+	if fired:
+		# Cada tiro arranca la animación desde el cuadro del impacto.
+		_sprite.play(anim)
+		_sprite.set_frame_and_progress(0, 0.0)
+	elif _sprite.animation != anim:
+		# Cambio de ángulo sin tirar: salta de golpe al mismo cuadro del otro ángulo.
+		var frame := _sprite.frame if _is_shot_anim(_sprite.animation) else 2
+		var progress := _sprite.frame_progress
+		_sprite.play(anim)
+		_sprite.set_frame_and_progress(frame, progress)
+	return true
+
+
+func _is_shot_anim(anim: StringName) -> bool:
+	return SHOT_ANIMS.values().has(anim)
+
+
 func _update_gun() -> void:
-	# El caño se ve solo cuando puede disparar o está por hacerlo, para no confundir.
-	_gun.visible = _stance != ShootLogic.Stance.BUSY
+	_gun.visible = shoot_config.show_aim_line and _stance != ShootLogic.Stance.BUSY
 	var tip := _muzzle()
 	var dir := ShootLogic.direction(_aim, _motor.facing)
 	_gun.points = PackedVector2Array([tip - dir * GUN_LENGTH, tip])

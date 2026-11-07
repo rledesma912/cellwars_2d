@@ -54,9 +54,17 @@ enum RunRule {
 ## Solo rayo: cuánto se ve el destello.
 @export_range(0.01, 0.5, 0.01, "suffix:s") var ray_flash_time := 0.06
 
+@export_group("Pose")
+## Cuánto sigue en pose de tiro (apuntando) después del último disparo antes de
+## volver a quieto. Mantener apretado disparar también la sostiene.
+@export_range(0.0, 3.0, 0.05, "suffix:s") var aim_pose_time := 0.6
+## Dibuja una línea celeste sobre el caño (ayuda para ver de dónde sale el tiro).
+@export var show_aim_line := false
+
 # Posición de la boca del arma respecto de los pies de Elyon, mirando a la derecha
 # (x positivo = adelante, y negativo = arriba). Mirando a la izquierda se espeja x.
+# Medidas sobre el cuadro "hold" de cada animación de disparo.
 @export_group("Boca del arma")
-@export var muzzle_forward := Vector2(26, -50)
-@export var muzzle_up := Vector2(22, -60)
-@export var muzzle_down := Vector2(22, -42)
+@export var muzzle_forward := Vector2(35, -54)
+@export var muzzle_up := Vector2(18, -62)
+@export var muzzle_down := Vector2(32, -23)
