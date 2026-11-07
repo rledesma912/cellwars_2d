@@ -5,7 +5,7 @@
 ## proyectil según el .tres.
 ##
 ## Teclas del prototipo: J / X / botón X del gamepad disparar, W/S (o ↑/↓) apuntar,
-## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 el ángulo (45/35/40),
+## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 el ángulo de abajo (20/15),
 ## R vuelve al inicio, F3 datos.
 extends Node2D
 
@@ -59,10 +59,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				wrapi(config.run_rule + 1, 0, ShootConfig.RunRule.size()) as ShootConfig.RunRule
 			)
 		KEY_4:
-			# 45 → 35 → 40 → 45, los dos ángulos juntos.
-			var next := 35.0 if config.aim_up_angle >= 45.0 else config.aim_up_angle + 5.0
-			config.aim_up_angle = next
-			config.aim_down_angle = next
+			# Solo el ángulo de abajo: 20 → 15 → 20. El de arriba se cambia en el .tres.
+			config.aim_down_angle = 15.0 if config.aim_down_angle > 15.0 else 20.0
 		KEY_R:
 			_player.reset_to(START)
 		_:
