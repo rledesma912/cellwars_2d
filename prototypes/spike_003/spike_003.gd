@@ -6,6 +6,7 @@
 ##
 ## Teclas del prototipo: J / X / botón X del gamepad disparar, W/S (o ↑/↓) apuntar,
 ## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 el ángulo de abajo (20/15),
+## 5 la altura de la boca al tirar abajo (23/33/43/53 px),
 ## R vuelve al inicio, F3 datos.
 extends Node2D
 
@@ -61,6 +62,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		KEY_4:
 			# Solo el ángulo de abajo: 20 → 15 → 20. El de arriba se cambia en el .tres.
 			config.aim_down_angle = 15.0 if config.aim_down_angle > 15.0 else 20.0
+		KEY_5:
+			# Altura de la boca al tirar abajo: 23 → 33 → 43 → 53 px sobre los pies.
+			var height := -config.muzzle_down.y
+			height = 23.0 if height >= 53.0 else height + 10.0
+			config.muzzle_down = Vector2(config.muzzle_down.x, -height)
 		KEY_R:
 			_player.reset_to(START)
 		_:
@@ -122,7 +128,7 @@ func _update_help() -> void:
 	_help.text = (
 		(
 			"J/X disparar · W/S apuntar · 1 modo: %s · 2 sale: %s · 3 corriendo: %s"
-			+ " · 4 ángulo: %.0f°/%.0f° · R · F3"
+			+ " · 4 ángulo: %.0f°/%.0f° · 5 boca abajo: %.0f px · R · F3"
 		)
 		% [
 			ShootConfig.Mode.keys()[c.mode],
@@ -130,5 +136,6 @@ func _update_help() -> void:
 			ShootConfig.RunRule.keys()[c.run_rule],
 			c.aim_up_angle,
 			c.aim_down_angle,
+			-c.muzzle_down.y,
 		]
 	)
