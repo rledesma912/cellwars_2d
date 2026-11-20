@@ -25,3 +25,4 @@
 | 2026-11-20 | Ángulo de disparo arriba de 50° o 55° | Probados y no gustaron; queda 40° | `archive/spikes/003-disparo-de-pie.md`, D0006 |
 | 2026-11-20 | Ángulo abajo en el aire de 20° o 70° | El desarrollador eligió 45° | `archive/spikes/003-disparo-de-pie.md`, D0006 |
 | 2026-11-20 | Frenar la caída mientras se dispara en el aire | El desarrollador eligió que la caída no cambie | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Quedar plantado un instante después de cada tiro de pie | Con la regla elegida no tenía efecto en lo jugado; hacerlo de verdad cambia el control sin haberlo probado | D0007 |

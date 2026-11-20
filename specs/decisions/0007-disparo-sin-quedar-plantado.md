@@ -1,7 +1,7 @@
 ---
 id: D0007
 type: decision
-status: draft
+status: approved
 superseded_by:
 links: { gdd: [G003], decisions: [D0006], spike: S003 }
 updated: 2026-11-20
@@ -9,7 +9,7 @@ updated: 2026-11-20
 
 # 0007: Disparar de pie sin quedar plantado
 
-- Origen: spec de la feature 012 (disparo), pregunta 1. El desarrollador eligió la opción (a) el 2026-11-20.
+- Origen: spec de la feature 012 (disparo), pregunta 1. El desarrollador eligió la opción (a) el 2026-11-20 y aprobó la decisión ("Sí, apruebo la D0007 y la spec F012").
 - De **D0006** reemplaza solo el punto "De pie, Elyon queda plantado un instante después de cada tiro (`shot_recovery`)". Todo lo demás sigue vigente.
 
 ## Contexto

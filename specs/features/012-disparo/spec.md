@@ -1,7 +1,7 @@
 ---
 id: F012
 type: feature
-status: draft           # draft → approved → in-progress → done (as-built)
+status: approved           # draft → approved → in-progress → done (as-built)
 superseded_by:
 links: { gdd: [G001, G003], decisions: [D0006, D0007], spike: S003 }
 updated: 2026-11-20
