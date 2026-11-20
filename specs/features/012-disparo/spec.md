@@ -81,7 +81,7 @@ En el juego:
   - de pie, se ve la animación de disparo del ángulo elegido (`disparar_adelante`, `disparar_arriba`, `disparar_abajo`);
   - cada tiro la arranca desde el cuadro del impacto, y cambiar de ángulo salta al mismo cuadro del otro ángulo;
   - la pose se sostiene mientras se mantiene apretado o hasta `aim_pose_time` (0,6 s) después del último tiro, y después vuelve a quieto;
-  - corriendo y en el aire, una línea marca el arma durante el mismo tiempo.
+  - corriendo y en el aire no se marca el arma: sigue la animación de movimiento (el desarrollador pidió quitar la línea del arma el 2026-11-20).
 - F012-AC16 [manual] **Arte Elyon2:** Elyon usa la hoja Elyon2 en todas sus animaciones (quieto, correr, frenar, girar, saltar, caer, aterrizar, rodar y morir). Se ven como en el spike, con los pies en el piso, y sin cuadros que falten o salten.
 - F012-AC17 [manual] **Debug:** el overlay F3 muestra hacia dónde apunta, si puede disparar, el tiempo hasta el próximo tiro y cuántos tiros salieron.
 - F012-AC18 [feel] Disparar de pie, corriendo y en el aire se siente como en el spike: ágil y legible, sin que el control del movimiento cambie.

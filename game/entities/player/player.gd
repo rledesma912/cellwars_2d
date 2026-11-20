@@ -36,9 +36,6 @@ const AIM_NAMES := {
 	ShootLogic.Aim.UP: "arriba",
 	ShootLogic.Aim.DOWN: "abajo",
 }
-## Largo de la línea que marca el arma corriendo y en el aire (greybox: no hay arte).
-const GUN_LENGTH := 22.0
-
 ## Parámetros del movimiento. La escena usa game/data/player_movement.tres.
 @export var config: PlayerMovementConfig
 ## Parámetros del disparo. La escena usa game/data/shoot.tres.
@@ -55,7 +52,6 @@ var _shots := 0
 # Sus cuadros miden 144 × 144 con los pies abajo al centro; el offset los pone en el
 # origen. Usa el material de suavizado (sharp_pixel) con filtro lineal: ver player.tscn.
 @onready var _sprite: AnimatedSprite2D = %Sprite
-@onready var _gun: Line2D = %Gun
 
 
 func _ready() -> void:
@@ -108,7 +104,6 @@ func _physics_process(delta: float) -> void:
 		_show_shot_pose(fired)
 	else:
 		_animate(input.direction)
-	_update_gun()
 	# Se emite una sola vez: quien la recibe llama a reset_to y deja de estar muerto.
 	if _motor.is_death_finished():
 		death_finished.emit()
@@ -219,15 +214,3 @@ func _show_shot_pose(fired: bool) -> void:
 		var progress := _sprite.frame_progress if from_shot else 0.0
 		_sprite.play(anim)
 		_sprite.set_frame_and_progress(frame, progress)
-
-
-# Corriendo y en el aire no hay arte de disparo: una línea marca el arma mientras dura
-# la pose, desde la boca hacia atrás.
-func _update_gun() -> void:
-	var moving := _stance == ShootLogic.Stance.MOVING or _stance == ShootLogic.Stance.AIR
-	_gun.visible = moving and _shoot.is_in_pose()
-	if not _gun.visible:
-		return
-	var tip := ShootLogic.muzzle(_aim, _motor.facing, shoot_config)
-	var dir := _direction()
-	_gun.points = PackedVector2Array([tip - dir * GUN_LENGTH, tip])

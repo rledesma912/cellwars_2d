@@ -94,8 +94,8 @@ func step(held: bool, pressed: bool, stance: Stance, delta: float) -> bool:
 	return fired
 
 
-## Está en pose de tiro: de pie se muestra la animación de disparo; en movimiento, la
-## línea del arma.
+## Está en pose de tiro: de pie se muestra la animación de disparo. Corriendo y en el
+## aire no cambia nada a la vista.
 func is_in_pose() -> bool:
 	return _pose > 0.0
 

@@ -28,8 +28,3 @@ unique_name_in_owner = true
 position = Vector2(0, -41)
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Gun" type="Line2D" parent="."]
-unique_name_in_owner = true
-visible = false
-width = 5.0
-default_color = Color(0.35, 0.95, 1, 1)

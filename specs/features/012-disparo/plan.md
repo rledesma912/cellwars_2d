@@ -23,8 +23,7 @@ World (Node2D, world.gd)                 # ya existe
 ├── <sala actual> (Room)                 # ya existe, primer hijo
 ├── Player (CharacterBody2D, player.gd)  # ya existe
 │   ├── Sprite (AnimatedSprite2D)        # pasa a la hoja Elyon2
-│   ├── Shape (CollisionShape2D)
-│   └── Gun (Line2D)                     # nuevo: marca el arma corriendo y en el aire
+│   └── Shape (CollisionShape2D)
 ├── Projectiles (Node2D)                 # nuevo: contenedor de los proyectiles en vuelo
 │   └── Projectile (Node2D, projectile.gd)   # uno por tiro, se crea en código
 └── DebugOverlay                         # ya existe
@@ -41,8 +40,8 @@ Projectile (Node2D, projectile.gd)       # se dibuja con _draw: un rectángulo d
 | `game/data/shoot.tres` | Resource (`.tres`) | Valores iniciales del spike S003 (los crea el agente una vez) |
 | `game/systems/combat/shoot_logic.gd` | lógica pura | `ShootLogic`: gatillo automático con tope de cadencia, situaciones en que se puede disparar, tiempo de pose. Estáticas: `aim_from`, `stance_for(PlayerMotor.State)`, `direction`, `muzzle` |
 | `game/systems/combat/projectile_flight.gd` | lógica pura | `ProjectileFlight`: posición y distancia recorrida. `advance(delta)` devuelve el tramo (desde, hasta) del paso y si terminó. El primer tramo arranca en el punto de resguardo (centro de Elyon a la altura de la boca) |
-| `game/entities/player/player.gd` | nodo | Lee `shoot`, `move_up` y `move_down`, llama a `ShootLogic`, emite `shot_fired`, pone la animación de disparo de pie y la línea `Gun`. Sus líneas de F3 |
-| `game/entities/player/player.tscn` | escena | `shoot_config` apunta a `shoot.tres`; nodo `Gun` |
+| `game/entities/player/player.gd` | nodo | Lee `shoot`, `move_up` y `move_down`, llama a `ShootLogic`, emite `shot_fired`, pone la animación de disparo de pie. Sus líneas de F3 |
+| `game/entities/player/player.tscn` | escena | `shoot_config` apunta a `shoot.tres` |
 | `game/systems/player/player_animation.gd` | lógica pura | `shot_animation(aim)` → `disparar_adelante` / `disparar_arriba` / `disparar_abajo` |
 | `game/entities/projectile/projectile.gd` + `.tscn` | nodo | Pide el tramo a `ProjectileFlight`, lanza el rayo (`intersect_ray`) y se libera al chocar o al terminar |
 | `game/world/world.gd` + `world.tscn` | nodo | Escucha `shot_fired`, crea el proyectil en `Projectiles` y vacía el contenedor al cambiar de sala y al volver a la entrada |

@@ -41,7 +41,7 @@ updated: 2026-11-20
 - F012-AC15:
   - De pie, cada tiro muestra la animación de disparo del ángulo; cambiar de ángulo salta a la pose del otro ángulo.
   - Al soltar, la pose sigue unos 0,6 s y vuelve a quieto.
-  - Corriendo y en el aire, una línea celeste marca el arma durante el mismo tiempo.
+  - Corriendo y en el aire no aparece ninguna línea sobre el arma: sigue la animación de correr o saltar.
 - F012-AC16: recorré las animaciones (quieto, arrancar, correr, frenar, girar, preparar, subir, caer, caída larga, aterrizar, rodar y las dos muertes) → todas son de la hoja Elyon2, se ven como en el spike, con los pies en el piso y sin cuadros que falten o salten.
 - F012-AC17: con F3 abierto, disparando → se ven `apunta`, `puede disparar`, `próximo tiro en`, `pose de tiro` y `disparos`, y cambian al jugar.
 

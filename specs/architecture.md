@@ -78,7 +78,6 @@ flowchart TD
     Room --> MortalZone["MortalZone<br/>zona mortal"]
     Player --> Sprite["Sprite<br/>animaciones"]
     Player --> Shape["Shape<br/>colisión"]
-    Player --> Gun["Gun<br/>línea del arma"]
     Projectiles --> Projectile["Projectile<br/>un tiro"]
 ```
 
@@ -162,7 +161,7 @@ flowchart LR
 - Muerte (F007): el vacío y la zona mortal (`game/entities/mortal_zone/`, un `Area2D` que se coloca en la sala) llaman a `Player.die(causa)`, y la duración depende de la causa. Mientras está muerto, `World` ignora los bordes. Al terminar, `Player` emite `death_finished` y `World` vuelve a la entrada con `LevelProgress.checkpoint()`. `body_entered` avisa solo al entrar: ninguna entrada de sala puede quedar dentro de una zona.
 - Altura y checkpoint (F010): aterrizar desde `lethal_fall_height` o más mata. La altura no se reinicia al cruzar de sala y se congela al morir. `LevelProgress` lleva el checkpoint aparte de la sala actual: al cruzar por abajo no avanza hasta que `World` lo confirma con `Player.is_grounded()`, y por eso morir en esa caída vuelve a la sala donde empezó. Por un costado avanza al instante. Una salida de abajo tiene que contar lo que se cae antes y después de cruzar.
 - Refugio (F011): `LevelProgress.finishes_level()` dice si un borde cruzado es la salida de la última sala. En ese caso `World` emite `level_completed` en lugar de cambiar de sala, y `Main` pausa con `get_tree().paused` y muestra `LevelCompleteMenu`, que tiene `PROCESS_MODE_ALWAYS` para responder durante la pausa. La marca de la salida es un `ColorRect` sin comportamiento: lo que termina el nivel es cruzar el borde.
-- Disparo (F012, D0006, D0007): `Player` le pasa a `ShootLogic` el botón `shoot` y la situación (`ShootLogic.stance_for` del estado del motor). Si sale un tiro, emite `shot_fired(origen, dirección, resguardo)`. `World` crea un `Projectile` (`game/entities/projectile/`) en el contenedor `Projectiles`, que no está dentro de la sala, y lo vacía al cambiar de sala y al volver a la entrada. El proyectil es un `Node2D`, no un `Area2D` ni un cuerpo. En cada paso, `ProjectileFlight` le da el tramo recorrido y el nodo lanza un rayo por código (`intersect_ray`) contra la capa 1. El primer tramo arranca en el centro de Elyon, para que pegado a una pared no la atraviese. De pie, la pose de disparo es una animación de la hoja de Elyon; corriendo y en el aire, el arma se marca con la línea `Gun`.
+- Disparo (F012, D0006, D0007): `Player` le pasa a `ShootLogic` el botón `shoot` y la situación (`ShootLogic.stance_for` del estado del motor). Si sale un tiro, emite `shot_fired(origen, dirección, resguardo)`. `World` crea un `Projectile` (`game/entities/projectile/`) en el contenedor `Projectiles`, que no está dentro de la sala, y lo vacía al cambiar de sala y al volver a la entrada. El proyectil es un `Node2D`, no un `Area2D` ni un cuerpo. En cada paso, `ProjectileFlight` le da el tramo recorrido y el nodo lanza un rayo por código (`intersect_ray`) contra la capa 1. El primer tramo arranca en el centro de Elyon, para que pegado a una pared no la atraviese. De pie, la pose de disparo es una animación de la hoja de Elyon; corriendo y en el aire no hay pose: sigue la animación de movimiento.
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
