@@ -1,9 +1,9 @@
 ---
 id: S003
 type: spike
-status: approved         # draft (definición) → approved (en curso) → done (informe listo) → archivado por close-spike
+status: done         # draft (definición) → approved (en curso) → done (informe listo) → archivado por close-spike
 superseded_by:
-links: { gdd: [G001], decisions: [D0003, D0005], spike: }
+links: { gdd: [G001], decisions: [D0003, D0005, D0006], spike: }
 updated: 2026-11-20
 ---
 
@@ -70,8 +70,10 @@ Todo en `prototypes/spike_003/`, en la branch del spike (no llega a `develop`):
 - `shot_caster.gd` y `projectile.gd`: el rayo instantáneo es una consulta de rayo (`intersect_ray`). El proyectil avanza en cada paso de física y lanza un rayo corto desde donde estaba hasta donde va a estar, así no atraviesa un blanco fino aunque avance 15 px por paso.
 - Animaciones `disparar_adelante`, `disparar_arriba` y `disparar_abajo` (impact, recovery y hold) aprobadas en `cw2d-art` (commit `3b32a14`), copiadas en `prototypes/spike_003/art/` a pedido del desarrollador, ya en ejecución. Cada tiro arranca desde el impacto, cambiar de ángulo salta al mismo cuadro del otro ángulo y la pose se sostiene mientras se mantiene apretado el botón o hasta 0,6 s después del último tiro.
 - El botón `shoot` (J, X y el botón X del gamepad) se registra al arrancar la escena, sin tocar `project.godot`.
+- Ampliación (disparar en movimiento): cuarta regla al correr, `FIRE_WHILE_RUNNING`, y una situación nueva, "en el aire", en la lógica del gatillo. En los dos casos Elyon no queda plantado. Las teclas 4, 5 y 6 cambian la velocidad corriendo al disparar, el ángulo de abajo en el aire y la gravedad al caer disparando. Hay tres blancos más: dos altos y uno bajo y lejos. Como no hay arte de disparo en movimiento, el arma se marca con una línea celeste.
+- Acceso temporal desde el menú principal (botón "Prototipo 003", solo en builds de debug), mergeado a `develop` en el PR #32.
 
-Verificado: consola sin errores al correr la escena, y una prueba por código de las 18 combinaciones (modo × rayo/proyectil × regla al correr) disparó sin errores y pegó en los blancos.
+Verificado: consola sin errores al correr la escena, y una prueba por código de las 18 combinaciones (modo × rayo/proyectil × regla al correr) disparó sin errores y pegó en los blancos. En la ampliación, otra prueba por código confirmó: con `FORBID` no sale tiro corriendo; con `FIRE_WHILE_RUNNING` dispara a 215 px/s (y a 108 px/s con la velocidad al 50 %); en el aire sale el ángulo pedido; con la gravedad al 25 % el salto dura 57 cuadros en lugar de 38.
 
 ## Evidencia y findings
 
@@ -83,9 +85,8 @@ Verificado: consola sin errores al correr la escena, y una prueba por código de
 - **Boca al tirar abajo de pie**: subirla mejora el tiro; eligió **42 px** sobre los pies (el arte la tiene en 32).
 - **Arma en movimiento**: corriendo y en el aire no hay arte de disparo; el prototipo marca el arma con una línea celeste. El desarrollador la notó.
 - **Valores**: no los cambió. Sobre los de arranque dijo: *"me parecen valores default que me permiten adaptarme mientras pruebo"*. Quedan como valores iniciales, no como valores finales.
-- **[feel]**: sobre el prototipo con animaciones dijo *"Está bueno"*. No hubo más comentarios del feel; queda sin cerrar (el agente no lo marca como cumplido).
-- **45° abajo**: con el arte real, la boca del arma queda a 23 px del piso. Desde el piso, ese tiro pega casi en los pies; sirve sobre todo desde un escalón o una repisa. El desarrollador no lo comentó.
-- **Boca del arma**: medida sobre el cuadro `hold` de cada animación, desde los pies y mirando a la derecha: adelante (35, −54), arriba (18, −62), abajo (32, −23).
+- **[feel]**: sobre el disparo de pie con animaciones dijo *"Está bueno"*. Sobre disparar corriendo y en el aire dijo *"Se siente bien"*. El agente no marca el `[feel]` como cumplido: se vuelve a jugar en la feature.
+- **Boca del arma**: medida sobre el cuadro `hold` de cada animación de Elyon2, desde los pies y mirando a la derecha: adelante (33, −52), arriba (26, −66), abajo (29, −32), esta última subida a −42.
 - **Botón**: el botón X del gamepad (`JOY_BUTTON_X`, índice 2) también está asignado a `dash`, que hoy está reservado y no hace nada. En el teclado no hay choque: J queda al lado de K (saltar) y L (`dash`).
 
 ## Valores de tuning que funcionaron
@@ -110,19 +111,20 @@ Valores iniciales del prototipo, aceptados como punto de partida (`prototypes/sp
 
 ## Riesgos y limitaciones
 
-- **`FORBID` puede no alcanzar** cuando haya enemigos que se acercan rápido y salas con terreno real: el desarrollador ya lo dudó. Se revisa en el spike de combate. Si cambia, es una decisión nueva que reemplaza esta parte.
-- **Sin enemigos ni daño**: el automático a 7 tiros por segundo se probó contra blancos que no hacen nada. Cuántos tiros hacen falta y si el automático vuelve el combate frenético (la visión pide "lectura del enemigo sobre la ejecución frenética") se ve recién con vida y enemigos.
-- **45° abajo desde el piso** casi no sirve con el arte actual: pega cerca de los pies. Depende de que las salas tengan desniveles para usarlo, o de un ajuste del arte.
+- **Disparar corriendo a velocidad completa con automático** puede volver el combate frenético (la visión pide "lectura del enemigo sobre la ejecución frenética"). Se probó contra blancos que no hacen nada; cuántos tiros hacen falta y si conviene limitarlo se ve en el spike de combate, con vida y enemigos.
+- **Sin arte de disparo en movimiento**: corriendo y en el aire el prototipo usa una línea. La feature necesita poses de disparar corriendo y en el aire (tres ángulos), que se piden a `cw2d-art`.
+- **Arte de disparo de pie a retocar**: está dibujado para unos 45° y los ángulos elegidos son 40° arriba y 20° abajo. La boca de abajo quedó a 42 px, más alta que en el dibujo (32 px).
 - **Botón X del gamepad** compartido con `dash`: hay que elegir en la spec.
 - **Sin sonido ni fogonazo**: el arte dice que el fogonazo y las vainas son partículas del motor; no se probaron.
 - El arte de disparo está en el prototipo, no en `game/art`: la feature tiene que traerlo desde `cw2d-art`.
+- **Fuera de alcance, anotado**: la muerte hacia atrás en el aire se ve mal (el desarrollador lo marcó). Se resuelve en el spike de combate: pose de impacto, pose en el aire mientras el motor mueve el cuerpo y aterrizaje. Las poses son de `cw2d-art`; la física, la elección de animación y la detección del aterrizaje son del juego.
 
 ## Recomendación
 
-Disparo de pie **automático**, con **proyectil visible**, en tres ángulos que cambian de golpe, y **sin disparar corriendo** (hay que frenar). Usar los valores de la tabla como `.tres` inicial de la feature. Mantener la forma del prototipo: lógica pura del gatillo, Resource de configuración y proyectil que avanza con un rayo corto por paso. Dejar anotada la duda sobre disparar corriendo para el spike de combate.
+Disparo **automático** con **proyectil visible**, en tres ángulos que cambian de golpe (40° arriba, adelante, 20° abajo de pie y 45° abajo en el aire), de pie, **corriendo sin frenar** y **en el aire sin cambiar el salto**. De pie, Elyon queda plantado un instante después de cada tiro; en movimiento, no. Usar los valores de la tabla como `.tres` inicial de la feature y mantener la forma del prototipo: lógica pura del gatillo, Resource de configuración y proyectil que avanza con un rayo corto por paso.
 
 ## Siguiente paso
 
-- [x] Decisión D0006 → GDD (mecánica de disparo), arquitectura (acción `shoot`), backlog (feature de disparo y revisión de `FORBID` en el spike de combate)
+- [x] Decisión D0006 → GDD (mecánica de disparo), arquitectura (acción `shoot`), backlog (feature de disparo, arte de disparo en movimiento, muerte en el aire y límites del disparo corriendo en el spike de combate)
 - [ ] Otro spike: no hace falta para el disparo; el spike de combate ya está en el backlog
 - [ ] Descartar la idea: no
