@@ -201,7 +201,9 @@ Reglas del pixel art en `canvas_items`:
 
 ## Input
 
-Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `shoot` (`J`, `X`; el botón del gamepad se elige en la spec del disparo, porque X ya es de `dash`; D0006), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio. Los menús usan las acciones `ui_*` que trae Godot.
+Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado; Shift, `L`, botón B), `shoot` (`J`, `X`, botón X; D0006, F012), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio.
+
+Capas de física 2D: la 1 se llama "mundo" (paredes, pisos y techos de las baldosas). Elyon y los proyectiles la buscan. Los menús usan las acciones `ui_*` que trae Godot.
 
 ## Debug overlay
 
