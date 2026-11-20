@@ -17,7 +17,7 @@ updated: 2026-11-20
 - [x] T6 `Projectile` (escena y nodo) con rayo por tramo (cubre: F012-AC13)
 - [x] T7 Player dispara: lee el input, llama a `ShootLogic`, emite `shot_fired`, pose de disparo de pie, línea `Gun` y líneas de F3 (cubre: F012-AC09, F012-AC10, F012-AC11, F012-AC12, F012-AC15, F012-AC17)
 - [x] T8 World: contenedor `Projectiles`, crea el proyectil al recibir `shot_fired` y lo vacía al cambiar de sala y al volver a la entrada (cubre: F012-AC13, F012-AC14)
-- [ ] T9 Mapa del código en `architecture.md` (sistema `combat`, señal `shot_fired`, entidad `Projectile`)
+- [x] T9 Mapa del código en `architecture.md` (sistema `combat`, señal `shot_fired`, entidad `Projectile`)
 - [ ] T10 Smoke run y playtest: `playtest.md` y PR con el checklist (cubre: F012-AC08 a F012-AC18)
 
 Los tests de gdUnit4 incluyen el ID en el nombre, por ejemplo `test_f012_ac03_auto_fires_seven_shots_in_sixty_steps`.
