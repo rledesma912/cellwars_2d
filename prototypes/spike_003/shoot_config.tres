@@ -22,4 +22,4 @@ aim_pose_time = 0.6
 show_aim_line = false
 muzzle_forward = Vector2(33, -52)
 muzzle_up = Vector2(26, -66)
-muzzle_down = Vector2(29, -32)
+muzzle_down = Vector2(29, -42)

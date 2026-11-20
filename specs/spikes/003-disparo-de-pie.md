@@ -4,7 +4,7 @@ type: spike
 status: approved         # draft (definición) → approved (en curso) → done (informe listo) → archivado por close-spike
 superseded_by:
 links: { gdd: [G001], decisions: [D0003, D0005], spike: }
-updated: 2026-11-07
+updated: 2026-11-20
 ---
 
 # Spike 003: disparo de pie
@@ -38,6 +38,26 @@ updated: 2026-11-07
   - El botón de disparo se registra **en tiempo de ejecución** desde el prototipo (`InputMap.add_action`), sin tocar `project.godot`. Como propuesta para probar: `J` / `X` en teclado y el botón izquierdo del frente (X en Xbox) en gamepad.
   - El overlay F3 muestra el modo, el ángulo, la cadencia y el tiempo hasta el próximo disparo.
 - Destino del código: descartar (por defecto). Lo que sirve de ese código son los valores del `.tres` y la forma de la lógica pura, que pasan a la spec de la feature.
+
+### Ampliación: disparar corriendo y en el aire (pedida por el desarrollador el 2026-11-20, pendiente de aprobación)
+
+- Pregunta: ¿se siente bien que Elyon dispare **sin frenar** mientras corre y mientras salta o cae, y con qué reglas?
+- Motivo: el desarrollador quiere las dos cosas. Cambia la regla elegida para correr (`FORBID`) y saca "disparar en el aire" de la lista de lo que no entra. Como la decisión del spike todavía no se escribió, se amplía este spike en lugar de abrir otro.
+- Entra:
+  - **Disparar corriendo**: Elyon sigue corriendo mientras dispara, en los tres ángulos (40° arriba, adelante, 20° abajo). Se suma como cuarta regla al correr (`FIRE_WHILE_RUNNING`), comparable con las otras tres con la tecla 3.
+  - **Disparar en el aire**: subiendo y cayendo, en los tres ángulos, sin cambiar el salto.
+  - Mientras corre o está en el aire, Elyon no queda plantado después de cada tiro (`shot_recovery` vale solo de pie).
+  - Sala de prueba: se suman blancos pensados para tirar en movimiento (un pasillo largo para correr disparando y blancos altos para tirar en el aire).
+  - Arte: no hay animaciones de disparar corriendo ni en el aire. Se usan las de `correr`, `subir` y `caer` con una línea encima que marca el arma (greybox).
+- Alternativas a evaluar:
+  - **Velocidad al disparar corriendo**: (a) velocidad completa; (b) más lento mientras dispara (multiplicador en el `.tres`, se prueba con una tecla).
+  - **Ángulo de abajo en el aire**: (a) el mismo 20° que de pie; (b) uno más empinado, solo en el aire (valor en el `.tres`).
+  - **Efecto del tiro en el salto**: (a) ninguno; (b) mientras dispara en el aire la caída se frena un poco (multiplicador de gravedad en el `.tres`).
+- No entra: disparar agachado o rodando; el arte final de las poses de disparo en movimiento; la muerte hacia atrás en el aire (va al spike de combate); enemigos, daño y sonido.
+- Criterios de salida (se suman a los de arriba):
+  6. Probaste disparar corriendo y elegiste una regla al correr (incluida volver a `FORBID`) y una velocidad.
+  7. Probaste disparar en el aire y elegiste el ángulo de abajo en el aire y si el tiro afecta la caída.
+  8. Quedó anotado lo que reportes del `[feel]` de disparar en movimiento.
 
 ## Qué se construyó
 
