@@ -21,6 +21,8 @@ var _flow := ScreenFlow.new()
 var _store := SettingsStore.new(SETTINGS_PATH)
 var _settings: PlayerSettings
 var _current_screen: Node
+## Herramienta de desarrollo: hay un prototipo de spike en pantalla (Esc vuelve al menú).
+var _in_prototype := false
 
 @onready var _screen: Node = %Screen
 @onready var _pause_menu: PauseMenu = %PauseMenu
@@ -53,6 +55,11 @@ func _ready() -> void:
 
 # _unhandled_input recibe solo lo que no usaron antes los menús (p. ej. un botón con foco).
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("pause") and _in_prototype:
+		# El prototipo no es una partida: no se pausa, se vuelve al menú.
+		_show_main_menu()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause"):
 		# Se manda siempre; ScreenFlow lo ignora si no corresponde (menú u opciones).
 		_flow.send(ScreenFlow.Event.PAUSE)
@@ -97,8 +104,21 @@ func _show_main_menu(focus_options: bool = false) -> void:
 	menu.options_requested.connect(_flow.send.bind(ScreenFlow.Event.OPEN_OPTIONS))
 	menu.quit_requested.connect(get_tree().quit)
 	_show_screen(menu)
+	_in_prototype = false
+	# Herramienta temporal de desarrollo: botones a los prototipos de spike. Solo en
+	# debug (correr desde el editor o un build de debug); el juego publicado no los muestra.
+	if OS.is_debug_build():
+		menu.prototype_requested.connect(_show_prototype)
+		menu.show_prototypes(PrototypeCatalog.find())
 	if focus_options:
 		menu.focus_options()
+
+
+func _show_prototype(scene_path: String) -> void:
+	# load() y no preload(): la ruta se conoce recién al apretar el botón.
+	var scene: PackedScene = load(scene_path)
+	_show_screen(scene.instantiate())
+	_in_prototype = true
 
 
 func _show_options() -> void:

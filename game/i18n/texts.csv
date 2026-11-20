@@ -2,6 +2,7 @@ keys,es,en
 MENU_PLAY,Jugar,Play
 MENU_OPTIONS,Opciones,Options
 MENU_QUIT,Salir,Quit
+MENU_PROTOTYPE,Prototipo %s,Prototype %s
 PAUSE_TITLE,Pausa,Paused
 PAUSE_RESUME,Continuar,Resume
 PAUSE_TO_MENU,Volver al menú,Back to menu
