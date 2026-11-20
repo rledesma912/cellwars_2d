@@ -67,6 +67,23 @@ static func duration_for(animation: StringName, config: PlayerMovementConfig) ->
 			return 0.0
 
 
+## Animación de disparo de pie para cada ángulo (F012). Son de impacto, recuperación
+## y pose sostenida, sin loop: el nodo las reinicia en cada tiro.
+static func shot_animation(aim: ShootLogic.Aim) -> StringName:
+	match aim:
+		ShootLogic.Aim.UP:
+			return &"disparar_arriba"
+		ShootLogic.Aim.DOWN:
+			return &"disparar_abajo"
+		_:
+			return &"disparar_adelante"
+
+
+## true si es una de las animaciones de disparo de pie.
+static func is_shot_animation(animation: StringName) -> bool:
+	return animation in [&"disparar_adelante", &"disparar_arriba", &"disparar_abajo"]
+
+
 ## true si toca una pared y la dirección apretada apunta hacia ella. La normal de una
 ## pared apunta hacia afuera: dirección y normal de signo contrario es "hacia la pared".
 static func is_blocked(on_wall: bool, wall_normal_x: float, direction: float) -> bool:
