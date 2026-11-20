@@ -109,7 +109,9 @@ func test_f009_ac06_frames_have_every_animation() -> void:
 				for i in frames.get_frame_count(anim):
 					var size := frames.get_frame_texture(anim, i).get_size()
 					assert_vector(size).is_equal(Vector2(144.0, 144.0))
-	assert_int(frames.get_animation_names().size()).is_equal(13)
+	# Hoja Elyon2 (F012): las 13 de F009/F010, las 3 de disparo y 4 muertes que todavía
+	# no se usan (morir_aire, morir_aire_golpe, morir_atras, morir_corriendo).
+	assert_int(frames.get_animation_names().size()).is_equal(20)
 
 
 func test_f007_ac05_dead_shows_morir() -> void:
@@ -133,7 +135,7 @@ func test_f007_ac05_morir_durations_sum_frame_count() -> void:
 	# sumaran eso, morir no duraría death_time.
 	var frames := _frames()
 	var count := frames.get_frame_count(&"morir")
-	assert_int(count).is_equal(9)
+	assert_int(count).is_equal(8)  # 8 cuadros en la hoja Elyon2 (F012)
 	var total := 0.0
 	for i in count:
 		total += frames.get_frame_duration(&"morir", i)
@@ -205,3 +207,19 @@ func test_f010_ac08_morir_caida_keeps_own_pace_and_last_frame() -> void:
 	assert_bool(PlayerAnimation.holds_last_frame(&"aterrizar")).is_false()
 	# morir sigue durando death_time.
 	assert_float(PlayerAnimation.duration_for(&"morir", config)).is_equal(config.death_time)
+
+
+# Apoyo de F012-AC15: cada ángulo tiene su animación de disparo en la hoja de Elyon.
+func test_shot_animation_by_aim() -> void:
+	var expected := {
+		ShootLogic.Aim.FORWARD: &"disparar_adelante",
+		ShootLogic.Aim.UP: &"disparar_arriba",
+		ShootLogic.Aim.DOWN: &"disparar_abajo",
+	}
+	var frames := _frames()
+	for aim: ShootLogic.Aim in expected:
+		var anim := PlayerAnimation.shot_animation(aim)
+		assert_str(anim).is_equal(expected[aim])
+		assert_bool(frames.has_animation(anim)).is_true()
+		assert_bool(PlayerAnimation.is_shot_animation(anim)).is_true()
+	assert_bool(PlayerAnimation.is_shot_animation(&"quieto")).is_false()

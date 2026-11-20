@@ -71,12 +71,14 @@ flowchart TD
     Screen -.->|"una a la vez"| World["World<br/>partida en curso"]
     World --> Room["Room<br/>una sala de game/levels/"]
     World --> Player["Player<br/>Elyon"]
+    World --> Projectiles["Projectiles<br/>proyectiles en vuelo"]
     World --> DebugOverlay["DebugOverlay<br/>panel F3"]
     Room --> Tiles["TileMapLayer<br/>pisos y paredes"]
     Room --> Markers["Entrance y Exit<br/>marcadores"]
     Room --> MortalZone["MortalZone<br/>zona mortal"]
     Player --> Sprite["Sprite<br/>animaciones"]
     Player --> Shape["Shape<br/>colisión"]
+    Projectiles --> Projectile["Projectile<br/>un tiro"]
 ```
 
 ### Quién decide qué
@@ -90,6 +92,7 @@ flowchart LR
         WorldN["World"]
         RoomN["Room"]
         PlayerN["Player"]
+        ProjectileN["Projectile"]
     end
     subgraph Logica["Lógica pura: decide"]
         Flow["ScreenFlow<br/>qué pantalla sigue"]
@@ -101,10 +104,13 @@ flowchart LR
         Motor["PlayerMotor<br/>movimiento, caída y muerte"]
         Anim["PlayerAnimation<br/>qué animación mostrar"]
         Input["PlayerInput<br/>teclas ya leídas"]
+        Shoot["ShootLogic<br/>cuándo y hacia dónde dispara"]
+        Flight["ProjectileFlight<br/>tramo de cada paso"]
     end
     subgraph Datos["Resources: valores"]
         Config["PlayerMovementConfig<br/>game/data/player_movement.tres"]
         Level["LevelData<br/>game/levels/test/test_level.tres"]
+        ShootC["ShootConfig<br/>game/data/shoot.tres"]
     end
     MainN --> Flow
     MainN --> Store
@@ -119,6 +125,10 @@ flowchart LR
     PlayerN --> Input
     PlayerN --> Config
     Motor --> Config
+    PlayerN --> Shoot
+    Shoot --> ShootC
+    ProjectileN --> Flight
+    ProjectileN --> ShootC
 ```
 
 ### Cómo se avisan
@@ -134,7 +144,8 @@ flowchart LR
     WorldS -->|"level_completed"| MainS
     MainS -.->|"send(evento)"| FlowS["ScreenFlow"]
     FlowS -->|"state_changed"| MainS
-    PlayerS["Player"] -->|"death_finished"| WorldS["World"]
+    PlayerS["Player"] -->|"death_finished<br/>shot_fired"| WorldS["World"]
+    WorldS -.->|"launch(...)"| ProjS["Projectile"]
     ZoneS["MortalZone"] -.->|"die(causa)"| PlayerS
     WorldS -.->|"die(causa)<br/>reset_to(posición)"| PlayerS
     WorldS -.->|"track(nodo)"| DebugS["DebugOverlay"]
@@ -150,6 +161,7 @@ flowchart LR
 - Muerte (F007): el vacío y la zona mortal (`game/entities/mortal_zone/`, un `Area2D` que se coloca en la sala) llaman a `Player.die(causa)`, y la duración depende de la causa. Mientras está muerto, `World` ignora los bordes. Al terminar, `Player` emite `death_finished` y `World` vuelve a la entrada con `LevelProgress.checkpoint()`. `body_entered` avisa solo al entrar: ninguna entrada de sala puede quedar dentro de una zona.
 - Altura y checkpoint (F010): aterrizar desde `lethal_fall_height` o más mata. La altura no se reinicia al cruzar de sala y se congela al morir. `LevelProgress` lleva el checkpoint aparte de la sala actual: al cruzar por abajo no avanza hasta que `World` lo confirma con `Player.is_grounded()`, y por eso morir en esa caída vuelve a la sala donde empezó. Por un costado avanza al instante. Una salida de abajo tiene que contar lo que se cae antes y después de cruzar.
 - Refugio (F011): `LevelProgress.finishes_level()` dice si un borde cruzado es la salida de la última sala. En ese caso `World` emite `level_completed` en lugar de cambiar de sala, y `Main` pausa con `get_tree().paused` y muestra `LevelCompleteMenu`, que tiene `PROCESS_MODE_ALWAYS` para responder durante la pausa. La marca de la salida es un `ColorRect` sin comportamiento: lo que termina el nivel es cruzar el borde.
+- Disparo (F012, D0006, D0007): `Player` le pasa a `ShootLogic` el botón `shoot` y la situación (`ShootLogic.stance_for` del estado del motor). Si sale un tiro, emite `shot_fired(origen, dirección, resguardo)`. `World` crea un `Projectile` (`game/entities/projectile/`) en el contenedor `Projectiles`, que no está dentro de la sala, y lo vacía al cambiar de sala y al volver a la entrada. El proyectil es un `Node2D`, no un `Area2D` ni un cuerpo. En cada paso, `ProjectileFlight` le da el tramo recorrido y el nodo lanza un rayo por código (`intersect_ray`) contra la capa 1. El primer tramo arranca en el centro de Elyon, para que pegado a una pared no la atraviese. De pie, la pose de disparo es una animación de la hoja de Elyon; corriendo y en el aire no hay pose: sigue la animación de movimiento.
 - Entidades: el origen de un personaje está en sus pies, al centro.
 
 ## Personaje y movimiento (D0003, tamaños de D0004)
@@ -201,11 +213,13 @@ Reglas del pixel art en `canvas_items`:
 
 ## Input
 
-Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `shoot` (`J`, `X`; el botón del gamepad se elige en la spec del disparo, porque X ya es de `dash`; D0006), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio. Los menús usan las acciones `ui_*` que trae Godot.
+Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado; Shift, `L`, botón B), `shoot` (`J`, `X`, botón X; D0006, F012), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio.
+
+Capas de física 2D: la 1 se llama "mundo" (paredes, pisos y techos de las baldosas). Elyon y los proyectiles la buscan. Los menús usan las acciones `ui_*` que trae Godot.
 
 ## Debug overlay
 
-`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy: la sala actual ("sala: 2 / 3"), el checkpoint y la escala del pixel art, y del personaje: velocidad, "en el piso", estado del motor, hacia dónde mira, sus timers (estado, coyote, buffer) y la altura de la caída. Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
+`game/debug/debug_overlay.tscn` (`DebugOverlay`, `CanvasLayer` en `PROCESS_MODE_ALWAYS`), activable con F3 o Select/Back (`debug_toggle`), también en pausa. Muestra FPS y las líneas de cada sistema registrado: un nodo implementa `get_debug_info() -> Dictionary` y `World` lo registra con `track()`. Hoy: la sala actual ("sala: 2 / 3"), el checkpoint y la escala del pixel art, y del personaje: velocidad, "en el piso", estado del motor, hacia dónde mira, sus timers (estado, coyote, buffer) y la altura de la caída, y del disparo: hacia dónde apunta, si puede disparar, el tiempo hasta el próximo tiro, la pose y cuántos tiros salieron. Mientras está visible pide los datos en cada cuadro. Es la herramienta principal del playtest.
 
 ## Tooling
 

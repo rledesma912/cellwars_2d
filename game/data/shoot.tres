@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ShootConfig" format=3]
+
+[ext_resource type="Script" uid="uid://c4k11yupvbn0u" path="res://game/systems/combat/shoot_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+fire_interval = 0.14
+projectile_speed = 900.0
+shot_range = 360.0
+aim_up_angle = 40.0
+aim_down_angle = 20.0
+air_aim_down_angle = 45.0
+aim_pose_time = 0.6
+muzzle_forward = Vector2(33, -52)
+muzzle_up = Vector2(26, -66)
+muzzle_down = Vector2(29, -42)

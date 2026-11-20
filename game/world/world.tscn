@@ -12,5 +12,8 @@ level = ExtResource("2_level")
 [node name="Player" parent="." instance=ExtResource("3_player")]
 unique_name_in_owner = true
 
+[node name="Projectiles" type="Node2D" parent="."]
+unique_name_in_owner = true
+
 [node name="DebugOverlay" parent="." instance=ExtResource("4_debug")]
 unique_name_in_owner = true

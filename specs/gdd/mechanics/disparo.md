@@ -3,13 +3,13 @@ id: G003
 type: gdd
 status: approved
 superseded_by:
-links: { gdd: [G001, G002], decisions: [D0006], spike: }
+links: { gdd: [G001, G002], decisions: [D0006, D0007], spike: }
 updated: 2026-11-20
 ---
 
 # Disparo
 
-> Cómo dispara Elyon. Sale del spike S003 y de la decisión D0006. Los números exactos los fija la feature en su `.tres`; acá van las reglas.
+> Cómo dispara Elyon. Sale del spike S003 y de las decisiones D0006 y D0007. Los números exactos los fija la feature en su `.tres`; acá van las reglas.
 
 ## Gatillo
 
@@ -32,7 +32,7 @@ Tres, que cambian de golpe (sin girar el arma de a poco): se mantiene arriba o a
 
 ## Cuándo se puede disparar
 
-- **De pie**: después de cada tiro Elyon queda plantado un instante (no corre ni salta). Le da peso a cada tiro.
+- **De pie**: dispara sin quedar plantado; puede arrancar a correr o saltar en el mismo momento.
 - **Corriendo**: sigue corriendo a velocidad completa mientras dispara.
 - **En el aire** (subiendo o cayendo): dispara sin cambiar el salto ni la caída.
 - **No se dispara** girando, preparando el salto, aterrizando, rodando ni muerto.

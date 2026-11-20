@@ -9,6 +9,8 @@ extends Node2D
 ## Cruzó la salida de la última sala: llegó al refugio.
 signal level_completed
 
+const PROJECTILE := preload("res://game/entities/projectile/projectile.tscn")
+
 ## El nivel que se juega: la lista ordenada de salas.
 @export var level: LevelData
 
@@ -19,6 +21,9 @@ var _room: Room
 var _rooms: Dictionary[int, Room] = {}
 
 @onready var _player: Player = %Player
+# Contenedor de los proyectiles en vuelo. No van dentro de la sala: las salas se sacan
+# del árbol y se guardan vivas, y un proyectil adentro reaparecería al volver.
+@onready var _projectiles: Node2D = %Projectiles
 @onready var _debug_overlay: DebugOverlay = %DebugOverlay
 
 
@@ -32,6 +37,7 @@ func _ready() -> void:
 	_show_room(0)
 	_player.reset_to(_room.entrance_position())
 	_player.death_finished.connect(_on_player_death_finished)
+	_player.shot_fired.connect(_on_player_shot_fired)
 	_debug_overlay.track(_player)
 	_debug_overlay.track(self)
 
@@ -102,8 +108,23 @@ func _on_player_death_finished() -> void:
 	_restart(_progress.checkpoint())
 
 
+# Elyon disparó: el proyectil vuela solo hasta chocar o llegar a su alcance.
+func _on_player_shot_fired(origin: Vector2, direction: Vector2, guard_from: Vector2) -> void:
+	var projectile: Projectile = PROJECTILE.instantiate()
+	projectile.launch(_player.shoot_config, origin, direction, guard_from, _player)
+	_projectiles.add_child(projectile)
+
+
+# Saca todos los proyectiles en vuelo (al cambiar de sala o al volver a la entrada).
+# queue_free los libera al terminar este paso, sin cortar el que está corriendo.
+func _clear_projectiles() -> void:
+	for projectile in _projectiles.get_children():
+		projectile.queue_free()
+
+
 # Vuelve quieto a la entrada de la sala que dice el cambio.
 func _restart(change: LevelProgress.RoomChange) -> void:
+	_clear_projectiles()
 	_show_room(change.room_index)
 	_player.reset_to(_room.entrance_position())
 
@@ -116,6 +137,7 @@ func _show_room(index: int) -> void:
 		# para volver a ponerla si Elyon regresa.
 		if _room:
 			remove_child(_room)
+			_clear_projectiles()
 		add_child(room)
 		# Primer hijo: se dibuja detrás de Elyon.
 		move_child(room, 0)
