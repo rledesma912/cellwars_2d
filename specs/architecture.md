@@ -3,8 +3,8 @@ id: ARCH
 type: architecture
 status: approved
 superseded_by:
-links: { gdd: [], decisions: [D0003, D0004], spike: }
-updated: 2026-11-05
+links: { gdd: [], decisions: [D0003, D0004, D0006], spike: }
+updated: 2026-11-20
 ---
 
 # Arquitectura
@@ -201,7 +201,7 @@ Reglas del pixel art en `canvas_items`:
 
 ## Input
 
-Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio. Los menús usan las acciones `ui_*` que trae Godot.
+Acciones: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `shoot` (`J`, `X`; el botón del gamepad se elige en la spec del disparo, porque X ya es de `dash`; D0006), `pause` (Esc, Start), `debug_toggle` (F3). Teclado y gamepad desde el inicio. Los menús usan las acciones `ui_*` que trae Godot.
 
 ## Debug overlay
 

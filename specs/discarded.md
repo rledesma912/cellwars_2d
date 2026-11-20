@@ -16,3 +16,12 @@
 | 2026-10-29 | Suavizado *sharp bilinear* sobre la imagen terminada | Obliga a dibujar a la resolución interna: pierde la luz y el movimiento suaves de `canvas_items` | `archive/spikes/002-resolucion.md`, D0004 |
 | 2026-10-30 | Entrada y salida de cada sala en lados estrictamente opuestos | Obliga a que todo el nivel sea horizontal o todo vertical: no deja bajar en medio del recorrido. Reemplazada por "lados distintos, salida nunca arriba" (aprobado por el desarrollador) | `features/006-varias-salas/spec.md` |
 | 2026-11-04 | Reiniciar la altura de una caída al cambiar de sala | No queda lógico: una caída que cruza de sala sigue siendo una sola caída | `features/010-caida-mortal/spec.md` |
+| 2026-11-20 | Gatillo tiro a tiro (un disparo por apretón) | El desarrollador eligió automático | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Gatillo en ráfaga (N tiros por apretón y pausa) | El desarrollador eligió automático | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Disparo como rayo instantáneo | El desarrollador eligió proyectil visible | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | No poder disparar corriendo (hay que frenar primero) | Elegida al principio con dudas para salas y enemigos reales; reemplazada por seguir corriendo mientras dispara | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Frenar solo al disparar corriendo, o cortar la carrera en seco | El desarrollador eligió seguir corriendo | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Correr más lento mientras se dispara (75 % o 50 %) | El desarrollador eligió velocidad completa | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Ángulo de disparo arriba de 50° o 55° | Probados y no gustaron; queda 40° | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Ángulo abajo en el aire de 20° o 70° | El desarrollador eligió 45° | `archive/spikes/003-disparo-de-pie.md`, D0006 |
+| 2026-11-20 | Frenar la caída mientras se dispara en el aire | El desarrollador eligió que la caída no cambie | `archive/spikes/003-disparo-de-pie.md`, D0006 |
