@@ -44,6 +44,21 @@ size = Vector2(30, 40)
 position = Vector2(1200, 680)
 script = ExtResource("6_target")
 
+[node name="TargetHighA" type="StaticBody2D" parent="."]
+position = Vector2(780, 470)
+script = ExtResource("6_target")
+size = Vector2(30, 30)
+
+[node name="TargetHighB" type="StaticBody2D" parent="."]
+position = Vector2(1060, 400)
+script = ExtResource("6_target")
+size = Vector2(30, 30)
+
+[node name="TargetCrawlerB" type="StaticBody2D" parent="."]
+position = Vector2(1010, 680)
+script = ExtResource("6_target")
+size = Vector2(30, 20)
+
 [node name="Player" parent="." instance=ExtResource("3_player")]
 unique_name_in_owner = true
 script = ExtResource("4_shooter")

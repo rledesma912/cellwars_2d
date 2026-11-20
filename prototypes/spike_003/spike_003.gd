@@ -5,9 +5,9 @@
 ## proyectil según el .tres.
 ##
 ## Teclas del prototipo: J / X / botón X del gamepad disparar, W/S (o ↑/↓) apuntar,
-## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 el ángulo de abajo (20/15),
-## 5 la altura de la boca al tirar abajo (32/42/52 px),
-## R vuelve al inicio, F3 datos.
+## 1 cambia el modo, 2 rayo/proyectil, 3 la regla al correr, 4 la velocidad corriendo
+## al disparar (100/75/50 %), 5 el ángulo de abajo en el aire (20/45/70°), 6 la gravedad
+## cayendo al disparar (100/50/25 %), R vuelve al inicio, F3 datos.
 extends Node2D
 
 const PROJECTILE := preload("res://prototypes/spike_003/projectile.gd")
@@ -60,18 +60,25 @@ func _unhandled_input(event: InputEvent) -> void:
 				wrapi(config.run_rule + 1, 0, ShootConfig.RunRule.size()) as ShootConfig.RunRule
 			)
 		KEY_4:
-			# Solo el ángulo de abajo: 20 → 15 → 20. El de arriba se cambia en el .tres.
-			config.aim_down_angle = 15.0 if config.aim_down_angle > 15.0 else 20.0
+			config.run_fire_speed = _next(config.run_fire_speed, [1.0, 0.75, 0.5])
 		KEY_5:
-			# Altura de la boca al tirar abajo: 32 (la del arte) → 42 → 52 → 32 px sobre los pies.
-			var height := -config.muzzle_down.y
-			height = 32.0 if height >= 52.0 else height + 10.0
-			config.muzzle_down = Vector2(config.muzzle_down.x, -height)
+			config.air_aim_down_angle = _next(config.air_aim_down_angle, [20.0, 45.0, 70.0])
+		KEY_6:
+			config.air_fire_gravity = _next(config.air_fire_gravity, [1.0, 0.5, 0.25])
 		KEY_R:
 			_player.reset_to(START)
 		_:
 			return
 	_update_help()
+
+
+## El valor que sigue en la lista (vuelve al primero). Si el actual no está en la lista
+## (porque se cambió en el .tres), arranca por el primero.
+func _next(current: float, values: Array[float]) -> float:
+	for i in values.size():
+		if is_equal_approx(current, values[i]):
+			return values[(i + 1) % values.size()]
+	return values[0]
 
 
 ## Agrega la acción "shoot" en tiempo de ejecución, sin tocar project.godot: el botón
@@ -128,14 +135,15 @@ func _update_help() -> void:
 	_help.text = (
 		(
 			"J/X disparar · W/S apuntar · 1 modo: %s · 2 sale: %s · 3 corriendo: %s"
-			+ " · 4 ángulo: %.0f°/%.0f° · 5 boca abajo: %.0f px · R · F3"
+			+ " · 4 vel. disparando: %.0f%% · 5 abajo en aire: %.0f° · 6 gravedad: %.0f%%"
+			+ " · R · F3"
 		)
 		% [
 			ShootConfig.Mode.keys()[c.mode],
 			ShootConfig.Delivery.keys()[c.delivery],
 			ShootConfig.RunRule.keys()[c.run_rule],
-			c.aim_up_angle,
-			c.aim_down_angle,
-			-c.muzzle_down.y,
+			c.run_fire_speed * 100.0,
+			c.air_aim_down_angle,
+			c.air_fire_gravity * 100.0,
 		]
 	)

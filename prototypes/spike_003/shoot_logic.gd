@@ -8,7 +8,8 @@ extends RefCounted
 enum Stance {
 	READY,  ## Quieto en el piso: puede disparar.
 	MOVING,  ## Corriendo o frenando: depende de la regla run_rule.
-	BUSY,  ## Girando, saltando, en el aire, rodando o muerto: no dispara.
+	AIR,  ## Subiendo o cayendo: dispara sin quedar plantado (ampliación del spike).
+	BUSY,  ## Girando, preparando el salto, aterrizando, rodando o muerto: no dispara.
 }
 
 enum Aim { FORWARD, UP, DOWN }
@@ -60,7 +61,9 @@ static func direction(aim: Aim, facing: int, up_deg: float, down_deg: float) -> 
 			return Vector2(facing, 0)
 
 
-func step(held: bool, pressed: bool, stance: Stance, delta: float) -> Result:
+## wants_move: este paso se aprieta una dirección o saltar. Con la regla
+## FIRE_WHILE_RUNNING sirve para que el tiro de pie no lo deje plantado y pueda arrancar.
+func step(held: bool, pressed: bool, stance: Stance, delta: float, wants_move := false) -> Result:
 	var r := Result.new()
 	_cooldown = maxf(_cooldown - delta, 0.0)
 	_recovery = maxf(_recovery - delta, 0.0)
@@ -88,8 +91,25 @@ func step(held: bool, pressed: bool, stance: Stance, delta: float) -> Result:
 				r.stop_now = true
 	r.fire = _try_fire(held, trigger)
 	_pending = false
-	r.hold_still = _recovery > 0.0 or _burst_left > 0
+	# Plantado solo de pie. Corriendo con FIRE_WHILE_RUNNING o en el aire, sigue moviéndose.
+	var free_move := (
+		stance == Stance.AIR
+		or (
+			_config.run_rule == ShootConfig.RunRule.FIRE_WHILE_RUNNING
+			and (stance == Stance.MOVING or wants_move)
+		)
+	)
+	if free_move:
+		_recovery = 0.0
+	else:
+		r.hold_still = _recovery > 0.0 or _burst_left > 0
 	return r
+
+
+## Está disparando: salió un tiro hace menos de un intervalo, o hay una ráfaga en curso.
+## El nodo lo usa para frenar la carrera o la caída mientras dispara.
+func is_shooting() -> bool:
+	return _cooldown > 0.0 or _burst_left > 0
 
 
 func get_cooldown() -> float:

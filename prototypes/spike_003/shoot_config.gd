@@ -24,6 +24,7 @@ enum RunRule {
 	FORBID,  ## No dispara: hay que frenar primero (el apretón se pierde).
 	BRAKE_THEN_SHOOT,  ## Frena solo y dispara al quedar quieto.
 	INSTANT_STOP,  ## Corta la carrera en seco y dispara en ese mismo paso.
+	FIRE_WHILE_RUNNING,  ## Sigue corriendo y dispara sin frenar (ampliación del spike).
 }
 
 @export_group("Variantes")
@@ -57,8 +58,19 @@ enum RunRule {
 @export_group("Ángulos")
 ## Ángulo del tiro hacia arriba, medido desde la horizontal.
 @export_range(10.0, 80.0, 1.0, "suffix:°") var aim_up_angle := 40.0
-## Ángulo del tiro hacia abajo, medido desde la horizontal. La tecla 4 alterna 20/15.
+## Ángulo del tiro hacia abajo de pie, medido desde la horizontal.
 @export_range(10.0, 80.0, 1.0, "suffix:°") var aim_down_angle := 20.0
+
+# Ampliación del spike: disparar corriendo y en el aire. Las teclas 4, 5 y 6 alternan
+# estos tres valores jugando (no se guarda en el .tres).
+@export_group("En movimiento")
+## Velocidad de carrera mientras dispara, como fracción de la normal (1 = no frena).
+## Solo con la regla FIRE_WHILE_RUNNING.
+@export_range(0.1, 1.0, 0.05) var run_fire_speed := 1.0
+## Ángulo del tiro hacia abajo en el aire (de pie se usa aim_down_angle).
+@export_range(10.0, 90.0, 1.0, "suffix:°") var air_aim_down_angle := 20.0
+## Gravedad mientras cae disparando, como fracción de la normal (1 = la caída no cambia).
+@export_range(0.1, 1.0, 0.05) var air_fire_gravity := 1.0
 
 @export_group("Pose")
 ## Cuánto sigue en pose de tiro (apuntando) después del último disparo antes de
