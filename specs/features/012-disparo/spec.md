@@ -3,14 +3,14 @@ id: F012
 type: feature
 status: draft           # draft → approved → in-progress → done (as-built)
 superseded_by:
-links: { gdd: [G001, G003], decisions: [D0006], spike: S003 }
+links: { gdd: [G001, G003], decisions: [D0006, D0007], spike: S003 }
 updated: 2026-11-20
 ---
 
 # Feature 012: disparo
 
-- Origen: GDD `mechanics/disparo.md` / decisión 0006 (spike 003)
-- Vía: completa (sistema nuevo, toca a Elyon, el input map, el debug y las salas; tiene `[feel]`)
+- Origen: GDD `mechanics/disparo.md` / decisiones 0006 (spike 003) y 0007
+- Vía: completa (sistema nuevo, toca a Elyon, su arte, el input map y el debug; tiene `[feel]`)
 
 ## Objetivo
 
@@ -19,7 +19,8 @@ Elyon dispara en el juego como se eligió en el spike S003:
 - Gatillo **automático**.
 - **Proyectil visible** de alcance corto.
 - **Tres ángulos** que cambian de golpe.
-- Se dispara **de pie, corriendo y en el aire**.
+- Se dispara **de pie, corriendo y en el aire**, sin quedar plantado después del tiro (D0007).
+- Elyon pasa a la hoja de arte **Elyon2**, la que se jugó en el spike, que trae las animaciones de disparo de pie.
 
 El proyectil se frena contra paredes, pisos y techos. Todavía no hay nada a qué pegarle: los enemigos, el daño y los blancos llegan con el spike de combate.
 
@@ -33,7 +34,7 @@ El proyectil se frena contra paredes, pisos y techos. Todavía no hay nada a qu�
   - el retoque de las poses de pie a 40°/20°;
   - las poses de disparar corriendo y en el aire.
 
-  Son tareas de `cw2d-art`; ver la pregunta 3 sobre qué arte usa esta feature.
+  Son tareas de `cw2d-art`. Las animaciones de muerte nuevas de Elyon2 (`morir_aire`, `morir_atras` y otras) vienen en la hoja pero no se usan todavía.
 - La muerte hacia atrás en el aire (va al spike de combate).
 - El botón para abrir prototipos del menú: no se toca.
 
@@ -62,10 +63,11 @@ Lógica pura (`game/systems/combat/`):
 En el juego:
 
 - F012-AC08 [manual] **Botones:**
-  - `J` o `X` en el teclado, y el botón del gamepad que se elija (pregunta 2), disparan;
+  - `J` o `X` en el teclado, y el botón X del gamepad, disparan;
+  - `dash` (reservado) pasa al botón B del gamepad;
   - mantenerlos apretados dispara de forma repetida;
   - la acción `shoot` está en el input map del proyecto.
-- F012-AC09 [manual] **De pie:** quieto, dispara en los tres ángulos, y mantener arriba o abajo cambia el ángulo al instante.
+- F012-AC09 [manual] **De pie:** quieto, dispara en los tres ángulos, y mantener arriba o abajo cambia el ángulo al instante. Apretar una dirección o saltar mientras dispara arranca en el acto, sin quedar plantado.
 - F012-AC10 [manual] **Corriendo:** dispara en los tres ángulos sin frenar. En F3, la velocidad sigue en 215 mientras dispara.
 - F012-AC11 [manual] **En el aire:** subiendo y cayendo, dispara en los tres ángulos, con el de abajo más empinado (45°). El salto y la caída no cambian: en F3, la altura y la caída son las mismas con y sin disparar.
 - F012-AC12 [manual] **Cuándo no dispara:** girando, preparando el salto, aterrizando, rodando o muerto no sale ningún tiro. El estado se ve en F3.
@@ -76,10 +78,13 @@ En el juego:
   - en pausa los proyectiles se quedan quietos y siguen al continuar;
   - al cambiar de sala o al morir y volver a la entrada, los proyectiles de la sala anterior desaparecen.
 - F012-AC15 [manual] **Se ve el arma:**
-  - de pie, se ve la pose de disparo del ángulo elegido (según la pregunta 3);
-  - corriendo y en el aire, una línea marca el arma mientras dispara y hasta 0,6 s después del último tiro.
-- F012-AC16 [manual] **Debug:** el overlay F3 muestra hacia dónde apunta, si puede disparar, el tiempo hasta el próximo tiro y cuántos tiros salieron.
-- F012-AC17 [feel] Disparar de pie, corriendo y en el aire se siente como en el spike: ágil y legible, sin que el control del movimiento cambie.
+  - de pie, se ve la animación de disparo del ángulo elegido (`disparar_adelante`, `disparar_arriba`, `disparar_abajo`);
+  - cada tiro la arranca desde el cuadro del impacto, y cambiar de ángulo salta al mismo cuadro del otro ángulo;
+  - la pose se sostiene mientras se mantiene apretado o hasta `aim_pose_time` (0,6 s) después del último tiro, y después vuelve a quieto;
+  - corriendo y en el aire, una línea marca el arma durante el mismo tiempo.
+- F012-AC16 [manual] **Arte Elyon2:** Elyon usa la hoja Elyon2 en todas sus animaciones (quieto, correr, frenar, girar, saltar, caer, aterrizar, rodar y morir). Se ven como en el spike, con los pies en el piso, y sin cuadros que falten o salten.
+- F012-AC17 [manual] **Debug:** el overlay F3 muestra hacia dónde apunta, si puede disparar, el tiempo hasta el próximo tiro y cuántos tiros salieron.
+- F012-AC18 [feel] Disparar de pie, corriendo y en el aire se siente como en el spike: ágil y legible, sin que el control del movimiento cambie.
 
 ## Casos límite
 
@@ -110,13 +115,8 @@ A 900 px/s el proyectil avanza 15 px por paso. Como revisa todo el tramo de cada
 
 ## Preguntas abiertas
 
-1. **"Plantado un instante" no tuvo efecto en lo que jugaste.** D0006 dice que de pie Elyon queda plantado 0,12 s después de cada tiro, pero con la regla elegida (seguir corriendo mientras dispara) apretar una dirección o saltar lo libera en el acto. En el spike nunca se notó. Opciones:
-   - **(a) Recomendada:** no implementarlo, así queda igual a lo que jugaste. Hay que corregir D0006 con una decisión corta, D0007, que reemplace solo ese punto, y actualizar `mechanics/disparo.md`.
-   - **(b)** Implementarlo de verdad: después de cada tiro de pie, no puede arrancar a correr ni saltar durante 0,12 s. Es algo que no probaste.
-2. **Botón del gamepad para disparar.** Hoy A salta, X tiene `dash` (reservado, no hace nada), Back abre el debug y Start pausa. Opciones:
-   - **(a) Recomendada:** disparar con **X**, como en el spike, y mover `dash` a **B**.
-   - **(b)** Disparar con **B** y dejar X para `dash`.
-   - **(c)** Disparar con un gatillo o un bumper (RT o RB).
-3. **Arte de disparo de pie.** Las animaciones de disparo solo existen en la hoja nueva de Elyon (Elyon2) que usó el prototipo, que cambia también todas las otras animaciones. Además, `cw2d-art` la entregó "sin final". Opciones:
-   - **(a)** Traer la hoja Elyon2 completa, como se jugó en el spike (guardada en el tag `archive/spike-003`). Cambia el dibujo de todas las animaciones.
-   - **(b) Recomendada:** dejar el arte actual y marcar el arma con la línea también de pie, como pide `CLAUDE.md` (greybox hasta pasar el `[feel]`). El arte entra después, en su propia feature, cuando `cw2d-art` publique el final.
+Ninguna. Resueltas por el desarrollador el 2026-11-20 ("1-a, 2-a, 3-a"):
+
+1. Elyon no queda plantado después del tiro, como se jugó. Se corrige D0006 con D0007.
+2. Gamepad: X dispara y `dash` pasa a B.
+3. Arte: se trae la hoja Elyon2 completa, como se jugó en el spike (tag `archive/spike-003`).
