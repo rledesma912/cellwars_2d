@@ -33,6 +33,9 @@ func launch(
 	# rotation gira el dibujo para que apunte hacia donde vuela.
 	rotation = direction.angle()
 	_exclude = [shooter.get_rid()]
+	# Invisible hasta revisar su primer tramo: pegado a una pared, la boca queda dentro
+	# de la pared y se vería un cuadro ahí antes de chocar.
+	visible = false
 
 
 func _physics_process(delta: float) -> void:
@@ -46,6 +49,7 @@ func _physics_process(delta: float) -> void:
 		queue_free()
 		return
 	position = segment.to
+	visible = true
 	if segment.done:
 		queue_free()
 
