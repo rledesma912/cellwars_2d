@@ -26,9 +26,10 @@ const SHOT_ANIMS := {
 	ShootLogic.Aim.UP: &"disparar_arriba",
 	ShootLogic.Aim.DOWN: &"disparar_abajo",
 }
-## Copia de los cuadros de Elyon con las tres animaciones de disparo sumadas. Vive en
-## el prototipo para no tocar game/art en el spike.
-const SHOOT_FRAMES := preload("res://prototypes/spike_003/art/elyon_disparo_frames.tres")
+## Cuadros de Elyon2 (cw2d-art, 2026-11-20), con las tres animaciones de disparo. Viven en
+## el prototipo para no tocar game/art en el spike. La copia anterior (elyon_disparo*)
+## queda en art/ para comparar.
+const SHOOT_FRAMES := preload("res://prototypes/spike_003/art/elyon2_frames.tres")
 
 @export var shoot_config: ShootConfig
 

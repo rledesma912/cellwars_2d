@@ -69,8 +69,8 @@ enum RunRule {
 
 # Posición de la boca del arma respecto de los pies de Elyon, mirando a la derecha
 # (x positivo = adelante, y negativo = arriba). Mirando a la izquierda se espeja x.
-# Medidas sobre el cuadro "hold" de cada animación de disparo.
+# Medidas sobre el arte de Elyon2 (cw2d-art, 2026-11-20).
 @export_group("Boca del arma")
-@export var muzzle_forward := Vector2(35, -54)
-@export var muzzle_up := Vector2(18, -62)
-@export var muzzle_down := Vector2(32, -23)
+@export var muzzle_forward := Vector2(33, -52)
+@export var muzzle_up := Vector2(26, -66)
+@export var muzzle_down := Vector2(29, -32)
