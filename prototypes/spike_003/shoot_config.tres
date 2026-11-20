@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource("1_config")
-mode = 0
-delivery = 0
-run_rule = 1
+mode = 1
+delivery = 1
+run_rule = 0
 semi_interval = 0.25
 auto_interval = 0.14
 burst_count = 3
