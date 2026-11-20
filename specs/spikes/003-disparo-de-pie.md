@@ -39,7 +39,7 @@ updated: 2026-11-20
   - El overlay F3 muestra el modo, el ángulo, la cadencia y el tiempo hasta el próximo disparo.
 - Destino del código: descartar (por defecto). Lo que sirve de ese código son los valores del `.tres` y la forma de la lógica pura, que pasan a la spec de la feature.
 
-### Ampliación: disparar corriendo y en el aire (pedida por el desarrollador el 2026-11-20, pendiente de aprobación)
+### Ampliación: disparar corriendo y en el aire (pedida y aprobada por el desarrollador el 2026-11-20)
 
 - Pregunta: ¿se siente bien que Elyon dispare **sin frenar** mientras corre y mientras salta o cae, y con qué reglas?
 - Motivo: el desarrollador quiere las dos cosas. Cambia la regla elegida para correr (`FORBID`) y saca "disparar en el aire" de la lista de lo que no entra. Como la decisión del spike todavía no se escribió, se amplía este spike en lugar de abrir otro.
@@ -77,7 +77,11 @@ Verificado: consola sin errores al correr la escena, y una prueba por código de
 
 - **Modo**: el desarrollador eligió **automático** (mantener apretado dispara de forma repetida; el primer tiro sale al apretar).
 - **Qué sale del arma**: eligió **proyectil visible**.
-- **Disparar corriendo**: eligió **no se puede** (`FORBID`, hay que frenar primero), con una duda explícita: *"me queda duda si al generar pantallas, terreno y enemigos no convenga que dispare mientras corra"*. La regla vale para la feature y se revisa con enemigos y salas reales (ver Riesgos).
+- **Disparar corriendo**: primero eligió **no se puede** (`FORBID`), con una duda explícita: *"me queda duda si al generar pantallas, terreno y enemigos no convenga que dispare mientras corra"*. Después pidió probar disparar corriendo y en el aire (ampliación). Con eso eligió **seguir corriendo mientras dispara** (`FIRE_WHILE_RUNNING`) **a velocidad completa** (`run_fire_speed` 1,0).
+- **Disparar en el aire**: eligió el tiro hacia abajo en el aire a **45°** (de pie sigue en 20°) y que disparar **no cambie la caída** (`air_fire_gravity` 1,0).
+- **Ángulos de pie**: probó 50° y 55° y no le gustaron. Quedan **40° arriba** y **20° abajo**. Pidió anotar que hay que retocar el arte de disparo (se dibujó para unos 45°).
+- **Boca al tirar abajo de pie**: subirla mejora el tiro; eligió **42 px** sobre los pies (el arte la tiene en 32).
+- **Arma en movimiento**: corriendo y en el aire no hay arte de disparo; el prototipo marca el arma con una línea celeste. El desarrollador la notó.
 - **Valores**: no los cambió. Sobre los de arranque dijo: *"me parecen valores default que me permiten adaptarme mientras pruebo"*. Quedan como valores iniciales, no como valores finales.
 - **[feel]**: sobre el prototipo con animaciones dijo *"Está bueno"*. No hubo más comentarios del feel; queda sin cerrar (el agente no lo marca como cumplido).
 - **45° abajo**: con el arte real, la boca del arma queda a 23 px del piso. Desde el piso, ese tiro pega casi en los pies; sirve sobre todo desde un escalón o una repisa. El desarrollador no lo comentó.
@@ -92,13 +96,17 @@ Valores iniciales del prototipo, aceptados como punto de partida (`prototypes/sp
 |---|---|---|
 | `mode` | AUTO | Elegido |
 | `delivery` | PROJECTILE | Elegido |
-| `run_rule` | FORBID | Elegido; se revisa en el spike de combate |
+| `run_rule` | FIRE_WHILE_RUNNING | Elegido en la ampliación |
+| `run_fire_speed` | 1,0 | No frena al disparar corriendo |
+| `aim_up_angle` / `aim_down_angle` | 40° / 20° | De pie |
+| `air_aim_down_angle` | 45° | Abajo en el aire |
+| `air_fire_gravity` | 1,0 | Disparar no cambia la caída |
 | `auto_interval` | 0,14 s | ~7 tiros por segundo |
 | `projectile_speed` | 900 px/s | 15 px por paso de física |
 | `shot_range` | 360 px | 18 baldosas, un poco más de un cuarto de sala |
 | `shot_recovery` | 0,12 s | Elyon queda plantado después de cada tiro |
 | `aim_pose_time` | 0,6 s | Sigue apuntando después del último tiro |
-| `muzzle_forward` / `_up` / `_down` | (35, −54) / (18, −62) / (32, −23) | Medidas sobre el arte; dependen del dibujo, no son tuning |
+| `muzzle_forward` / `_up` / `_down` | (33, −52) / (26, −66) / (29, −42) | Medidas sobre el arte de Elyon2; abajo subida a 42 px a pedido |
 
 ## Riesgos y limitaciones
 
