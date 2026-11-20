@@ -10,7 +10,7 @@ updated: 2026-11-20
 # Tasks: feature 012 (disparo)
 
 - [x] T1 `ShootConfig` (`game/systems/combat/shoot_config.gd`) y `game/data/shoot.tres` con los valores del spike (cubre: F012-AC03, F012-AC06)
-- [ ] T2 `ShootLogic` y sus tests: ángulo, dirección, boca, gatillo automático con tope, situaciones y tiempo de pose (cubre: F012-AC01, F012-AC02, F012-AC03, F012-AC04, F012-AC05, F012-AC06)
+- [x] T2 `ShootLogic` y sus tests: ángulo, dirección, boca, gatillo automático con tope, situaciones y tiempo de pose (cubre: F012-AC01, F012-AC02, F012-AC03, F012-AC04, F012-AC05, F012-AC06)
 - [ ] T3 `ProjectileFlight` y sus tests: tramo por paso, resguardo y fin al alcance (cubre: F012-AC07)
 - [ ] T4 Input map: acción `shoot` (`J`, `X`, botón X) y `dash` al botón B; nombre de la capa 1 de física; `architecture.md` y `CLAUDE.md` al día (cubre: F012-AC08)
 - [ ] T5 Hoja Elyon2 en `game/art/elyon/` (desde el tag `archive/spike-003`) y `PlayerAnimation.shot_animation` con su test; revisar duraciones y pies (cubre: F012-AC15, F012-AC16)
