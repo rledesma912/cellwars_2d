@@ -3,8 +3,8 @@ id: G002
 type: gdd
 status: approved
 superseded_by:
-links: { gdd: [G001], decisions: [], spike: }
-updated: 2026-10-29
+links: { gdd: [G001], decisions: [D0006], spike: }
+updated: 2026-11-20
 ---
 
 # Mundo y concepto
@@ -40,7 +40,7 @@ El arma estándar de los soldados del sistema inmune. Es biomecánica y funciona
 - La munición es "fluido vital": enzimas del propio soldado. En un neutrófilo, el arma es de corto alcance.
 - Limitaciones del concepto: se recalienta con el uso prolongado y necesita un tiempo de recuperación entre usos intensivos.
 
-Son ideas de ambientación, no reglas de juego. El arsenal sigue siendo una pregunta abierta de la visión.
+Son ideas de ambientación, no reglas de juego. Cómo se dispara está en `mechanics/disparo.md`; si hay más armas o munición limitada sigue abierto en la visión.
 
 ## Amenazas
 

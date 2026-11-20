@@ -3,8 +3,8 @@ id: G001
 type: gdd
 status: approved
 superseded_by:
-links: { gdd: [], decisions: [], spike: }
-updated: 2026-11-04
+links: { gdd: [], decisions: [D0006], spike: }
+updated: 2026-11-20
 ---
 
 # Visión: Cellwars 2D
@@ -67,7 +67,7 @@ Sin diálogos ni historia hablada. Sin cinemáticas extensas (las animaciones de
 
 ## Preguntas abiertas
 
-- ¿Qué arsenal tiene el soldado? ¿Un solo arma o varias, con munición limitada o infinita?
+- Arsenal: por ahora un arma de disparo automático (`mechanics/disparo.md`, D0006). ¿Habrá más armas? ¿La munición es limitada o infinita?
 - ¿Cómo funciona la vida? ¿Muero de un golpe o aguanto varios? Si aguanto varios, ¿cómo lo muestro sin HUD?
 - ¿El personaje puede agacharse, rodar o colgarse de bordes? (Correr, frenar, girar y saltar ya están definidos en D0003.)
 - ¿Los enemigos tienen patrones fijos o alguna variación?

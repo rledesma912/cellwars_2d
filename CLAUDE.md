@@ -62,7 +62,7 @@ GDD (`specs/gdd/`, modular) · Spike (investigación de alcance acotado, sin lí
 - Física a 60 ticks; movimiento en `_physics_process`.
 - Debug overlay `game/debug/debug_overlay.tscn` (F3, acción `debug_toggle`): estado, velocidad, `is_on_floor`, timers, FPS. Cada sistema nuevo agrega sus líneas.
 - Escenas: `game/main.tscn` es la raíz persistente y cambia de pantalla; `game/ui/` tiene los menús; `game/world/` es la escena activa mientras se juega (arma la partida con salas de `levels/` y entidades de `entities/`).
-- Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
+- Input map: `move_left`, `move_right`, `move_up`, `move_down`, `jump`, `dash` (reservado), `shoot` (`D0006`), `pause`, `debug_toggle`. Teclado y gamepad. Los menús navegan con las acciones `ui_*` de Godot.
 - Textos: nunca escritos directo (excepción: el overlay de debug, herramienta de desarrollo, va en castellano sin traducir); cada texto visible es una etiqueta (`MENU_PLAY`) traducida en `game/i18n/texts.csv` (columnas `es`, `en`). Los nodos con texto fijo se traducen solos; el texto armado por código usa `tr()`.
 
 ## Nombres del juego
